@@ -10,7 +10,11 @@
     "pnpm-lock.yaml": true,
     "pnpm-debug.log": true,
     "package-lock.json": true,
-    "node_modules": true
+    "node_modules": true,
+    "tsconfig.json": false,
+    "dist/src": true,
+    "dist/index.js": true,
+    "dist/index.js.map": true
   },
   "explorerExclude.backup": null
 }

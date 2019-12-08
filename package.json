@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "tsc && node dist/index.js",
-    "nodemon": "nodemon -e \"ts\" -i dist/ -x \"tsc && node dist/index.js || exit 1\""
+    "nodemon": "nodemon -e \"ts\" -i dist/ -i .env -x \"tsc && node dist/index.js || exit 1\""
   },
   "author": "AlexejheroYTB",
   "license": "GPL-3.0",

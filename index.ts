@@ -1,6 +1,6 @@
 import * as Discord from "discord.js";
 import { config as dotenv } from "dotenv";
-import * as express from "express";
+import express from "express";
 import { existsSync as folderExists, mkdirSync as makeFolder } from "fs";
 import * as http from "http";
 import { join as path } from "path";
@@ -10,6 +10,7 @@ import loadCommands from "./src/load_commands";
 
 dotenv();
 if (!folderExists(path(__dirname, "data"))) makeFolder(path(__dirname, "data"));
+if (!folderExists(path(__dirname, "data/modideas"))) makeFolder(path(__dirname, "data/modideas"));
 
 const bot = new Discord.Client({ fetchAllMembers: true });
 const commands = {};
