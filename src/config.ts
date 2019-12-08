@@ -1,1 +1,0 @@
-import { readData } from "./data";
