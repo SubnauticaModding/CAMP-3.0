@@ -11,10 +11,14 @@
     "pnpm-debug.log": true,
     "package-lock.json": true,
     "node_modules": true,
-    "tsconfig.json": false,
+    "tsconfig.json": true,
     "dist/src": true,
     "dist/index.js": true,
-    "dist/index.js.map": true
+    "dist/index.js.map": true,
+    ".vscode": true,
+    "tslint.json": true
   },
-  "explorerExclude.backup": null
+  "explorerExclude.backup": null,
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "tslint.autoFixOnSave": true
 }

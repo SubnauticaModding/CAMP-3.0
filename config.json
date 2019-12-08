@@ -1,0 +1,31 @@
+{
+  "CHANNELS": {
+    "IDEAS_LIST": "653004616186986546",
+    "IDEAS_SUBMIT": "653030118046040064"
+  },
+  "COLORS": {
+    "DELETED": "000000",
+    "DUPLICATE": "FFF99A",
+    "NONE": "79CEFF",
+    "RELEASED": "6EF273",
+    "REMOVED": "FF2D19",
+    "UNKNOWN": "B5651E"
+  },
+  "DISCORD": {
+    "GUILD": "324207629784186882"
+  },
+  "PREFIX": "c/",
+  "ROLES": {
+    "MOD_IDEAS_MANAGER": "640655772664987669",
+    "MODERATOR": "336286670011760646",
+    "STAFF": "ADMINISTRATOR"
+  },
+  "STRINGS": {
+    "IDEA_EMBED": {
+      "RATING": {
+        "TEXT": "Rating",
+        "VALUE": ""
+      }
+    }
+  }
+}

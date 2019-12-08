@@ -1,19 +1,23 @@
 import { UserResolvable } from "discord.js";
 
 import { guild } from "..";
-import CONSTS from "./consts";
+import config from "../config.json";
 
 export function isIdeasManager(user: UserResolvable) {
-  user = guild().member(user);
-  return [...user.roles.values()].filter(r => r.id == CONSTS.ROLES.MOD_IDEAS_MANAGER).length > 0;
+  return checkRole(user, config.ROLES.MOD_IDEAS_MANAGER);
 }
 
 export function isModerator(user: UserResolvable) {
-  user = guild().member(user);
-  return [...user.roles.values()].filter(r => r.id == CONSTS.ROLES.MODERATOR).length > 0;
+  return checkRole(user, config.ROLES.MODERATOR);
 }
 
 export function isStaff(user: UserResolvable) {
+  return checkRole(user, config.ROLES.STAFF);
+}
+
+function checkRole(user: UserResolvable, permission: string) {
   user = guild().member(user);
-  return user.hasPermission("ADMINISTRATOR");
+  if ([...user.roles.values()].filter((r) => r.id === permission).length > 0) { return true; }
+  if (user.permissions.toArray().filter((p) => p === permission).length > 0) { return true; }
+  return false;
 }

@@ -5,6 +5,17 @@
     "outDir": "dist",
     "sourceMap": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin",
+        "configFile": "./tslint.json"
+      }
+    ]
   },
   "include": [
     "src/**/*.ts",
@@ -12,5 +23,5 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
 }
