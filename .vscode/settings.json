@@ -12,11 +12,12 @@
     "package-lock.json": true,
     "node_modules": true,
     "tsconfig.json": true,
-    "dist/src": true,
-    "dist/index.js": true,
-    "dist/index.js.map": true,
     ".vscode": true,
-    "tslint.json": true
+    "tslint.json": true,
+    "dist/[abcefghijklmnopqrstuvwxyz]*": true,
+    "dist/d[bcdefghijklmnopqrstuvwxyz]*": true,
+    "dist/da[abcdefghijklmnopqrsuvwxyz]*": true,
+    "dist/dat[bcdefghijklmnopqrstuvwxyz]*": true
   },
   "explorerExclude.backup": null,
   "typescript.tsdk": "node_modules\\typescript\\lib",
