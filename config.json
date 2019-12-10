@@ -14,6 +14,21 @@
   "DISCORD": {
     "GUILD": "324207629784186882"
   },
+  "EMOJIS": {
+    "EDIT": {
+      "APPROVE": "✅",
+      "DUPLICATE": "🖇️",
+      "REMOVE": "🗑️"
+    },
+    "VOTE": {
+      "ABSTAIN": "653718217969238021",
+      "DOWNVOTE": "653231195051786260",
+      "EDIT": "🛠️",
+      "UPVOTE": "653230762254008350"
+    },
+    "SUCCESS": "✅"
+  },
+  "OPERATION_TIME": 30,
   "PREFIX": "c/",
   "ROLES": {
     "MOD_IDEAS_MANAGER": "640655772664987669",
@@ -22,9 +37,26 @@
   },
   "STRINGS": {
     "IDEA_EMBED": {
+      "DISLIKES": {
+        "NAME": "Dislikes",
+        "VALUE": "{dislikes} {downvote}"
+      },
+      "FOOTER": "MI-",
+      "LIKES": {
+        "NAME": "Likes",
+        "VALUE": "{likes} {upvote}"
+      },
       "RATING": {
-        "TEXT": "Rating",
-        "VALUE": ""
+        "NAME": "Rating",
+        "VALUE": "{rating}"
+      },
+      "TITLE": {
+        "DELETED": "Deleted Mod Idea",
+        "DUPLICATE": "Duplicate Mod Idea",
+        "NONE": "Mod Idea",
+        "RELEASED": "Released Mod Idea",
+        "REMOVED": "Removed Mod Idea",
+        "UNKNOWN": "ERROR: MOD IDEA HAS UNKNOWN STATUS"
       }
     }
   }

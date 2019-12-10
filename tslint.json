@@ -7,7 +7,8 @@
     "rules": {
         "no-null-keyword": true,
         "no-console": false,
-        "prettier": true
+        "curly": false,
+        "radix": false
     },
     "rulesDirectory": []
 }

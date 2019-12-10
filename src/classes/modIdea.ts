@@ -1,10 +1,10 @@
 import { IdeaStatus } from "../enums/ideaStatus";
-import { getNextID } from "../modIdeas";
+import { getNextId } from "../modIdeas";
 import { IdeaRating } from "./ideaRating";
 import { IdeaUpdate } from "./ideaUpdate";
 
 export class ModIdea {
-  public id: number = getNextID();
+  public id: number = getNextId();
   public text?: string;
   public author: string = "";
   public image?: string;
@@ -12,4 +12,5 @@ export class ModIdea {
   public rating: IdeaRating = new IdeaRating();
   public status: IdeaStatus = IdeaStatus.None;
   public updates: IdeaUpdate[] = [];
+  public message?: string;
 }

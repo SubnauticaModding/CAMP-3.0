@@ -17,7 +17,7 @@ export function isStaff(user: UserResolvable) {
 
 function checkRole(user: UserResolvable, permission: string) {
   user = guild().member(user);
-  if ([...user.roles.values()].filter((r) => r.id === permission).length > 0) { return true; }
-  if (user.permissions.toArray().filter((p) => p === permission).length > 0) { return true; }
+  if ([...user.roles.values()].filter((r) => r.id === permission).length > 0) return true;
+  if (user.permissions.toArray().filter((p) => p === permission).length > 0) return true;
   return false;
 }
