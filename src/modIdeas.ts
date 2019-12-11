@@ -10,7 +10,7 @@ import { IdeaStatus } from "./enums/ideaStatus";
 
 export function createModIdea(message: Discord.Message) {
   let last = getLastFileId();
-  let ideas = readData("modideas/" + last) as any[] || [];
+  let ideas = readData("modideas/" + last, []) as any[];
 
   if (ideas.length === 100) {
     ideas = [];
@@ -28,9 +28,10 @@ export function createModIdea(message: Discord.Message) {
   return idea;
 }
 
-export async function sendModIdea(idea: ModIdea, channel: string | Discord.TextChannel, main = false, react = true) {
+export async function sendModIdea(idea: ModIdea, channel: string | Discord.TextChannel,
+                                  main = false, react = true, operator?: string) {
   if (typeof channel === "string") channel = bot.channels.get(channel) as Discord.TextChannel;
-  const message = await channel.send(await generateIdeaEmbed(idea)) as Discord.Message;
+  const message = await channel.send(await generateIdeaEmbed(idea, operator)) as Discord.Message;
   if (main) {
     idea.message = message.id;
     updateModIdea(idea);
@@ -43,15 +44,15 @@ export async function sendModIdea(idea: ModIdea, channel: string | Discord.TextC
   }
 }
 
-export async function editModIdea(idea: ModIdea, message: Discord.Message) {
-  message.edit(await generateIdeaEmbed(idea));
+export async function editModIdea(idea: ModIdea, message: Discord.Message, operator?: string) {
+  message.edit(await generateIdeaEmbed(idea, operator));
 }
 
 export function updateModIdea(idea: ModIdea) {
   const file = Math.floor((idea.id - 1) / 100);
   const index = (idea.id - 1) % 100;
 
-  const ideas = readData("modideas/" + file) as any[];
+  const ideas = readData("modideas/" + file, []) as any[];
   if (!ideas) return idea;
   ideas[index] = idea;
   writeData("modideas/" + file, ideas);
@@ -59,16 +60,16 @@ export function updateModIdea(idea: ModIdea) {
   return idea;
 }
 
-export function getModIdea(id: number) {
+export function getModIdea(id: number): ModIdea | false {
   const file = Math.floor((id - 1) / 100);
   const index = (id - 1) % 100;
 
-  const ideas = readData("modideas/" + file) as any[];
-  if (!ideas) return;
-  return ideas[index];
+  const ideas = readData("modideas/" + file, []) as any[];
+  if (!ideas) return false;
+  return ideas[index] as ModIdea;
 }
 
-export function getModIdeaFromMessage(message: Discord.Message) {
+export function getModIdeaFromMessage(message: Discord.Message): ModIdea | false {
   if (message.author.id !== bot.user.id) return false;
   if (!message.embeds || message.embeds.length < 1) return false;
 
@@ -82,12 +83,12 @@ export function getModIdeaFromMessage(message: Discord.Message) {
   if (parseInt(footer).toString() !== footer) return false;
 
   const idea = getModIdea(parseInt(footer));
-  return idea === undefined ? false : idea;
+  return idea === undefined ? false : idea as ModIdea;
 }
 
 export function getNextId() {
   let last = getLastFileId();
-  let ideas = readData("modideas/" + last) as any[] || [];
+  let ideas = readData("modideas/" + last, []) as any[];
 
   if (ideas.length === 100) {
     ideas = [];
@@ -97,13 +98,15 @@ export function getNextId() {
   return last * 100 + ideas.length + 1;
 }
 
-async function generateIdeaEmbed(idea: ModIdea) {
+async function generateIdeaEmbed(idea: ModIdea, operator?: string) {
   const user = await bot.fetchUser(idea.author);
   const rating = idea.rating.likes.length - idea.rating.dislikes.length;
   return new Discord.RichEmbed()
     .setAuthor(user.tag, user.displayAvatarURL)
     .setColor(getColorFromStatus(idea))
     .setDescription(idea.text)
+    .addFieldIf(config.STRINGS.IDEA_EMBED.MODIFYING.NAME, config.STRINGS.IDEA_EMBED.MODIFYING.VALUE
+      .replace("{user}", "<@" + operator + ">"), !!operator)
     .addField(config.STRINGS.IDEA_EMBED.LIKES.NAME, config.STRINGS.IDEA_EMBED.LIKES.VALUE
       .replace("{likes}", idea.rating.likes.length.toString())
       .replace("{upvote}", "<:a:" + config.EMOJIS.VOTE.UPVOTE + ">"), true)

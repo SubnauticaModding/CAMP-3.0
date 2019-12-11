@@ -17,7 +17,9 @@
   "EMOJIS": {
     "EDIT": {
       "APPROVE": "✅",
+      "CANCEL": "❌",
       "DUPLICATE": "🖇️",
+      "EDIT": "📝",
       "REMOVE": "🗑️"
     },
     "VOTE": {
@@ -41,10 +43,14 @@
         "NAME": "Dislikes",
         "VALUE": "{dislikes} {downvote}"
       },
-      "FOOTER": "MI-",
+      "FOOTER": "ID: ",
       "LIKES": {
         "NAME": "Likes",
         "VALUE": "{likes} {upvote}"
+      },
+      "MODIFYING": {
+        "NAME": "Modifying...",
+        "VALUE": "{user} is currently modifying this mod idea..."
       },
       "RATING": {
         "NAME": "Rating",

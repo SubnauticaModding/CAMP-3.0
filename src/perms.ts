@@ -4,11 +4,11 @@ import { guild } from "..";
 import config from "../config.json";
 
 export function isIdeasManager(user: UserResolvable) {
-  return checkRole(user, config.ROLES.MOD_IDEAS_MANAGER);
+  return isModerator(user) || checkRole(user, config.ROLES.MOD_IDEAS_MANAGER);
 }
 
 export function isModerator(user: UserResolvable) {
-  return checkRole(user, config.ROLES.MODERATOR);
+  return isStaff(user) || checkRole(user, config.ROLES.MODERATOR);
 }
 
 export function isStaff(user: UserResolvable) {

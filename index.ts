@@ -8,7 +8,7 @@ import { join as path } from "path";
 import config from "./config.json";
 import loadCommands from "./src/loadCommands";
 import { createModIdea, editModIdea, getModIdeaFromMessage, sendModIdea, updateModIdea } from "./src/modIdeas.js";
-import { getOperations, startOperation, stopOperation } from "./src/operations.js";
+import { getOperation, getOperations, startOperation, stopOperation } from "./src/operations.js";
 import { wait } from "./src/util.js";
 
 dotenv();
@@ -19,8 +19,8 @@ const bot = new Discord.Client({ fetchAllMembers: true });
 const commands: any = {};
 const guild = () => {
   const g = bot.guilds.get(config.DISCORD.GUILD);
-  if (g) { return g; }
-  throw new Error("Main guild could not be found!");
+  if (!g) throw new Error("Main guild missing!");
+  return g;
 };
 const web = express();
 
@@ -42,7 +42,7 @@ bot.on("message", (message) => {
 
 bot.on("message", async (message) => {
   if (message.channel.type !== "text") return;
-  if (message.author.bot) { return; }
+  if (message.author.bot) return;
   if (message.content.startsWith(config.PREFIX)) return;
   if (message.channel.id !== config.CHANNELS.IDEAS_SUBMIT) return;
 
@@ -57,47 +57,58 @@ bot.on("messageReactionAdd", async (mr, user) => {
   const idea = getModIdeaFromMessage(mr.message);
   if (!idea) return;
 
-  switch (mr.emoji.id) {
-    case config.EMOJIS.VOTE.UPVOTE:
-      idea.rating.likes = idea.rating.likes.filter((e: string) => e !== user.id);
-      idea.rating.dislikes = idea.rating.dislikes.filter((e: string) => e !== user.id);
-      idea.rating.likes.push(user.id);
-      await editModIdea(updateModIdea(idea), mr.message);
-      mr.remove(user);
-      break;
-    case config.EMOJIS.VOTE.ABSTAIN:
-      idea.rating.likes = idea.rating.likes.filter((e: string) => e !== user.id);
-      idea.rating.dislikes = idea.rating.dislikes.filter((e: string) => e !== user.id);
-      await editModIdea(updateModIdea(idea), mr.message);
-      mr.remove(user);
-      break;
-    case config.EMOJIS.VOTE.DOWNVOTE:
-      idea.rating.likes = idea.rating.likes.filter((e: string) => e !== user.id);
-      idea.rating.dislikes = idea.rating.dislikes.filter((e: string) => e !== user.id);
-      idea.rating.dislikes.push(user.id);
-      await editModIdea(updateModIdea(idea), mr.message);
-      mr.remove(user);
-      break;
-    default:
-      switch (mr.emoji.toString()) {
-        case config.EMOJIS.VOTE.EDIT:
-          await startOperation(user, mr.message);
-          break;
-        default:
-          mr.remove(user);
-      }
-  }
-});
+  const operation = await getOperation(mr.message);
+  if (!operation) {
+    switch (mr.emoji.id) {
+      case config.EMOJIS.VOTE.UPVOTE:
+        idea.rating.likes = idea.rating.likes.filter((e: string) => e !== user.id);
+        idea.rating.dislikes = idea.rating.dislikes.filter((e: string) => e !== user.id);
+        idea.rating.likes.push(user.id);
+        await editModIdea(updateModIdea(idea), mr.message);
+        mr.remove(user);
+        break;
+      case config.EMOJIS.VOTE.ABSTAIN:
+        idea.rating.likes = idea.rating.likes.filter((e: string) => e !== user.id);
+        idea.rating.dislikes = idea.rating.dislikes.filter((e: string) => e !== user.id);
+        await editModIdea(updateModIdea(idea), mr.message);
+        mr.remove(user);
+        break;
+      case config.EMOJIS.VOTE.DOWNVOTE:
+        idea.rating.likes = idea.rating.likes.filter((e: string) => e !== user.id);
+        idea.rating.dislikes = idea.rating.dislikes.filter((e: string) => e !== user.id);
+        idea.rating.dislikes.push(user.id);
+        await editModIdea(updateModIdea(idea), mr.message);
+        mr.remove(user);
+        break;
+      default:
+        switch (mr.emoji.toString()) {
+          case config.EMOJIS.VOTE.EDIT:
+            if (await getOperation(user)) {
+              mr.remove(user);
+              return;
+            }
+            await startOperation(user, mr.message);
+            break;
+          default:
+            mr.remove(user);
+        }
+    }
+  } else {
+    if (user.id !== operation.user) mr.remove(user);
 
-bot.on("messageReactionRemove", async (mr, user) => {
-  if (bot.user.id === user.id) return;
-  const idea = getModIdeaFromMessage(mr.message);
-  if (!idea) return;
-
-  switch (mr.emoji.toString()) {
-    case config.EMOJIS.VOTE.EDIT:
-      stopOperation(user, mr.message);
-      break;
+    switch (mr.emoji.toString()) {
+      case config.EMOJIS.EDIT.APPROVE:
+        break;
+      case config.EMOJIS.EDIT.REMOVE:
+        break;
+      case config.EMOJIS.EDIT.DUPLICATE:
+        break;
+      case config.EMOJIS.EDIT.CANCEL:
+        stopOperation(user, mr.message);
+        break;
+      default:
+        mr.remove(user);
+    }
   }
 });
 
@@ -128,9 +139,11 @@ bot.on("raw", (packet: any) => {
 });
 
 setInterval(async () => {
-  for (const operation of await getOperations()) {
-    if (operation.time + 1000 * config.OPERATION_TIME > Date.now()) {
-      stopOperation(operation.user, operation.message);
+  if (!bot.status) {
+    for (const operation of await getOperations()) {
+      if (operation.time < Date.now()) {
+        stopOperation(operation.user, operation.message);
+      }
     }
   }
 }, 1000);
