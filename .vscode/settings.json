@@ -14,7 +14,6 @@
         "node_modules": true,
         "tsconfig.json": true,
         ".vscode": true,
-        ".eslintrc.js": true,
         "dist/[abcefghijklmnopqrstuvwxyz]*": true,
         "dist/d[bcdefghijklmnopqrstuvwxyz]*": true,
         "dist/da[abcdefghijklmnopqrsuvwxyz]*": true,

@@ -3,14 +3,13 @@
   "version": "3.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && NODE_ENV=dev node dist/index.js",
-    "nodemon": "nodemon -e \"ts\" -i dist/ -i .env -x \"tsc && echo Build finished! && NODE_ENV=dev node dist/index.js || exit 1\"",
+    "start": "tsc && node dist/index.js development",
+    "nodemon": "nodemon -e \"ts\" -i dist/ -i .env -x \"tsc && echo Build finished! && node dist/index.js development || exit 1\"",
     "update": "ncu -u && pnpm i"
   },
   "author": "AlexejheroYTB",
   "license": "GPL-3.0",
   "dependencies": {
-    "@types/ws": "^7.2.4",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -23,12 +22,7 @@
     "@types/fs-readdir-recursive": "^1.0.0",
     "@types/request": "^2.48.5",
     "@types/request-promise": "^4.1.46",
-    "@typescript-eslint/eslint-plugin": "^2.33.0",
-    "@typescript-eslint/parser": "^2.33.0",
-    "eslint": "^7.0.0",
-    "eslint-plugin-jsdoc": "^25.4.1",
-    "eslint-plugin-no-null": "^1.0.2",
-    "typescript": "^3.9.2",
-    "typescript-tslint-plugin": "^0.5.5"
+    "@types/ws": "^7.2.4",
+    "typescript": "^3.9.2"
   }
 }

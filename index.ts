@@ -13,11 +13,13 @@ console.log("Launching bot...");
 util.ensureFolders(__dirname, "data", "mod_ideas");
 
 export const bot = new Discord.Client({
-  disableMentions: "everyone"
+  disableMentions: "everyone",
+  partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"],
 });
 export var guild: Discord.Guild;
 
 bot.login(process.env.DISCORD_TOKEN);
+
 bot.on("ready", () => {
   console.log("Bot is ready.");
   var mainGuild = bot.guilds.cache.get(config.guild);
@@ -25,10 +27,60 @@ bot.on("ready", () => {
   else guild = mainGuild;
 });
 
-bot.on("message", (message) => {
+bot.on("message", async (message) => {
+  if (message.partial) message = await message.fetch();
+
+  if (message.guild?.id !== guild.id) return;
   if (message.channel.id !== config.mod_ideas.submit_channel) return;
   if (message.author.bot) return;
   if (message.content.startsWith(config.prefix)) return;
 
-  mod_ideas.createModIdea(message);
+  const ideamsg = mod_ideas.sendModIdea(mod_ideas.createModIdea(message), config.mod_ideas.list_channel, true, true);
+  message.react(config.emojis.success);
+  const replymsg = await message.channel.send(new Discord.MessageEmbed({
+    description: `Your mod idea has been submitted.\nClick [here](${(await ideamsg).url}) to view it.`,
+    color: "GREEN"
+  }));
+
+  await util.wait(10);
+
+  message.delete();
+  replymsg.delete();
+});
+
+bot.on("messageReactionAdd", async (reaction, user) => {
+  if (reaction.partial) reaction = await reaction.fetch();
+  if (user.partial) user = await user.fetch();
+
+  if (reaction.message.guild?.id !== guild.id) return;
+  if (reaction.message.channel.id !== config.mod_ideas.list_channel) return;
+  if (user.bot) return;
+
+  var modidea = mod_ideas.getModIdeaFromMessage(reaction.message);
+  if (!modidea) return;
+
+  switch (reaction.emoji.id ?? reaction.emoji.toString()) {
+    case config.emojis.abstain:
+      modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
+      modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
+      mod_ideas.updateModIdea(modidea);
+      mod_ideas.editModIdea(modidea, reaction.message);
+      break;
+    case config.emojis.downvote:
+      modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
+      modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
+      modidea.rating.dislikes.push(user.id);
+      mod_ideas.updateModIdea(modidea);
+      mod_ideas.editModIdea(modidea, reaction.message);
+      break;
+    case config.emojis.upvote:
+      modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
+      modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
+      modidea.rating.likes.push(user.id);
+      mod_ideas.updateModIdea(modidea);
+      mod_ideas.editModIdea(modidea, reaction.message);
+      break;
+  }
+
+  reaction.users.remove(user);
 });

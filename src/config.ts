@@ -6,7 +6,7 @@ var environment: { environment: "development" | "production" } = {
   environment: "development",
 };
 
-if (process.env.NODE_ENV == "dev") {
+if ((process.argv[2] || "production") == "development") {
   var config = {
     ...all,
     ...development,

@@ -1,4 +1,9 @@
 {
-  "prefix": "c/",
-  "invite": "https://discord.gg/UpWuWwq"
+  "emojis": {
+    "abstain": "653718217969238021",
+    "downvote": "653231195051786260",
+    "success": "✅",
+    "upvote": "653230762254008350"
+  },
+  "prefix": "c/"
 }
