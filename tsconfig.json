@@ -9,17 +9,12 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "strict": true,
-    "noUnusedLocals": true,
-    "plugins": [
-      {
-        "name": "typescript-tslint-plugin",
-        "configFile": "./tslint.json"
-      }
-    ]
+    "noUnusedLocals": true
   },
   "include": [
     "src/**/*.ts",
-    "index.ts"
+    "index.ts",
+    "config/**/*.json"
   ],
   "exclude": [
     "node_modules"
