@@ -8,9 +8,11 @@ export default class ModIdea {
   time: number;
   image?: string;
 
+  channel?: string;
   message?: string;
   status: ModIdeaStatus = ModIdeaStatus.None;
   edited: boolean = false;
+  specialComment: string = "";
   comment: string = "";
   rating: ModIdeaRating = new ModIdeaRating();
 

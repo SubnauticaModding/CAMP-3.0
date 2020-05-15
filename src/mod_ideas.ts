@@ -29,13 +29,12 @@ export async function sendModIdea(idea: ModIdea, channel: string | Discord.TextC
   if (typeof channel === "string") channel = bot.channels.cache.get(channel) as Discord.TextChannel;
   const message = await channel.send(await generateIdeaEmbed(idea)) as Discord.Message;
   if (main) {
+    idea.channel = channel.id;
     idea.message = message.id;
     updateModIdea(idea);
   }
   if (react) {
-    await message.react(config.emojis.upvote);
-    await message.react(config.emojis.abstain);
-    await message.react(config.emojis.downvote);
+    addReactions(message);
   }
   return message;
 }
@@ -85,16 +84,30 @@ export function getModIdeaFromMessage(message: Discord.Message): ModIdea | undef
 async function generateIdeaEmbed(idea: ModIdea) {
   const user = await bot.users.fetch(idea.author);
   const rating = idea.rating.likes.length - idea.rating.dislikes.length;
-  return new Discord.MessageEmbed()
+
+  const embed = new Discord.MessageEmbed()
     .setAuthor(user.tag, user.displayAvatarURL())
     .setColor(getColorFromStatus(idea.status))
-    .setDescription(idea.text)
-    .addField("Rating", `<:a:${getEmojiForRating(rating)}> \`${rating}\``, true)
-    .addField("Votes", idea.rating.likes.length + idea.rating.dislikes.length, true)
-    .setFooter("ID: #" + idea.id)
+    .setDescription(idea.text);
+
+  switch (idea.status) {
+    case ModIdeaStatus.None:
+      embed.addField("Rating", `<:a:${getEmojiForRating(rating)}> \`${rating}\``, true)
+        .addField("Votes", idea.rating.likes.length + idea.rating.dislikes.length, true);
+      break;
+    case ModIdeaStatus.Released:
+      embed.addField("Status", "Released at " + idea.specialComment);
+      break;
+  }
+
+  if (idea.comment) embed.addField("Comment", idea.comment);
+
+  embed.setFooter("ID: #" + idea.id)
     .setImage(idea.image ?? "")
     .setTimestamp(idea.time)
     .setTitle(getTitleFromStatus(idea.status));
+
+  return embed;
 }
 
 function getColorFromStatus(status: ModIdeaStatus): string {
@@ -150,4 +163,10 @@ function getLastFileId(): number {
     .filter((p) => p.endsWith(".json"))
     .map((p) => parseInt(p.substring(0, p.length - 5))),
   );
+}
+
+async function addReactions(message: Discord.Message) {
+  await message.react(config.emojis.upvote);
+  await message.react(config.emojis.abstain);
+  await message.react(config.emojis.downvote);
 }

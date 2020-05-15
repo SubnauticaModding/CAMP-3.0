@@ -1,6 +1,8 @@
 import Discord from "discord.js";
 import dotenv from "dotenv";
+import nexusmods from "@nexusmods/nexus-api";
 
+import * as commands from "./src/commands";
 import config from "./src/config";
 import * as mod_ideas from "./src/mod_ideas";
 import * as util from "./src/util";
@@ -17,6 +19,13 @@ export const bot = new Discord.Client({
   partials: ["CHANNEL", "GUILD_MEMBER", "MESSAGE", "REACTION", "USER"],
 });
 export var guild: Discord.Guild;
+export var nexus: nexusmods;
+
+(async () => {
+  console.log("Creating nexusmods object...")
+  nexus = await nexusmods.create(process.env.NEXUS_API_KEY ?? "", "SNModding-CAMP-Bot", "3.0.0", "Subnautica");
+  console.log("Nexusmods object created");
+})();
 
 bot.login(process.env.DISCORD_TOKEN);
 
@@ -48,12 +57,31 @@ bot.on("message", async (message) => {
   replymsg.delete();
 });
 
+bot.on("message", async (message) => {
+  if (message.partial) message = await message.fetch();
+
+  if (message.guild?.id !== guild.id) return;
+  if (message.author.bot) return;
+  if (!message.content.startsWith(config.prefix)) return;
+
+  const args = message.content.split(/ +/g);
+  const cmd = args.shift()?.substr(config.prefix.length);
+
+  if (!cmd) return;
+
+  for (const commandType of Object.values(commands)) {
+    const command = new commandType();
+    if (command.name == cmd || command.aliases?.includes(cmd)) {
+      command.execute(message, args);
+    }
+  }
+});
+
 bot.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.partial) reaction = await reaction.fetch();
   if (user.partial) user = await user.fetch();
 
   if (reaction.message.guild?.id !== guild.id) return;
-  if (reaction.message.channel.id !== config.mod_ideas.list_channel) return;
   if (user.bot) return;
 
   var modidea = mod_ideas.getModIdeaFromMessage(reaction.message);
@@ -77,6 +105,10 @@ bot.on("messageReactionAdd", async (reaction, user) => {
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.likes.push(user.id);
+      mod_ideas.updateModIdea(modidea);
+      mod_ideas.editModIdea(modidea, reaction.message);
+      break;
+    case config.emojis.update:
       mod_ideas.updateModIdea(modidea);
       mod_ideas.editModIdea(modidea, reaction.message);
       break;
