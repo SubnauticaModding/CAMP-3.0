@@ -7,6 +7,7 @@ import config from "./src/config";
 import * as mod_ideas from "./src/mod_ideas";
 import * as util from "./src/util";
 import web_init from "./src/web_init";
+import * as embeds from "./src/embeds";
 
 dotenv.config();
 web_init();
@@ -46,15 +47,7 @@ bot.on("message", async (message) => {
 
   const ideamsg = mod_ideas.sendModIdea(mod_ideas.createModIdea(message), config.mod_ideas.list_channel, true, true);
   message.react(config.emojis.success);
-  const replymsg = await message.channel.send(new Discord.MessageEmbed({
-    description: `Your mod idea has been submitted.\nClick [here](${(await ideamsg).url}) to view it.`,
-    color: "GREEN"
-  }));
-
-  await util.wait(10);
-
-  message.delete();
-  replymsg.delete();
+  embeds.success(message, `Your mod idea has been submitted.\nClick [here](${(await ideamsg).url}) to view it.`);
 });
 
 bot.on("message", async (message) => {
