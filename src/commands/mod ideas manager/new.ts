@@ -1,16 +1,17 @@
 import Discord from "discord.js";
 
-import config from "../config";
-import Command from "../data_types/command";
-import CommandPermission from "../data_types/command_permission";
-import ModIdeaStatus from "../data_types/mod_idea_status";
-import * as embeds from "../embeds";
-import * as parser from "../parser";
+import config from "../../config";
+import Command from "../../data_types/command";
+import CommandPermission from "../../data_types/command_permission";
+import ModIdeaStatus from "../../data_types/mod_idea_status";
+import * as embeds from "../../embeds";
+import * as parser from "../../parser";
 
 export default class implements Command {
   name = "new";
   aliases = ["relist"];
   description = `Removes the status of a mod idea and re-adds it to <#${config.channels.ideas_list}>.`;
+  usage = "<#ID>";
   permission = CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {

@@ -1,16 +1,17 @@
 import Discord from "discord.js";
 
-import config from "../config";
-import Command from "../data_types/command";
-import CommandPermission from "../data_types/command_permission";
-import ModIdeaStatus from "../data_types/mod_idea_status";
-import * as embeds from "../embeds";
-import * as parser from "../parser";
+import config from "../../config";
+import Command from "../../data_types/command";
+import CommandPermission from "../../data_types/command_permission";
+import ModIdeaStatus from "../../data_types/mod_idea_status";
+import * as embeds from "../../embeds";
+import * as parser from "../../parser";
 
 export default class implements Command {
   name = "approve";
   aliases = ["release", "released"];
   description = `Marks a mod idea as released and moves it into <#${config.channels.ideas_released}>.`;
+  usage = "<#ID> <NexusMods link> [comment]";
   permission = CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {

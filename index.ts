@@ -44,7 +44,7 @@ bot.on("message", async (message) => {
   if (message.guild?.id !== guild.id) return;
   if (message.channel.id !== config.channels.ideas_submit) return;
   if (message.author.bot) return;
-  if (message.content.startsWith(config.prefix)) return;
+  if (message.content.startsWith("c/")) return;
 
   const ideamsg = ModIdea.create(message).send(config.channels.ideas_list, true, true);
   message.react(config.emojis.success);
@@ -56,10 +56,25 @@ bot.on("message", async (message) => {
 
   if (message.guild?.id !== guild.id) return;
   if (message.author.bot) return;
-  if (!message.content.startsWith(config.prefix)) return;
+  if (!message.content.startsWith("c/") && !message.content.startsWith("z/")) return;
+
+  if (message.content.startsWith("z/")) {
+    const reminderMessage = message.channel.send(new Discord.MessageEmbed({
+      title: "Reminder",
+      description: "The prefix for the Mod Ideas bot has changed. The new prefix is `c/`.",
+      color: "FEFEFE"
+    }));
+    message.content = "c" + message.content.substr(1);
+
+    reminderMessage.then((r) => {
+      setTimeout(() => {
+        r.delete();
+      }, 10000);
+    })
+  }
 
   const args = message.content.split(/ +/g);
-  const cmd = args.shift()?.substr(config.prefix.length);
+  const cmd = args.shift()?.substr(2);
 
   for (var i = 0; i < 10; i++) {
     args[i] = args[i] ?? "";
@@ -71,7 +86,7 @@ bot.on("message", async (message) => {
     const command = new commandType();
     // @ts-ignore 2345 - Argument of type 'string' is not assignable to parameter of type 'never'.
     if (command.name == cmd || command.aliases?.includes(cmd)) {
-      if (getPermission(message.member) >= command.permission) {
+      if (util.getPermission(message.member) >= command.permission) {
         command.execute(message, args);
       } else if (command.permission == CommandPermission.Developer) {
         embeds.error(message, "You don't have permission to execute this command.\nThis command may only be used by <@183249892712513536>.");
@@ -137,20 +152,3 @@ bot.on("messageReactionAdd", async (reaction, user) => {
 
   reaction.users.remove(user);
 });
-
-function getPermission(member: Discord.GuildMember | null): CommandPermission {
-  if (!member) return CommandPermission.None;
-  if (member.id == "183249892712513536") return CommandPermission.Developer;
-  if (member.hasPermission("ADMINISTRATOR")) return CommandPermission.ServerAdministrator;
-
-  var maxPermission = 0;
-  const roles = [...member.roles.cache.values()].map(r => r.id);
-  for (var permission in config.permissions) {
-    // @ts-ignore 7053 - No index signature with a parameter of type 'string' was found on type '{ 1: string, 2:string, ... }'
-    if (roles.includes(config.permissions[permission])) {
-      maxPermission = Math.max(maxPermission, parseInt(permission));
-    }
-  }
-
-  return maxPermission;
-}
