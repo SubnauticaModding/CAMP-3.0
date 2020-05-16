@@ -1,8 +1,9 @@
 {
   "guild": "695394283124949053",
-  "mod_ideas": {
-    "list_channel": "695394284035112987",
-    "submit_channel": "695394284035112986",
-    "released_channel": "695394284035112989"
+  "channels": {
+    "ideas_list": "695394284035112987",
+    "ideas_released": "695394284035112989",
+    "ideas_removed": "695394284219662386",
+    "ideas_submit": "695394284035112986"
   }
 }

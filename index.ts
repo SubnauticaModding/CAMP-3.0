@@ -2,9 +2,9 @@ import Discord from "discord.js";
 import dotenv from "dotenv";
 import nexusmods from "@nexusmods/nexus-api";
 
+import ModIdea from "./src/data_types/mod_idea";
 import * as commands from "./src/commands";
 import config from "./src/config";
-import * as mod_ideas from "./src/mod_ideas";
 import * as util from "./src/util";
 import web_init from "./src/web_init";
 import * as embeds from "./src/embeds";
@@ -45,7 +45,7 @@ bot.on("message", async (message) => {
   if (message.author.bot) return;
   if (message.content.startsWith(config.prefix)) return;
 
-  const ideamsg = mod_ideas.sendModIdea(mod_ideas.createModIdea(message), config.mod_ideas.list_channel, true, true);
+  const ideamsg = ModIdea.create(message).send(config.mod_ideas.list_channel, true, true);
   message.react(config.emojis.success);
   embeds.success(message, `Your mod idea has been submitted.\nClick [here](${(await ideamsg).url}) to view it.`);
 });
@@ -59,6 +59,10 @@ bot.on("message", async (message) => {
 
   const args = message.content.split(/ +/g);
   const cmd = args.shift()?.substr(config.prefix.length);
+
+  for (var i = 0; i < 10; i++) {
+    args[i] = args[i] ?? "";
+  }
 
   if (!cmd) return;
 
@@ -77,33 +81,33 @@ bot.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.message.guild?.id !== guild.id) return;
   if (user.bot) return;
 
-  var modidea = mod_ideas.getModIdeaFromMessage(reaction.message);
+  var modidea = ModIdea.getFromMessage(reaction.message);
   if (!modidea) return;
 
   switch (reaction.emoji.id ?? reaction.emoji.toString()) {
     case config.emojis.abstain:
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
-      mod_ideas.updateModIdea(modidea);
-      mod_ideas.editModIdea(modidea, reaction.message);
+      modidea.update();
+      modidea.edit(reaction.message);
       break;
     case config.emojis.downvote:
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.dislikes.push(user.id);
-      mod_ideas.updateModIdea(modidea);
-      mod_ideas.editModIdea(modidea, reaction.message);
+      modidea.update();
+      modidea.edit(reaction.message);
       break;
     case config.emojis.upvote:
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.likes.push(user.id);
-      mod_ideas.updateModIdea(modidea);
-      mod_ideas.editModIdea(modidea, reaction.message);
+      modidea.update();
+      modidea.edit(reaction.message);
       break;
     case config.emojis.update:
-      mod_ideas.updateModIdea(modidea);
-      mod_ideas.editModIdea(modidea, reaction.message);
+      modidea.update();
+      modidea.edit(reaction.message);
       break;
   }
 
