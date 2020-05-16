@@ -83,36 +83,36 @@ export default class ModIdea {
     const user = await bot.users.fetch(this.author);
     const rating = this.rating.likes.length - this.rating.dislikes.length;
 
-    const embed = new Discord.MessageEmbed()
-      .setAuthor(user.tag, user.displayAvatarURL())
-      .setColor(ModIdea.getColorFromStatus(this.status))
-      .setDescription(await this.parseReferences(this.text, true));
+    const embed = new Discord.MessageEmbed();
+    embed.setAuthor(user.tag, user.displayAvatarURL());
+    embed.setColor(ModIdea.getColorFromStatus(this.status));
+    embed.setDescription(await this.parseReferences(this.text, true));
 
     switch (this.status) {
       case ModIdeaStatus.Duplicate:
-        embed.addField("Status", await this.parseReferences(`Duplicate of #${this.specialComment}`, true))
-          .addField("Marked as duplicate by", `<@${this.lastActor}>`);
+        embed.addField("Status", await this.parseReferences(`Duplicate of #${this.specialComment}`, true));
+        embed.addField("Marked as duplicate by", `<@${this.lastActor}>`);
         break;
       case ModIdeaStatus.Removed:
-        embed.addField("Status", `Removed`)
-          .addField("Removed by", `<@${this.lastActor}>`);
+        embed.addField("Status", `Removed`);
+        embed.addField("Removed by", `<@${this.lastActor}>`);
         break;
       case ModIdeaStatus.None:
-        embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\``, true)
-          .addField("Votes", this.rating.likes.length + this.rating.dislikes.length, true);
+        embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\``, true);
+        embed.addField("Votes", this.rating.likes.length + this.rating.dislikes.length, true);
         break;
       case ModIdeaStatus.Released:
-        embed.addField("Status", `Released at ${this.specialComment}`)
-          .addField("Marked as released by", `<@${this.lastActor}>`);
+        embed.addField("Status", `Released at ${this.specialComment}`);
+        embed.addField("Marked as released by", `<@${this.lastActor}>`);
         break;
     }
 
     if (this.comment && this.comment.trim().length > 0) embed.addField("Comment", await this.parseReferences(this.comment, true));
 
-    embed.setFooter("ID: #" + this.id)
-      .setImage(this.image ?? "")
-      .setTimestamp(this.time)
-      .setTitle(ModIdea.getTitleFromStatus(this.status));
+    embed.setFooter(`ID: #${this.id}${this.edited ? " (edited)" : ""}`);
+    embed.setImage(this.image ?? "");
+    embed.setTimestamp(this.time);
+    embed.setTitle(ModIdea.getTitleFromStatus(this.status));
 
     return embed;
   }
@@ -211,6 +211,8 @@ export default class ModIdea {
     if (!footer.startsWith("ID: #")) return;
 
     footer = footer.substring("ID: #".length);
+    if (footer.toLowerCase().endsWith(" (edited)")) footer = footer.substr(0, footer.length - 9);
+
     if (parseInt(footer).toString() !== footer) return;
 
     return ModIdea.get(parseInt(footer));
@@ -252,6 +254,12 @@ export default class ModIdea {
     return config.emojis.abstain;
   }
 
+  public static async addReactions(message: Discord.Message) {
+    await message.react(config.emojis.upvote);
+    await message.react(config.emojis.abstain);
+    await message.react(config.emojis.downvote);
+  }
+
   private static getNextID(): number {
     var last = ModIdea.getLastFileId();
     var ideas = data.read("mod_ideas/" + last, []);
@@ -269,11 +277,5 @@ export default class ModIdea {
       .filter((p) => p.endsWith(".json"))
       .map((p) => parseInt(p.substring(0, p.length - 5))),
     );
-  }
-
-  private static async addReactions(message: Discord.Message) {
-    await message.react(config.emojis.upvote);
-    await message.react(config.emojis.abstain);
-    await message.react(config.emojis.downvote);
   }
 }

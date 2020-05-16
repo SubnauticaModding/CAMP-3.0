@@ -1,3 +1,6 @@
+export { default as attach } from "./user/attach";
+export { default as delete } from "./user/delete";
+export { default as edit } from "./user/edit";
 export { default as help } from "./user/help";
 
 export { default as approve } from "./mod ideas manager/approve";

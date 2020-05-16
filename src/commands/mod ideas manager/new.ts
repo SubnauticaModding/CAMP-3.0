@@ -3,6 +3,7 @@ import Discord from "discord.js";
 import config from "../../config";
 import Command from "../../data_types/command";
 import CommandPermission from "../../data_types/command_permission";
+import ModIdea from "../../data_types/mod_idea";
 import ModIdeaStatus from "../../data_types/mod_idea_status";
 import * as embeds from "../../embeds";
 import * as parser from "../../parser";
@@ -27,6 +28,7 @@ export default class implements Command {
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.channels.ideas_list);
+    ModIdea.addReactions(newIdeaMsg);
 
     embeds.success(message, `Mod idea \`#${modidea.id}\` has been re-added to <#${config.channels.ideas_list}>.\nClick [here](${newIdeaMsg.url}) to view it.`);
   }
