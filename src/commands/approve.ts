@@ -11,7 +11,7 @@ import * as embeds from "../embeds";
 export default class implements Command {
   name = "approve";
   aliases = ["release", "released"];
-  description = `Marks a mod idea as released and moves it into <#${config.mod_ideas.released_channel}>.`;
+  description = `Marks a mod idea as released and moves it into <#${config.channels.ideas_released}>.`;
   permission = CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
@@ -53,7 +53,7 @@ export default class implements Command {
 
     (await modidea.getMessage())?.delete();
     modidea.update();
-    const newIdeaMsg = modidea.send(config.mod_ideas.released_channel, true, false);
+    const newIdeaMsg = modidea.send(config.channels.ideas_released, true, false);
 
     if (oldStatus == ModIdeaStatus.Released)
       embeds.success(message, `Your changes to mod idea \`#${ideaID}\` have been applied.\nClick [here](${(await newIdeaMsg).url}) to view it.`)

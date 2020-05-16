@@ -41,11 +41,11 @@ bot.on("message", async (message) => {
   if (message.partial) message = await message.fetch();
 
   if (message.guild?.id !== guild.id) return;
-  if (message.channel.id !== config.mod_ideas.submit_channel) return;
+  if (message.channel.id !== config.channels.ideas_submit) return;
   if (message.author.bot) return;
   if (message.content.startsWith(config.prefix)) return;
 
-  const ideamsg = ModIdea.create(message).send(config.mod_ideas.list_channel, true, true);
+  const ideamsg = ModIdea.create(message).send(config.channels.ideas_list, true, true);
   message.react(config.emojis.success);
   embeds.success(message, `Your mod idea has been submitted.\nClick [here](${(await ideamsg).url}) to view it.`);
 });
