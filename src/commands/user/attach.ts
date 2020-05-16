@@ -12,7 +12,7 @@ export default class implements Command {
   name = "attach";
   aliases = [];
   description = "Adds, replaces or removes an attachment from a mod idea.";
-  usage = "<#ID> [attachment link, or none]";
+  usage = "<#ID> [attachment link]";
   permission = CommandPermission.User;
 
   async execute(message: Discord.Message, args: string[]) {

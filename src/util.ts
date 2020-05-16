@@ -39,6 +39,34 @@ export function getPermission(member: Discord.GuildMember | null): CommandPermis
   return maxPermission;
 }
 
+export async function getAllMessages(channel: Discord.TextChannel) {
+  const messages: Discord.Message[] = [];
+  var before = undefined;
+
+  while (true) {
+    try {
+      var fetchedMessages = [...(await channel.messages.fetch({
+        before: before,
+        limit: 100,
+      })).values()];
+
+      if (!fetchedMessages || fetchedMessages.length == 0) break;
+
+      for (var message of fetchedMessages) {
+        messages.unshift(message);
+      }
+
+      before = messages[0].id;
+
+      if (fetchedMessages.length != 100) break;
+    } catch {
+      break;
+    }
+  }
+
+  return messages;
+}
+
 declare global {
   interface String {
     replaceAsync(regexp: RegExp, func: (substring: string, ...args: any[]) => Promise<string>): Promise<string>;

@@ -89,12 +89,14 @@ export default class ModIdea {
     embed.setDescription(await this.parseReferences(this.text, true));
 
     switch (this.status) {
+      case ModIdeaStatus.Deleted:
+        embed.addField("Status", "Deleted by author");
       case ModIdeaStatus.Duplicate:
         embed.addField("Status", await this.parseReferences(`Duplicate of #${this.specialComment}`, true));
         embed.addField("Marked as duplicate by", `<@${this.lastActor}>`);
         break;
       case ModIdeaStatus.Removed:
-        embed.addField("Status", `Removed`);
+        embed.addField("Status", "Removed");
         embed.addField("Removed by", `<@${this.lastActor}>`);
         break;
       case ModIdeaStatus.None:
@@ -111,7 +113,7 @@ export default class ModIdea {
 
     embed.setFooter(`ID: #${this.id}${this.edited ? " (edited)" : ""}`);
     embed.setImage(this.image ?? "");
-    embed.setTimestamp(this.time);
+    embed.setTimestamp(this.time == 0 ? undefined : this.time);
     embed.setTitle(ModIdea.getTitleFromStatus(this.status));
 
     return embed;
@@ -260,7 +262,7 @@ export default class ModIdea {
     await message.react(config.emojis.downvote);
   }
 
-  private static getNextID(): number {
+  public static getNextID(): number {
     var last = ModIdea.getLastFileId();
     var ideas = data.read("mod_ideas/" + last, []);
 
@@ -272,8 +274,8 @@ export default class ModIdea {
     return last * 100 + ideas.length + 1;
   }
 
-  private static getLastFileId(): number {
-    return Math.max(0, ...readdir(path.join(__dirname, "../data/mod_ideas"))
+  public static getLastFileId(): number {
+    return Math.max(0, ...readdir(path.join(__dirname, "../../data/mod_ideas"))
       .filter((p) => p.endsWith(".json"))
       .map((p) => parseInt(p.substring(0, p.length - 5))),
     );

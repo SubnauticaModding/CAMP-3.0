@@ -17,8 +17,9 @@ export default class implements Command {
   async execute(message: Discord.Message, args: string[]) {
     const embed = new Discord.MessageEmbed();
     embed.setColor("BLUE");
-    embed.setTitle("Commands List");
     embed.setAuthor(guild.me?.displayName, message.client.user?.displayAvatarURL());
+    embed.setTitle("Commands List");
+    embed.setDescription("Arguments in <angle brackets> are required, and arguments in [square brackets] are optional.");
     embed.setFooter("Bot created by AlexejheroYTB | v3.0.0");
 
     const userPerm = util.getPermission(message.member);
@@ -39,7 +40,7 @@ export default class implements Command {
           else toAdd += `>= <@&${config.permissions[command.permission.toString()]}>`
         }
 
-        embed.addField(`c/${command.name} ${command.usage}`, toAdd);
+        embed.addField(`c/${command.name} ${command.usage}`, toAdd.trim());
       }
     }
 

@@ -1,4 +1,6 @@
-import { nexus } from "..";
+import Discord from "discord.js";
+
+import { bot, nexus } from "..";
 import ModIdea from "./data_types/mod_idea";
 
 export function modIdea(id: string) {
@@ -7,6 +9,13 @@ export function modIdea(id: string) {
 
   const modidea = ModIdea.get(parseInt(id));
   return modidea;
+}
+
+export function textChannel(id: string) {
+  const ch = bot.channels.cache.get(id);
+  if (!ch) return;
+  if (ch.type != "news" && ch.type != "text") return;
+  return ch as Discord.TextChannel;
 }
 
 export async function nexusLink(link: string) {
