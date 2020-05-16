@@ -3,9 +3,9 @@ import Discord from "discord.js";
 import config from "../config";
 import Command from "../data_types/command";
 import CommandPermission from "../data_types/command_permission";
-import ModIdea from "../data_types/mod_idea";
 import ModIdeaStatus from "../data_types/mod_idea_status";
 import * as embeds from "../embeds";
+import * as parser from "../parser";
 
 export default class implements Command {
   name = "duplicate";
@@ -14,39 +14,36 @@ export default class implements Command {
   permission = CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
-    //#region Argument checks 
+    const dupe = parser.modIdea(args[0]);
+    if (!dupe) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
 
-    if (args[0].startsWith("#")) args[0] = args[0].substr(1);
-    if (parseInt(args[0]).toString() != args[0]) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
+    const orig = parser.modIdea(args[1]);
+    if (!orig) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the second argument.");
 
-    const modidea = ModIdea.get(parseInt(args[0]));
+    if (dupe.id == orig.id) return embeds.error(message, "Invalid arguments. Expected two different mod idea IDs as the first and second parameters.");
 
-    if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
+    if (dupe.time < orig.time && args[2] != "-f") {
+      return embeds.warn(message, "You are trying to mark an older mod idea as a duplicate of a newer mod idea.\nIf you're sure you want to do this, run this command with `-f` at the end.", 20);
+    }
 
-    if (args[1].startsWith("#")) args[1] = args[1].substr(1);
-    if (parseInt(args[1]).toString() != args[1]) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the second argument.");
+    args.shift();
+    args.shift();
 
-    const original = ModIdea.get(parseInt(args[1]));
+    const oldStatus = dupe.status;
 
-    if (!original) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the second argument.");
+    dupe.status = ModIdeaStatus.Duplicate;
+    dupe.specialComment = orig.id.toString();
+    dupe.lastActor = message.author.id;
+    dupe.comment = args[0] == "-f" ? args.join(" ").substr(3) : args.join(" ");
 
-    //#endregion
+    dupe.update();
+    const newIdeaMsg = await dupe.sendOrEdit(config.channels.ideas_removed);
 
-    const ideaID = args.shift();
-    const oldStatus = modidea.status;
-
-    modidea.status = ModIdeaStatus.Duplicate;
-    modidea.specialComment = args.shift() ?? "";
-    modidea.lastActor = message.author.id;
-    modidea.comment = args.join(" ");
-
-    (await modidea.getMessage())?.delete();
-    modidea.update();
-    const newIdeaMsg = modidea.send(config.channels.ideas_removed, true, false);
-
-    if (oldStatus == ModIdeaStatus.Removed)
-      embeds.success(message, `Your changes to mod idea \`#${ideaID}\` have been applied.\nClick [here](${(await newIdeaMsg).url}) to view it.`)
+    if (oldStatus == ModIdeaStatus.Duplicate)
+      embeds.success(message, `Your changes to mod idea \`#${dupe.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+    else if (dupe.time < orig.time && args[0] == "-f")
+      embeds.success(message, `Mod idea \`#${dupe.id}\` has been **forcefully** marked as a duplicate of \`#${orig.id}\`.\nClick [here](${newIdeaMsg.url}) to view it.`);
     else
-      embeds.success(message, `Mod idea \`#${ideaID}\` has been marked as a duplicate.\nClick [here](${(await newIdeaMsg).url}) to view it.`);
+      embeds.success(message, `Mod idea \`#${dupe.id}\` has been marked as a duplicate of \`#${orig.id}\`.\nClick [here](${newIdeaMsg.url}) to view it.`);
   }
 }

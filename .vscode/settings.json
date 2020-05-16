@@ -14,12 +14,13 @@
         "package-lock.json": true,
         "node_modules": true,
         "tsconfig.json": true,
-        ".vscode": false,
+        ".vscode": true,
         "dist/[abcefghijklmnopqrstuvwxyz]*": true,
         "dist/d[bcdefghijklmnopqrstuvwxyz]*": true,
         "dist/da[abcdefghijklmnopqrsuvwxyz]*": true,
         "dist/dat[bcdefghijklmnopqrstuvwxyz]*": true,
-        "package.json": true
+        "package.json": true,
+        ".env": true
     },
     "tslint.autoFixOnSave": true,
     "typescript.tsdk": "node_modules\\typescript\\lib"

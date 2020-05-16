@@ -3,7 +3,8 @@ enum CommandPermission {
   ModIdeasManager = 1,
   Moderator = 2,
   Administrator = 3,
-  Developer = 4,
+  ServerAdministrator = 10,
+  Developer = 99,
 }
 
 export default CommandPermission;

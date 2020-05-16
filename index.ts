@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import dotenv from "dotenv";
 import nexusmods from "@nexusmods/nexus-api";
 
+import CommandPermission from "./src/data_types/command_permission";
 import ModIdea from "./src/data_types/mod_idea";
 import * as commands from "./src/commands";
 import config from "./src/config";
@@ -47,7 +48,7 @@ bot.on("message", async (message) => {
 
   const ideamsg = ModIdea.create(message).send(config.channels.ideas_list, true, true);
   message.react(config.emojis.success);
-  embeds.success(message, `Your mod idea has been submitted.\nClick [here](${(await ideamsg).url}) to view it.`);
+  embeds.success(message, `Your mod idea has been submitted.\nClick [here](${(await ideamsg).url}) to view it.`, 5);
 });
 
 bot.on("message", async (message) => {
@@ -68,8 +69,31 @@ bot.on("message", async (message) => {
 
   for (const commandType of Object.values(commands)) {
     const command = new commandType();
+    // @ts-ignore 2345 - Argument of type 'string' is not assignable to parameter of type 'never'.
     if (command.name == cmd || command.aliases?.includes(cmd)) {
-      command.execute(message, args);
+      if (getPermission(message.member) >= command.permission) {
+        command.execute(message, args);
+      } else if (command.permission == CommandPermission.Developer) {
+        embeds.error(message, "You don't have permission to execute this command.\nThis command may only be used by <@183249892712513536>.");
+      } else {
+        var toSay = "You don't have permission to execute this command.";
+        const roles: string[] = [];
+        for (var permission in config.permissions) {
+          // @ts-ignore 7053 - No index signature with a parameter of type 'string' was found on type '{ 1: string, 2:string, ... }'
+          if (parseInt(permission) >= command.permission) roles.push(`<@&${config.permissions[permission]}>`);
+        }
+
+        if (roles.length == 1) {
+          toSay += `\nIn order to execute this command, you need the following role: ${roles[0]}.`;
+        } else if (roles.length > 1) {
+          toSay += "\nIn order to execute this command, you need one of the following roles: ";
+          const lastRole = roles.pop();
+          toSay += roles.join(", ");
+          toSay += `or ${lastRole}.`;
+        }
+
+        embeds.error(message, toSay);
+      }
     }
   }
 });
@@ -113,3 +137,20 @@ bot.on("messageReactionAdd", async (reaction, user) => {
 
   reaction.users.remove(user);
 });
+
+function getPermission(member: Discord.GuildMember | null): CommandPermission {
+  if (!member) return CommandPermission.None;
+  if (member.id == "183249892712513536") return CommandPermission.Developer;
+  if (member.hasPermission("ADMINISTRATOR")) return CommandPermission.ServerAdministrator;
+
+  var maxPermission = 0;
+  const roles = [...member.roles.cache.values()].map(r => r.id);
+  for (var permission in config.permissions) {
+    // @ts-ignore 7053 - No index signature with a parameter of type 'string' was found on type '{ 1: string, 2:string, ... }'
+    if (roles.includes(config.permissions[permission])) {
+      maxPermission = Math.max(maxPermission, parseInt(permission));
+    }
+  }
+
+  return maxPermission;
+}

@@ -53,6 +53,19 @@ export default class ModIdea {
     message.edit(await this.generateEmbed());
   }
 
+  public async sendOrEdit(channel: string) {
+    var newIdeaMsg;
+    const oldMessage = await this.getMessage();
+    if (oldMessage?.channel.id == channel) {
+      newIdeaMsg = oldMessage;
+      this.edit(oldMessage);
+    } else {
+      oldMessage?.delete();
+      newIdeaMsg = await this.send(channel, true, false);
+    }
+    return newIdeaMsg;
+  }
+
   public update() {
     const file = Math.floor((this.id - 1) / 100);
     const index = (this.id - 1) % 100;

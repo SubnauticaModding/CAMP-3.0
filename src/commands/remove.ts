@@ -3,29 +3,22 @@ import Discord from "discord.js";
 import config from "../config";
 import Command from "../data_types/command";
 import CommandPermission from "../data_types/command_permission";
-import ModIdea from "../data_types/mod_idea";
 import ModIdeaStatus from "../data_types/mod_idea_status";
 import * as embeds from "../embeds";
+import * as parser from "../parser";
 
 export default class implements Command {
   name = "remove";
-  aliases = ["deny", "invalid"];
+  aliases = ["deny", "invalid", "delete"];
   description = `Removes a mod idea and moves it into <#${config.channels.ideas_removed}>.`;
   permission = CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
-    //#region Argument checks 
-
-    if (args[0].startsWith("#")) args[0] = args[0].substr(1);
-    if (parseInt(args[0]).toString() != args[0]) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
-
-    const modidea = ModIdea.get(parseInt(args[0]));
-
+    const modidea = parser.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
 
-    //#endregion
+    args.shift();
 
-    const ideaID = args.shift();
     const oldStatus = modidea.status;
 
     modidea.status = ModIdeaStatus.Removed;
@@ -33,13 +26,12 @@ export default class implements Command {
     modidea.lastActor = message.author.id;
     modidea.comment = args.join(" ");
 
-    (await modidea.getMessage())?.delete();
     modidea.update();
-    const newIdeaMsg = modidea.send(config.channels.ideas_removed, true, false);
+    const newIdeaMsg = await modidea.sendOrEdit(config.channels.ideas_removed);
 
     if (oldStatus == ModIdeaStatus.Removed)
-      embeds.success(message, `Your changes to mod idea \`#${ideaID}\` have been applied.\nClick [here](${(await newIdeaMsg).url}) to view it.`)
+      embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
     else
-      embeds.success(message, `Mod idea \`#${ideaID}\` has been removed.\nClick [here](${(await newIdeaMsg).url}) to view it.`);
+      embeds.success(message, `Mod idea \`#${modidea.id}\` has been removed.\nClick [here](${newIdeaMsg.url}) to view it.`);
   }
 }
