@@ -124,6 +124,11 @@ bot.on("messageReactionAdd", async (reaction, user) => {
   var modidea = ModIdea.getFromMessage(reaction.message);
   if (!modidea) return;
 
+  if (user.id == modidea.author) {
+    reaction.users.remove(user);
+    return;
+  }
+
   switch (reaction.emoji.id ?? reaction.emoji.toString()) {
     case config.emojis.abstain:
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);

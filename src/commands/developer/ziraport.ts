@@ -56,7 +56,7 @@ export default class implements Command {
     idea.comment = (embed.title?.toLowerCase().includes("potential") || embed.title?.toLowerCase().includes("approved")) && embed.fields.length > 0 ? embed.fields[0].value : "";
 
     for (var reaction of message.reactions.cache.values()) {
-      var users = [...(await reaction.users.fetch()).keys()].filter(u => u != "275813801792634880");
+      var users = [...(await reaction.users.fetch()).keys()].filter(u => u != "275813801792634880" && u != (id ?? message.author.id));
       switch (reaction.emoji.id ?? reaction.emoji.toString()) {
         case "653230762254008350":
         case "👍":
@@ -68,6 +68,10 @@ export default class implements Command {
           break;
       }
     }
+
+    const doubleVotes = idea.rating.likes.filter(x => idea.rating.dislikes.includes(x));
+    idea.rating.likes = idea.rating.likes.filter(x => !doubleVotes.includes(x));
+    idea.rating.dislikes = idea.rating.dislikes.filter(x => !doubleVotes.includes(x));
 
     ideas.push(idea);
     data.write("mod_ideas/" + last, ideas);
