@@ -7,3 +7,6 @@ dist
 pnpm-lock.yaml
 package-lock.json
 pnpm-debug.log
+.githubsync
+pull.sh
+push.sh
