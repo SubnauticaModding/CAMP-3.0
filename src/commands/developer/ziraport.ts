@@ -24,7 +24,7 @@ export default class implements Command {
     const newList = parser.textChannel(args[1]);
     if (!newList) return embeds.error(message, "Invalid arguments. Expected a text channel id as the third parameter.");
     
-    if (oldLit.id == newList.id) return embeds.error(message, "Invalid arguments. Expected two different text channel ids as the first two parameters.");
+    if (oldList.id == newList.id) return embeds.error(message, "Invalid arguments. Expected two different text channel ids as the first two parameters.");
 
     const loadingMsg = await message.channel.send(new Discord.MessageEmbed({
       title: `<a:a:${config.emojis.loading}> Porting in progress...`
