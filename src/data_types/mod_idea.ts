@@ -351,11 +351,11 @@ export default class ModIdea {
     embed.setTimestamp(Date.now());
 
     embed.addField("Total Mod Ideas", total, true);
-    embed.addField("Listed Mod Ideas", listed, true);
-    embed.addField("Released Mod Ideas", released, true);
-    embed.addField("Removed Mod Ideas", removed, true);
-    embed.addField("Duplicate Mod Ideas", duplicate, true);
-    embed.addField("Deleted Mod Ideas", deleted, true);
+    embed.addField("Listed Mod Ideas", `${listed} (${(listed / total * 100).toFixed(2)}%)`, true);
+    embed.addField("Released Mod Ideas", `${released} (${(released / total * 100).toFixed(2)}%)`, true);
+    embed.addField("Removed Mod Ideas", `${removed} (${(removed / total * 100).toFixed(2)}%)`, true);
+    embed.addField("Duplicate Mod Ideas", `${duplicate} (${(duplicate / total * 100).toFixed(2)}%)`, true);
+    embed.addField("Deleted Mod Ideas", `${deleted} (${(deleted / total * 100).toFixed(2)}%)`, true);
 
     embed.addField("Poorly-rated Mod Ideas", badIdeas.length == 0 ? "_none_" : await ModIdea.parseReferencesStatic(badIdeas.map(b => "#" + b.id).join(", ")));
 
