@@ -95,20 +95,19 @@ export default class ModIdea {
         embed.addField("Status", "Deleted by author");
         break;
       case ModIdeaStatus.Duplicate:
-        embed.addField("Status", await this.parseReferences(`Duplicate of #${this.specialComment}`, true), true);
-        embed.addField("Marked as duplicate by", `<@${this.lastActor}>`, true);
+        embed.addField("Status", await this.parseReferences(`Duplicate of #${this.specialComment}`, true));
+        embed.addField("Marked as duplicate by", `<@${this.lastActor}>`);
         break;
       case ModIdeaStatus.Removed:
-        embed.addField("Status", "Removed", true);
-        embed.addField("Removed by", `<@${this.lastActor}>`, true);
-        embed.addField("​", "​", true); // Both title and value are zero-width spaces, in order to shift the rating fields down. Caveat: looks like an empty space on mobile
+        embed.addField("Status", "Removed");
+        embed.addField("Removed by", `<@${this.lastActor}>`);
       case ModIdeaStatus.None:
         embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\``, true);
         embed.addField("Votes", this.rating.likes.length + this.rating.dislikes.length, true);
         break;
       case ModIdeaStatus.Released:
-        embed.addField("Status", `Released at ${this.specialComment}`, true);
-        embed.addField("Marked as released by", `<@${this.lastActor}>`, true);
+        embed.addField("Status", `Released at ${this.specialComment}`);
+        embed.addField("Marked as released by", `<@${this.lastActor}>`);
         break;
     }
 
