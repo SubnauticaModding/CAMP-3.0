@@ -1,0 +1,9 @@
+debug.log
+npm-debug.log*
+node_modules/
+.npm
+.env
+dist
+pnpm-lock.yaml
+package-lock.json
+pnpm-debug.log

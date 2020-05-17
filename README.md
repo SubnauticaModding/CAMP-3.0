@@ -1,3 +1,4 @@
-# Get Started!
+## CAMP-3.0
+The bot used by the Subnautica Modding Discord server.
 
-Add files and start typing 🎉
+<a href="https://www.openode.io/">Sponsored and hosted by opeNode.io</a>

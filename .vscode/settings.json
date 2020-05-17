@@ -1,0 +1,27 @@
+{
+    "explorerExclude.backup": null,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "LICENSE.*": true,
+        "LICENSE": true,
+        ".gitignore": true,
+        "pnpm-lock.yaml": true,
+        "pnpm-debug.log": true,
+        "package-lock.json": true,
+        "node_modules": true,
+        "tsconfig.json": true,
+        ".vscode": true,
+        "dist/[abcefghijklmnopqrstuvwxyz]*": true,
+        "dist/d[bcdefghijklmnopqrstuvwxyz]*": true,
+        "dist/da[abcdefghijklmnopqrsuvwxyz]*": true,
+        "dist/dat[bcdefghijklmnopqrstuvwxyz]*": true,
+        "package.json": true,
+        ".env": true
+    },
+    "tslint.autoFixOnSave": true,
+    "typescript.tsdk": "node_modules\\typescript\\lib"
+}
