@@ -8,8 +8,8 @@ export default class implements Command {
   aliases = [];
   description = "";
   usage = "<JS code>";
-  permission = CommandPermission.Developer;
   hidden = true;
+  getPermission = (message: Discord.Message) => CommandPermission.Developer;
 
   async execute(message: Discord.Message, args: string[]) {
     eval(`(async(message)=>{${args.join(" ")}})(message);`);

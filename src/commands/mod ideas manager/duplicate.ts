@@ -12,7 +12,7 @@ export default class implements Command {
   aliases = ["dupe", "copy"];
   description = `Marks a mod idea as a duplicate of another mod idea and moves it into <#${config.channels.ideas_removed}>.`;
   usage = "<duplicate #ID> <original #ID> [comment]";
-  permission = CommandPermission.ModIdeasManager;
+  getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
     const dupe = parser.modIdea(args[0]);

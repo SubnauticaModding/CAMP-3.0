@@ -12,7 +12,7 @@ export default class implements Command {
   aliases = [];
   description = `Shows a list of commands you can use.`;
   usage = "";
-  permission = CommandPermission.User;
+  getPermission = (message: Discord.Message) => CommandPermission.User;
 
   async execute(message: Discord.Message, args: string[]) {
     const embed = new Discord.MessageEmbed();
@@ -29,16 +29,16 @@ export default class implements Command {
 
       if (command.hidden == true) continue;
 
-      if (userPerm >= command.permission) {
+      if (userPerm >= command.getPermission(message)) {
         var toAdd = `${command.description}`;
 
         if (command.aliases && command.aliases.length > 0) {
           toAdd += "\n• Aliases: ";
           toAdd += command.aliases.map(a => `\`c/${a}\``).join(", ");
         }
-        if (command.permission != CommandPermission.User) {
+        if (command.getPermission(message) != CommandPermission.User) {
           toAdd += "\n• Required Permission: ";
-          if (command.permission == CommandPermission.Developer) toAdd += "Developer";
+          if (command.getPermission(message) == CommandPermission.Developer) toAdd += "Developer";
           // @ts-ignore 7053 - No index signature with a parameter of type 'string' was found on type '...'
           else toAdd += `>= <@&${config.permissions[command.permission.toString()]}>`
         }

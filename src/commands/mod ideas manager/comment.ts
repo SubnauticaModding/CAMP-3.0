@@ -11,7 +11,7 @@ export default class implements Command {
   aliases = [];
   description = "Adds, replaces or removes a comment on a mod idea.";
   usage = "<#ID> [comment]";
-  permission = CommandPermission.ModIdeasManager;
+  getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
     const modidea = parser.modIdea(args[0]);

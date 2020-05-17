@@ -7,7 +7,7 @@ export default interface Command {
   aliases: string[];
   description: string;
   usage: string;
-  permission: CommandPermission;
   hidden?: boolean;
+  getPermission(message: Discord.Message): CommandPermission;
   execute(message: Discord.Message, args: string[]): void | Promise<void>;
 }

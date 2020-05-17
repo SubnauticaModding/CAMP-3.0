@@ -86,9 +86,9 @@ bot.on("message", async (message) => {
     const command = new commandType();
     // @ts-ignore 2345 - Argument of type 'string' is not assignable to parameter of type 'never'.
     if (command.name == cmd || command.aliases?.includes(cmd)) {
-      if (util.getPermission(message.member) >= command.permission) {
+      if (util.getPermission(message.member) >= command.getPermission(message)) {
         command.execute(message, args);
-      } else if (command.permission == CommandPermission.Developer) {
+      } else if (command.getPermission(message) == CommandPermission.Developer) {
         embeds.error(message, "You don't have permission to execute this command.\nThis command may only be used by <@183249892712513536>.");
       } else {
         var toSay = "You don't have permission to execute this command.";

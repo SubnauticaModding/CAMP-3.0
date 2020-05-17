@@ -12,7 +12,7 @@ export default class implements Command {
   aliases = ["release", "released"];
   description = `Marks a mod idea as released and moves it into <#${config.channels.ideas_released}>.`;
   usage = "<#ID> <NexusMods link> [comment]";
-  permission = CommandPermission.ModIdeasManager;
+  getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
     const modidea = parser.modIdea(args[0]);

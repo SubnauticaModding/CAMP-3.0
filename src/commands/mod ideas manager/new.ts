@@ -13,7 +13,7 @@ export default class implements Command {
   aliases = ["relist"];
   description = `Removes the status of a mod idea and re-adds it to <#${config.channels.ideas_list}>.`;
   usage = "<#ID>";
-  permission = CommandPermission.ModIdeasManager;
+  getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
     const modidea = parser.modIdea(args[0]);

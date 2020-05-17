@@ -12,8 +12,8 @@ export default class implements Command {
   aliases = ["zpa"];
   description = "";
   usage = "<#ID> <NexusMods link> [comment]";
-  permission = CommandPermission.Developer;
   hidden = true;
+  getPermission = (message: Discord.Message) => CommandPermission.Developer;
 
   async execute(message: Discord.Message, args: string[]) {
     const modidea = parser.modIdea(args[0]);

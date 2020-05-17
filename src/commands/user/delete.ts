@@ -12,7 +12,7 @@ export default class implements Command {
   aliases = [];
   description = `Deletes your mod idea and moves it into <#${config.channels.ideas_removed}>.`;
   usage = "<#ID> [comment]";
-  permission = CommandPermission.User;
+  getPermission = (message: Discord.Message) => CommandPermission.User;
 
   async execute(message: Discord.Message, args: string[]) {
     const modidea = parser.modIdea(args[0]);

@@ -13,7 +13,7 @@ export default class implements Command {
   aliases = [];
   description = "Adds, replaces or removes an attachment from a mod idea.";
   usage = "<#ID> [attachment link]";
-  permission = CommandPermission.User;
+  getPermission = (message: Discord.Message) => CommandPermission.User;
 
   async execute(message: Discord.Message, args: string[]) {
     const modidea = parser.modIdea(args[0]);

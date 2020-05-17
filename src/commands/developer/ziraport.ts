@@ -14,8 +14,8 @@ export default class implements Command {
   aliases = ["zp"];
   description = "";
   usage = "<old ideas list> <old ideas released> <new ideas list> <new ideas released>";
-  permission = CommandPermission.Developer;
   hidden = true;
+  getPermission = (message: Discord.Message) => CommandPermission.Developer;
 
   public async execute(message: Discord.Message, args: string[]) {
     const oldList = parser.textChannel(args[0]);
