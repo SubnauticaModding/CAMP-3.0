@@ -19,7 +19,7 @@
         "dist/d[bcdefghijklmnopqrstuvwxyz]*": true,
         "dist/da[abcdefghijklmnopqrsuvwxyz]*": true,
         "dist/dat[bcdefghijklmnopqrstuvwxyz]*": true,
-        "package.json": true,
+        "package.json": false,
         ".env": true
     },
     "tslint.autoFixOnSave": true,

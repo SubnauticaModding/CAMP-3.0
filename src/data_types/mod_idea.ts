@@ -178,6 +178,19 @@ export default class ModIdea {
     this.update();
   }
 
+  public static async parseReferencesStatic(text: string) {
+    return await text.replaceAsync(/#(\d+)/g, async (substring: string, ...args: any[]) => {
+      const modidea = ModIdea.get(parseInt(args[0]));
+      if (!modidea) return substring;
+
+      var message = await modidea.getMessage();
+      if (!message) return substring;
+      if (message.partial) message = await message.fetch();
+
+      return `[${substring}](${message.url})`;
+    });
+  }
+
   public static create(message: Discord.Message) {
     var last = ModIdea.getLastFileId();
     var ideas = data.read("mod_ideas/" + last, []) as ModIdea[];
@@ -205,6 +218,15 @@ export default class ModIdea {
     if (ideas[index].deleted) return;
 
     return Object.assign(new ModIdea(0, "", ""), ideas[index]) as ModIdea;
+  }
+
+  public static getAll() {
+    const ideas: ModIdea[] = [];
+    for (var i = 1; i < ModIdea.getNextID(); i++) {
+      const idea = ModIdea.get(i);
+      if (idea) ideas.push(idea);
+    }
+    return ideas;
   }
 
   public static getFromMessage(message: Discord.Message): ModIdea | undefined {
@@ -284,5 +306,58 @@ export default class ModIdea {
       .filter((p) => p.endsWith(".json"))
       .map((p) => parseInt(p.substring(0, p.length - 5))),
     );
+  }
+
+  public static async updateReportMessage() {
+    const channel = await bot.channels.fetch(config.staff.channel) as Discord.TextChannel;
+    try {
+      var message = await channel.messages.fetch(config.staff.message);
+      if (!message.editable) return;
+    } catch {
+      return; // todo: edit config and save it
+    }
+
+    const ideas = ModIdea.getAll();
+    const badIdeas: ModIdea[] = [];
+    var total = ideas.length, listed = 0, released = 64, removed = 408, duplicate = 84, deleted = 2;
+
+    for (const idea of ideas) {
+      switch (idea.status) {
+        case ModIdeaStatus.Deleted:
+          deleted++;
+          break;
+        case ModIdeaStatus.Duplicate:
+          duplicate++;
+          break;
+        case ModIdeaStatus.Removed:
+          removed++;
+          break;
+        case ModIdeaStatus.None:
+          listed++;
+          break;
+        case ModIdeaStatus.Released:
+          released++;
+          break;
+      }
+      if (idea.rating.likes < idea.rating.dislikes) badIdeas.push(idea);
+    }
+
+    const embed = new Discord.MessageEmbed();
+    embed.setColor("BLUE");
+    embed.setAuthor(message.guild?.me?.displayName, bot.user?.displayAvatarURL());
+    embed.setTitle("Mod Ideas Report");
+    embed.setFooter("Last updated");
+    embed.setTimestamp(Date.now());
+
+    embed.addField("Total Mod Ideas", total, true);
+    embed.addField("Listed Mod Ideas", listed, true);
+    embed.addField("Released Mod Ideas", released, true);
+    embed.addField("Removed Mod Ideas", removed, true);
+    embed.addField("Duplicate Mod Ideas", duplicate, true);
+    embed.addField("Deleted Mod Ideas", deleted, true);
+
+    embed.addField("Poorly-rated Mod Ideas", badIdeas.length == 0 ? "_none_" : ModIdea.parseReferencesStatic(badIdeas.map(b => "#" + b.id).join(", ")));
+
+    message.edit(embed);
   }
 }

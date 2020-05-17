@@ -38,6 +38,8 @@ bot.on("ready", () => {
   var mainGuild = bot.guilds.cache.get(config.guild);
   if (!mainGuild) console.error("Main guild missing!");
   else guild = mainGuild;
+
+  ModIdea.updateReportMessage();
 });
 
 bot.on("message", async (message) => {
@@ -46,7 +48,7 @@ bot.on("message", async (message) => {
   if (message.guild?.id !== guild.id) return;
   if (message.channel.id !== config.channels.ideas_submit) return;
   if (message.author.bot) return;
-  if (message.content.startsWith("c/") && util.getPermission(message.member) == CommandPermission.Administrator) return;
+  if (message.content.startsWith("c/") && util.getPermission(message.member) >= CommandPermission.Administrator) return;
 
   const ideamsg = ModIdea.create(message).send(config.channels.ideas_list, true, true);
   message.react(config.emojis.success);
@@ -169,3 +171,7 @@ bot.on("messageDelete", async (message) => {
   modidea.deleted = true;
   modidea.update();
 });
+
+setInterval(() => {
+  ModIdea.updateReportMessage();
+}, 300000);
