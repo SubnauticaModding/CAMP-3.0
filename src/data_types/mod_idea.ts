@@ -347,7 +347,7 @@ export default class ModIdea {
     embed.setColor("BLUE");
     embed.setAuthor(message.guild?.me?.displayName, bot.user?.displayAvatarURL());
     embed.setTitle("Mod Ideas Report");
-    embed.setFooter("Last updated");
+    embed.setFooter("Last Updated");
     embed.setTimestamp(Date.now());
 
     embed.addField("Total Mod Ideas", total, true);
