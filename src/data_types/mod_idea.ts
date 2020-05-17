@@ -101,6 +101,7 @@ export default class ModIdea {
       case ModIdeaStatus.Removed:
         embed.addField("Status", "Removed", true);
         embed.addField("Removed by", `<@${this.lastActor}>`, true);
+        embed.addField("​", "​", true); // Both title and value are zero-width spaces, in order to shift the rating fields down. Caveat: looks like an empty space on mobile
       case ModIdeaStatus.None:
         embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\``, true);
         embed.addField("Votes", this.rating.likes.length + this.rating.dislikes.length, true);
