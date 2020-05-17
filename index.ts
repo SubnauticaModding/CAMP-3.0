@@ -125,19 +125,16 @@ bot.on("messageReactionAdd", async (reaction, user) => {
   var modidea = ModIdea.getFromMessage(reaction.message);
   if (!modidea) return;
 
-  if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) {
-    reaction.users.remove(user);
-    return;
-  }
-
   switch (reaction.emoji.id ?? reaction.emoji.toString()) {
     case config.emojis.abstain:
+      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) break;
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.update();
       modidea.edit(reaction.message);
       break;
     case config.emojis.downvote:
+      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) break;
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.dislikes.push(user.id);
@@ -145,6 +142,7 @@ bot.on("messageReactionAdd", async (reaction, user) => {
       modidea.edit(reaction.message);
       break;
     case config.emojis.upvote:
+      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) break;
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.likes.push(user.id);
