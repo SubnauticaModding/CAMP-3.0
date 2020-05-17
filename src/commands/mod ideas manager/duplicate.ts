@@ -24,7 +24,15 @@ export default class implements Command {
     if (dupe.id == orig.id) return embeds.error(message, "Invalid arguments. Expected two different mod idea IDs as the first and second parameters.");
 
     if (dupe.time < orig.time && args[2] != "-f") {
-      return embeds.warn(message, "You are trying to mark an older mod idea as a duplicate of a newer mod idea.\nIf you're sure you want to do this, run this command with `-f` at the end.", 20);
+      return embeds.warn(message, "You are trying to mark an older mod idea as a duplicate of a newer mod idea.\nUsually, you should do it the other way around.\n_If you're sure you want to do this, run this command with `-f` at the end._", 20);
+    }
+
+    if (orig.status == ModIdeaStatus.Released && args[2] != "-f") {
+      return embeds.warn(message, "You are trying to mark a mod idea as a duplicate of a released mod idea.\nUsually, in this case, you'd want to remove the duplicate mod idea.\n_If you're sure you want to do this, run this command with `-f` at the end._", 20);
+    }
+
+    if ((orig.status == ModIdeaStatus.Removed || orig.status == ModIdeaStatus.Duplicate || orig.status == ModIdeaStatus.Deleted) && args[2] != "-f") {
+      return embeds.warn(message, "You are trying to mark a mod idea as a duplicate of a removed mod idea.\nUsually, in this case, you'd want to remove the duplicate mod idea.\n_If you're sure you want to do this, run this command with `-f` at the end._", 20);
     }
 
     args.shift();
@@ -40,11 +48,16 @@ export default class implements Command {
     dupe.update();
     const newIdeaMsg = await dupe.sendOrEdit(config.channels.ideas_removed);
 
-    if (oldStatus == ModIdeaStatus.Duplicate)
-      embeds.success(message, `Your changes to mod idea \`#${dupe.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
-    else if (dupe.time < orig.time && args[0] == "-f")
-      embeds.success(message, `Mod idea \`#${dupe.id}\` has been **forcefully** marked as a duplicate of \`#${orig.id}\`.\nClick [here](${newIdeaMsg.url}) to view it.`);
-    else
-      embeds.success(message, `Mod idea \`#${dupe.id}\` has been marked as a duplicate of \`#${orig.id}\`.\nClick [here](${newIdeaMsg.url}) to view it.`);
+    if (oldStatus == ModIdeaStatus.Duplicate) {
+      if ((dupe.time < orig.time || orig.status != ModIdeaStatus.None) && args[0] == "-f")
+        embeds.success(message, `Your changes to mod idea \`#${dupe.id}\` have been **forcefully** applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      else
+        embeds.success(message, `Your changes to mod idea \`#${dupe.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+    } else {
+      if ((dupe.time < orig.time || orig.status != ModIdeaStatus.None) && args[0] == "-f")
+        embeds.success(message, `Mod idea \`#${dupe.id}\` has been **forcefully** marked as a duplicate of \`#${orig.id}\`.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      else
+        embeds.success(message, `Mod idea \`#${dupe.id}\` has been marked as a duplicate of \`#${orig.id}\`.\nClick [here](${newIdeaMsg.url}) to view it.`);
+    }
   }
 }
