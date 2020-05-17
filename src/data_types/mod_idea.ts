@@ -357,7 +357,7 @@ export default class ModIdea {
     embed.addField("Duplicate Mod Ideas", `${duplicate} (${(duplicate / total * 100).toFixed(2)}%)`, true);
     embed.addField("Deleted Mod Ideas", `${deleted} (${(deleted / total * 100).toFixed(2)}%)`, true);
 
-    embed.addField("Poorly-rated Mod Ideas", badIdeas.length == 0 ? "_none_" : await ModIdea.parseReferencesStatic(badIdeas.map(b => "#" + b.id).join(", ")));
+    embed.addField("Poorly Rated Mod Ideas", badIdeas.length == 0 ? "_none_" : await ModIdea.parseReferencesStatic(badIdeas.map(b => "#" + b.id).join(", ")));
 
     message.edit(embed);
   }
