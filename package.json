@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "main": "dist/index.js",
   "scripts": {
-    "start": "tsc && node dist/index.js",
+    "start": "tsc && echo Build finished! && node dist/index.js",
     "nodemon": "nodemon -e \"ts\" -i dist/ -i .env -x \"tsc && echo Build finished! && node dist/index.js || exit 1\"",
     "update": "ncu -u && pnpm i"
   },
