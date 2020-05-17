@@ -11,3 +11,5 @@ pnpm-debug.log
 pull.sh
 push.sh
 shrinkwrap.yaml
+pull
+push
