@@ -84,7 +84,7 @@ export default class ModIdea {
     const rating = this.rating.likes.length - this.rating.dislikes.length;
 
     const embed = new Discord.MessageEmbed();
-    embed.setAuthor(user.tag, user.displayAvatarURL());
+    embed.setAuthor(`${user.tag} | ${user.id}`, user.displayAvatarURL());
     embed.setColor(ModIdea.getColorFromStatus(this.status));
     embed.setDescription(await this.parseReferences(this.text, true));
 
