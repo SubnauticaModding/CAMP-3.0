@@ -319,7 +319,7 @@ export default class ModIdea {
 
     const ideas = ModIdea.getAll();
     const badIdeas: ModIdea[] = [];
-    var total = ideas.length, listed = 0, released = 64, removed = 408, duplicate = 84, deleted = 2;
+    var total = 558, listed = 0, released = 64, removed = 408, duplicate = 84, deleted = 2;
 
     for (const idea of ideas) {
       switch (idea.status) {
@@ -339,6 +339,7 @@ export default class ModIdea {
           released++;
           break;
       }
+      total++;
       if (idea.rating.likes.length < idea.rating.dislikes.length) badIdeas.push(idea);
     }
 
