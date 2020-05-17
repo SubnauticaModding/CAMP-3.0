@@ -6,7 +6,7 @@ var environment: { environment: "development" | "production" } = {
   environment: "development",
 };
 
-if ((process.argv[2] || "production") == "development") {
+if (process.env.APP_ENV != "glitch") {
   var config = {
     ...all,
     ...development,
