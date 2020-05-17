@@ -10,3 +10,4 @@ pnpm-debug.log
 .githubsync
 pull.sh
 push.sh
+shrinkwrap.yaml
