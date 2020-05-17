@@ -23,14 +23,13 @@ export default class implements Command {
 
     const newList = parser.textChannel(args[1]);
     if (!newList) return embeds.error(message, "Invalid arguments. Expected a text channel id as the third parameter.");
-    
+
     if (oldList.id == newList.id) return embeds.error(message, "Invalid arguments. Expected two different text channel ids as the first two parameters.");
 
     const loadingMsg = await message.channel.send(new Discord.MessageEmbed({
       title: `<a:a:${config.emojis.loading}> Porting in progress...`
     }));
 
-    
     var oldListMessages = await util.getAllMessages(oldList);
     for (var msg of oldListMessages) {
       var idea = await this.createZiraIdea(msg);
@@ -55,6 +54,20 @@ export default class implements Command {
     const idea = new ModIdea(ModIdea.getNextID(), embed.description ?? embed.fields[0].value, id ?? message.author.id, undefined);
     idea.time = embed.timestamp ?? 0;
     idea.comment = (embed.title?.toLowerCase().includes("potential") || embed.title?.toLowerCase().includes("approved")) && embed.fields.length > 0 ? embed.fields[0].value : "";
+
+    for (var reaction of message.reactions.cache.values()) {
+      var users = [...(await reaction.users.fetch()).keys()].filter(u => u != "275813801792634880");
+      switch (reaction.emoji.id ?? reaction.emoji.toString()) {
+        case "653230762254008350":
+        case "👍":
+          idea.rating.likes = users;
+          break;
+        case "653231195051786260":
+        case "👎":
+          idea.rating.dislikes = users;
+          break;
+      }
+    }
 
     ideas.push(idea);
     data.write("mod_ideas/" + last, ideas);
