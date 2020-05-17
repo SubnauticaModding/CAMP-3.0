@@ -1,5 +1,7 @@
-import Discord from "discord.js";
 import dotenv from "dotenv";
+dotenv.config();
+
+import Discord from "discord.js";
 import nexusmods from "@nexusmods/nexus-api";
 
 import CommandPermission from "./src/data_types/command_permission";
@@ -10,7 +12,6 @@ import * as util from "./src/util";
 import web_init from "./src/web_init";
 import * as embeds from "./src/embeds";
 
-dotenv.config();
 web_init();
 console.log("Environment: " + config.environment);
 console.log("Launching bot...");
