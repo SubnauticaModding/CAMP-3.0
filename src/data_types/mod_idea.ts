@@ -215,7 +215,7 @@ export default class ModIdea {
     const ideas = data.read("mod_ideas/" + file, []) as any[];
     if (!ideas) return;
 
-    if (ideas[index].deleted) return;
+    if (!ideas[index] /*|| ideas[index].deleted*/) return;
 
     return Object.assign(new ModIdea(0, "", ""), ideas[index]) as ModIdea;
   }
