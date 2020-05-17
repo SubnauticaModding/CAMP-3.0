@@ -6,6 +6,7 @@ import nexusmods from "@nexusmods/nexus-api";
 
 import CommandPermission from "./src/data_types/command_permission";
 import ModIdea from "./src/data_types/mod_idea";
+import ModIdeaStatus from "./src/data_types/mod_idea_status";
 import * as commands from "./src/commands";
 import config from "./src/config";
 import * as util from "./src/util";
@@ -124,7 +125,7 @@ bot.on("messageReactionAdd", async (reaction, user) => {
   var modidea = ModIdea.getFromMessage(reaction.message);
   if (!modidea) return;
 
-  if (user.id == modidea.author) {
+  if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) {
     reaction.users.remove(user);
     return;
   }

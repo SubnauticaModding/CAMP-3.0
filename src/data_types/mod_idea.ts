@@ -99,7 +99,6 @@ export default class ModIdea {
       case ModIdeaStatus.Removed:
         embed.addField("Status", "Removed");
         embed.addField("Removed by", `<@${this.lastActor}>`);
-        break;
       case ModIdeaStatus.None:
         embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\``, true);
         embed.addField("Votes", this.rating.likes.length + this.rating.dislikes.length, true);
