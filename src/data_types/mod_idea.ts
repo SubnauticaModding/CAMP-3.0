@@ -91,6 +91,7 @@ export default class ModIdea {
     switch (this.status) {
       case ModIdeaStatus.Deleted:
         embed.addField("Status", "Deleted by author");
+        break;
       case ModIdeaStatus.Duplicate:
         embed.addField("Status", await this.parseReferences(`Duplicate of #${this.specialComment}`, true));
         embed.addField("Marked as duplicate by", `<@${this.lastActor}>`);

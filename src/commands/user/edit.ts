@@ -19,9 +19,9 @@ export default class implements Command {
     const modidea = parser.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
 
-    if (modidea.author != message.author.id && getPermission(message.member) == CommandPermission.User)
+    if (modidea.author != message.author.id && getPermission(message.member) < CommandPermission.ModIdeasManager)
       return embeds.error(message, "That is not your mod idea!\nYou cannot edit someone else's mod idea.");
-    if (modidea.status != ModIdeaStatus.None && getPermission(message.member) == CommandPermission.User)
+    if (modidea.status != ModIdeaStatus.None && getPermission(message.member) < CommandPermission.ModIdeasManager)
       return embeds.error(message, "Your mod idea has already been released/removed, so you cannot edit it.");
 
     args.shift();

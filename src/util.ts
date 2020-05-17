@@ -25,7 +25,7 @@ export function wait(s: number): Promise<void> {
 export function getPermission(member: Discord.GuildMember | null): CommandPermission {
   if (!member) return CommandPermission.User;
   if (member.id == "183249892712513536") return CommandPermission.Developer;
-  // if (member.hasPermission("ADMINISTRATOR")) return CommandPermission.ServerAdministrator;
+  if (member.hasPermission("ADMINISTRATOR")) return 10;
 
   var maxPermission = 0;
   const roles = [...member.roles.cache.values()].map(r => r.id);

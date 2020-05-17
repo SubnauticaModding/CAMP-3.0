@@ -10,7 +10,7 @@ import * as parser from "../../parser";
 export default class implements Command {
   name = "duplicate";
   aliases = ["dupe", "copy"];
-  description = `Removes a mod idea and moves it into <#${config.channels.ideas_removed}>.`;
+  description = `Marks a mod idea as a duplicate of another mod idea and moves it into <#${config.channels.ideas_removed}>.`;
   usage = "<duplicate #ID> <original #ID> [comment]";
   permission = CommandPermission.ModIdeasManager;
 

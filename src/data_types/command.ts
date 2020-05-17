@@ -8,5 +8,6 @@ export default interface Command {
   description: string;
   usage: string;
   permission: CommandPermission;
+  hidden?: boolean;
   execute(message: Discord.Message, args: string[]): void | Promise<void>;
 }

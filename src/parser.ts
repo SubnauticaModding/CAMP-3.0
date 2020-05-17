@@ -19,7 +19,7 @@ export function textChannel(id: string) {
 }
 
 export async function nexusLink(link: string) {
-  const matches = [...link.matchAll(/https?:\/\/nexusmods.com\/(subnautica(?:belowzero)?)\/mods\/(\d+)/g)];
+  const matches = [...link.matchAll(/https?:\/\/(?:www\.)?nexusmods\.com\/(subnautica(?:belowzero)?)\/mods\/(\d+)\/?/g)];
 
   if (matches.length != 1) return;
 

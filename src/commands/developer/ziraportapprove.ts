@@ -9,10 +9,11 @@ import * as parser from "../../parser";
 
 export default class implements Command {
   name = "ziraportapprove";
-  aliases = ["zpr"];
+  aliases = ["zpa"];
   description = "";
   usage = "<#ID> <NexusMods link> [comment]";
   permission = CommandPermission.Developer;
+  hidden = true;
 
   async execute(message: Discord.Message, args: string[]) {
     const modidea = parser.modIdea(args[0]);
@@ -24,19 +25,13 @@ export default class implements Command {
     args.shift();
     args.shift();
 
-    const oldStatus = modidea.status;
-
     modidea.status = ModIdeaStatus.Released;
     modidea.specialComment = `https://nexusmods.com/${modinfo.domain_name}/mods/${modinfo.mod_id}`;
     modidea.lastActor = "493359366381240341";
-    modidea.comment = args.join(" ");
 
     modidea.update();
-    const newIdeaMsg = await modidea.sendOrEdit(config.channels.ideas_released);
+    await modidea.sendOrEdit(config.channels.ideas_released);
 
-    if (oldStatus == ModIdeaStatus.Released)
-      embeds.success(message, `Your changes to mod idea \`#${modidea}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
-    else
-      embeds.success(message, `Mod idea \`#${modidea}\` has been marked as released.\nClick [here](${newIdeaMsg.url}) to view it.`);
+    embeds.success(message, "", 3);
   }
 }
