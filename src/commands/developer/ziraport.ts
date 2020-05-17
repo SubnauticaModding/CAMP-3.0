@@ -13,37 +13,28 @@ export default class implements Command {
   name = "ziraport";
   aliases = ["zp"];
   description = "";
-  usage = "<old ideas list> <old ideas released> <new ideas list> <new ideas released>";
+  usage = "<old ideas list channel> <new ideas list channel>";
   hidden = true;
   getPermission = (message: Discord.Message) => CommandPermission.Developer;
 
   public async execute(message: Discord.Message, args: string[]) {
     const oldList = parser.textChannel(args[0]);
-    if (!oldList) return embeds.error(message, "Invalid arguments. Expected a text channel id as the first parameter");
+    if (!oldList) return embeds.error(message, "Invalid arguments. Expected a text channel id as the first parameter.");
 
-    const oldReleased = parser.textChannel(args[1]);
-    if (!oldReleased) return embeds.error(message, "Invalid arguments. Expected a text channel id as the second parameter");
-
-    const newList = parser.textChannel(args[2]);
-    if (!newList) return embeds.error(message, "Invalid arguments. Expected a text channel id as the third parameter");
-
-    const newReleased = parser.textChannel(args[3]);
-    if (!newReleased) return embeds.error(message, "Invalid arguments. Expected a text channel id as the fourth parameter");
-
-    // var oldListMessages = await util.getAllMessages(oldList);
-    // for (var msg of oldListMessages) {
-    //   var idea = await this.createZiraIdea(msg);
-    //   idea.send(newList.id, true, true);
-    // }
+    const newList = parser.textChannel(args[1]);
+    if (!newList) return embeds.error(message, "Invalid arguments. Expected a text channel id as the third parameter.");
+    
+    if (oldLit.id == newList.id) return embeds.error(message, "Invalid arguments. Expected two different text channel ids as the first two parameters.");
 
     const loadingMsg = await message.channel.send(new Discord.MessageEmbed({
       title: `<a:a:${config.emojis.loading}> Porting in progress...`
     }));
 
-    var oldReleasedMessages = await util.getAllMessages(oldReleased);
-    for (var msg of oldReleasedMessages) {
+    
+    var oldListMessages = await util.getAllMessages(oldList);
+    for (var msg of oldListMessages) {
       var idea = await this.createZiraIdea(msg);
-      await idea.send(newReleased.id, true, false);
+      idea.send(newList.id, true, true);
     }
 
     loadingMsg.delete();
