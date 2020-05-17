@@ -36,8 +36,8 @@ export default class implements Command {
     const newIdeaMsg = await modidea.sendOrEdit(config.channels.ideas_released);
 
     if (oldStatus == ModIdeaStatus.Released)
-      embeds.success(message, `Your changes to mod idea \`#${modidea}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
+      embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
     else
-      embeds.success(message, `Mod idea \`#${modidea}\` has been marked as released.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      embeds.success(message, `Mod idea \`#${modidea.id}\` has been marked as released.\nClick [here](${newIdeaMsg.url}) to view it.`);
   }
 }

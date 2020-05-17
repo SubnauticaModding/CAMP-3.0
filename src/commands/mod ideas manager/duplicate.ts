@@ -11,7 +11,7 @@ export default class implements Command {
   name = "duplicate";
   aliases = ["dupe", "copy"];
   description = `Marks a mod idea as a duplicate of another mod idea and moves it into <#${config.channels.ideas_removed}>.`;
-  usage = "<duplicate #ID> <original #ID> [comment]";
+  usage = "<duplicate #ID> <original #ID> [-f] [comment]";
   getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
@@ -24,15 +24,15 @@ export default class implements Command {
     if (dupe.id == orig.id) return embeds.error(message, "Invalid arguments. Expected two different mod idea IDs as the first and second parameters.");
 
     if (dupe.time < orig.time && args[2] != "-f") {
-      return embeds.warn(message, "You are trying to mark an older mod idea as a duplicate of a newer mod idea.\nUsually, you should do it the other way around.\n_If you're sure you want to do this, run this command with `-f` at the end._", 20);
+      return embeds.warn(message, "You are trying to mark an older mod idea as a duplicate of a newer mod idea.\nUsually, you should do it the other way around.\n_If you're sure you want to do this, run this command with the `-f` parameter after the second mod idea ID._", 20);
     }
 
     if (orig.status == ModIdeaStatus.Released && args[2] != "-f") {
-      return embeds.warn(message, "You are trying to mark a mod idea as a duplicate of a released mod idea.\nUsually, in this case, you'd want to remove the duplicate mod idea.\n_If you're sure you want to do this, run this command with `-f` at the end._", 20);
+      return embeds.warn(message, "You are trying to mark a mod idea as a duplicate of a released mod idea.\nUsually, in this case, you'd want to remove the duplicate mod idea.\n_If you're sure you want to do this, run this command with the `-f` parameter after the second mod idea ID._", 20);
     }
 
     if ((orig.status == ModIdeaStatus.Removed || orig.status == ModIdeaStatus.Duplicate || orig.status == ModIdeaStatus.Deleted) && args[2] != "-f") {
-      return embeds.warn(message, "You are trying to mark a mod idea as a duplicate of a removed mod idea.\nUsually, in this case, you'd want to remove the duplicate mod idea.\n_If you're sure you want to do this, run this command with `-f` at the end._", 20);
+      return embeds.warn(message, "You are trying to mark a mod idea as a duplicate of a removed mod idea.\nUsually, in this case, you'd want to remove the duplicate mod idea.\n_If you're sure you want to do this, run this command with the `-f` parameter after the second mod idea ID._", 20);
     }
 
     args.shift();
