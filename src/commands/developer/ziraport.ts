@@ -33,7 +33,7 @@ export default class implements Command {
     var oldListMessages = await util.getAllMessages(oldList);
     for (var msg of oldListMessages) {
       var idea = await this.createZiraIdea(msg);
-      idea.send(newList.id, true, true);
+      await idea.send(newList.id, true, true);
     }
 
     loadingMsg.delete();
