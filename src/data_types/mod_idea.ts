@@ -339,7 +339,7 @@ export default class ModIdea {
           released++;
           break;
       }
-      if (idea.rating.likes < idea.rating.dislikes) badIdeas.push(idea);
+      if (idea.rating.likes.length < idea.rating.dislikes.length) badIdeas.push(idea);
     }
 
     const embed = new Discord.MessageEmbed();
