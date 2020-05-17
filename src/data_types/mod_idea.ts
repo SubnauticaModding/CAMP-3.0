@@ -27,6 +27,8 @@ export default class ModIdea {
 
   linkedBy: number[] = [];
 
+  deleted: boolean = false;
+
   public constructor(id: number, text: string, author: string, image?: string) {
     this.id = id;
     this.text = text;
@@ -141,6 +143,7 @@ export default class ModIdea {
 
   public async getMessage() {
     try {
+      if (this.deleted) return;
       if (!this.channel || !this.message) return;
       const ideaChannel = await bot.channels.fetch(this.channel) as Discord.TextChannel;
       const ideaMsg = await ideaChannel.messages.fetch(this.message);
@@ -198,6 +201,8 @@ export default class ModIdea {
 
     const ideas = data.read("mod_ideas/" + file, []) as any[];
     if (!ideas) return;
+
+    if (ideas[index].deleted) return;
 
     return Object.assign(new ModIdea(0, "", ""), ideas[index]) as ModIdea;
   }

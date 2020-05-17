@@ -159,3 +159,15 @@ bot.on("messageReactionAdd", async (reaction, user) => {
 
   reaction.users.remove(user);
 });
+
+bot.on("messageDelete", async (message) => {
+  if (message.partial) message = await message.fetch();
+
+  if (message.guild?.id !== guild.id) return;
+
+  var modidea = ModIdea.getFromMessage(message);
+  if (!modidea) return;
+
+  modidea.deleted = true;
+  modidea.update();
+});
