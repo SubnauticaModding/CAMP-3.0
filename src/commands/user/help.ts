@@ -40,7 +40,7 @@ export default class implements Command {
           toAdd += "\n• Required Permission: ";
           if (command.getPermission(message) == CommandPermission.Developer) toAdd += "Developer";
           // @ts-ignore 7053 - No index signature with a parameter of type 'string' was found on type '...'
-          else toAdd += `>= <@&${config.permissions[command.permission.toString()]}>`
+          else toAdd += `>= <@&${config.permissions[command.getPermission(message).toString()]}>`
         }
 
         embed.addField(`c/${command.name} ${command.usage}`, toAdd.trim());
