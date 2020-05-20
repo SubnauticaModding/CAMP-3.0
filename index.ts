@@ -117,6 +117,35 @@ bot.on("message", async (message) => {
   }
 });
 
+bot.on("message", async (message) => {
+  if (message.partial) message = await message.fetch();
+
+  if (message.guild?.id != guild.id) return;
+  if (message.channel.id == config.channels.ideas_submit) return;
+  if (message.author.bot) return;
+  if (message.content.toLowerCase().startsWith("c/") || message.content.toLowerCase().startsWith("z/")) return;
+
+  const references = await ModIdea.getReferences(message.content);
+  if (Object.values(references).length == 0) return;
+
+  const embed = new Discord.MessageEmbed();
+  embed.setColor("BLUE");
+  embed.setAuthor(message.member?.displayName, message.author.displayAvatarURL());
+  embed.setTitle("Mod Idea Links");
+  embed.setDescription("");
+
+  for (var key in references) {
+    const modidea = references[key];
+    var message = await modidea.getMessage();
+    if (!message) continue;
+    if (message.partial) message = await message.fetch();
+
+    embed.description += `[#${key}](${message.url}) by <@${modidea.author}> - ${modidea.text.substr(0, 20)}...`;
+  }
+
+  message.channel.send(embed);
+});
+
 bot.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.partial) reaction = await reaction.fetch();
   if (user.partial) user = await user.fetch();

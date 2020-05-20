@@ -191,6 +191,24 @@ export default class ModIdea {
     });
   }
 
+  public static async getReferences(text: string) {
+    const obj: { [key: number]: ModIdea } = {};
+
+    await text.replaceAsync(/#(\d+)/g, async (substring: string, ...args: any[]) => {
+      const modidea = ModIdea.get(parseInt(args[0]));
+      if (!modidea) return substring;
+
+      var message = await modidea.getMessage();
+      if (!message) return substring;
+
+      obj[parseInt(args[0])] = modidea;
+
+      return substring;
+    });
+
+    return obj;
+  }
+
   public static create(message: Discord.Message) {
     var last = ModIdea.getLastFileId();
     var ideas = data.read("mod_ideas/" + last, []) as ModIdea[];
