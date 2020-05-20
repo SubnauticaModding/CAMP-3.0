@@ -130,8 +130,6 @@ bot.on("message", async (message) => {
 
   const embed = new Discord.MessageEmbed();
   embed.setColor("BLUE");
-  embed.setAuthor(message.member?.displayName, message.author.displayAvatarURL());
-  embed.setTitle("Mod Idea Links");
   embed.setDescription("");
 
   for (var key in references) {
@@ -140,7 +138,7 @@ bot.on("message", async (message) => {
     if (!msg) continue;
     if (msg.partial) msg = await msg.fetch();
 
-    embed.description += `[#${key}](${msg.url}) by <@${modidea.author}> - ${modidea.text.substr(0, 20)}...`;
+    embed.description += `[#${key}](${msg.url}) by <@${modidea.author}> - ${modidea.text.substr(0, 100)}...`;
   }
 
   message.channel.send(embed);
