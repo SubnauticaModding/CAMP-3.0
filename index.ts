@@ -136,11 +136,11 @@ bot.on("message", async (message) => {
 
   for (var key in references) {
     const modidea = references[key];
-    var message = await modidea.getMessage();
-    if (!message) continue;
-    if (message.partial) message = await message.fetch();
+    var msg = await modidea.getMessage();
+    if (!msg) continue;
+    if (msg.partial) msg = await msg.fetch();
 
-    embed.description += `[#${key}](${message.url}) by <@${modidea.author}> - ${modidea.text.substr(0, 20)}...`;
+    embed.description += `[#${key}](${msg.url}) by <@${modidea.author}> - ${modidea.text.substr(0, 20)}...`;
   }
 
   message.channel.send(embed);
