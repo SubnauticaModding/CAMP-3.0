@@ -48,7 +48,7 @@ bot.on("message", async (message) => {
   if (message.guild?.id !== guild.id) return;
   if (message.channel.id !== config.channels.ideas_submit) return;
   if (message.author.bot) return;
-  if (message.content.startsWith("c/") && util.getPermission(message.member) >= CommandPermission.Administrator) return;
+  if (message.content.toLowerCase().startsWith("c/") && util.getPermission(message.member) >= CommandPermission.Administrator) return;
 
   const ideamsg = ModIdea.create(message).send(config.channels.ideas_list, true, true);
   message.react(config.emojis.success);
@@ -60,9 +60,9 @@ bot.on("message", async (message) => {
 
   if (message.guild?.id !== guild.id) return;
   if (message.author.bot) return;
-  if (!message.content.startsWith("c/") && !message.content.startsWith("z/")) return;
+  if (!message.content.toLowerCase().startsWith("c/") && !message.content.toLowerCase().startsWith("z/")) return;
 
-  if (message.content.startsWith("z/")) {
+  if (message.content.toLowerCase().startsWith("z/")) {
     const reminderMessage = message.channel.send(new Discord.MessageEmbed({
       title: "Reminder",
       description: "The prefix for the Mod Ideas bot has changed. The new prefix is `c/`.",
@@ -77,7 +77,7 @@ bot.on("message", async (message) => {
     })
   }
 
-  const args = message.content.split(/ +/g);
+  const args = message.content.split(/[ \n\r]+/g);
   const cmd = args.shift()?.substr(2);
 
   for (var i = 0; i < 10; i++) {
