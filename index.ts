@@ -138,7 +138,7 @@ bot.on("message", async (message) => {
     if (!msg) continue;
     if (msg.partial) msg = await msg.fetch();
 
-    embed.description += `[#${key}](${msg.url}) by <@${modidea.author}> - ${modidea.text.substr(0, 100)}${modidea.text.substr(0, 100) == modidea.text ? "" : "..."}\n\n`;
+    embed.description += `[#${key}](${msg.url}) by <@${modidea.author}> - ${modidea.text.substr(0, 100).replace(/[\n\r]+/g, " ").replace(/:\/\//g, ":/​/​")}${modidea.text.substr(0, 100) == modidea.text ? "" : "..."}\n\n`;
   }
 
   message.channel.send(embed);
