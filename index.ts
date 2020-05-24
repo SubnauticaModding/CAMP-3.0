@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config(); // Add .env variables to process.env; This is handled automatically by Glitch, but in the case of local testing, this module is required.
+dotenv.config();
 
 import Discord from "discord.js";
 import nexusmods from "@nexusmods/nexus-api";
@@ -13,10 +13,10 @@ import * as util from "./src/util";
 import web_init from "./src/web_init";
 import * as embeds from "./src/embeds";
 
-web_init(); // Glitch requires a web server to be running in order for the bot to work
+web_init();
 console.log("Environment: " + config.environment);
 console.log("Launching bot...");
-util.ensureFolders(__dirname, "data", "mod_ideas"); // The fs module freaks out if folders are missing
+util.ensureFolders(__dirname, "data", "mod_ideas");
 
 export const bot = new Discord.Client({
   disableMentions: "everyone",
@@ -25,24 +25,24 @@ export const bot = new Discord.Client({
 export var guild: Discord.Guild;
 export var nexus: nexusmods;
 
-(async () => { // This needs to run asynchronously, but top-level awaits are not supported in the configuration of TypeScript which is used here
+(async () => {
   console.log("Creating nexusmods object...")
   nexus = await nexusmods.create(process.env.NEXUS_API_KEY ?? "", "SNModding-CAMP-Bot", "3.0.0", "Subnautica");
   console.log("Nexusmods object created");
-})(); // This syntax creats an anonymous async function and then runs it
+})();
 
 bot.login(process.env.DISCORD_TOKEN);
 
 bot.on("ready", () => {
   console.log("Bot is ready.");
-  var mainGuild = bot.guilds.cache.get(config.guild); // We need to wait for the bot to be ready before accessing its guilds
+  var mainGuild = bot.guilds.cache.get(config.guild);
   if (!mainGuild) console.error("Main guild missing!");
   else guild = mainGuild;
 
   ModIdea.updateReportMessage();
 });
 
-bot.on("message", async (message) => { // This event parses and submits mod ideas 
+bot.on("message", async (message) => {
   if (message.partial) message = await message.fetch();
 
   if (message.guild?.id !== guild.id) return;
@@ -55,7 +55,7 @@ bot.on("message", async (message) => { // This event parses and submits mod idea
   embeds.success(message, `Your mod idea has been submitted.\nClick [here](${(await ideamsg).url}) to view it.`, 5);
 });
 
-bot.on("message", async (message) => { // This event parses and runs commands
+bot.on("message", async (message) => {
   if (message.partial) message = await message.fetch();
 
   if (message.guild?.id !== guild.id) return;
@@ -117,7 +117,7 @@ bot.on("message", async (message) => { // This event parses and runs commands
   }
 });
 
-bot.on("message", async (message) => { // This event checks for messages in #mod-ideas-discussion and gives information about mod ideas when they are referenced
+bot.on("message", async (message) => {
   if (message.partial) message = await message.fetch();
 
   if (message.guild?.id != guild.id) return;
@@ -144,7 +144,7 @@ bot.on("message", async (message) => { // This event checks for messages in #mod
   message.channel.send(embed);
 });
 
-bot.on("messageReactionAdd", async (reaction, user) => { // This event parses reactions on messages
+bot.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.partial) reaction = await reaction.fetch();
   if (user.partial) user = await user.fetch();
 
@@ -202,4 +202,4 @@ bot.on("messageReactionAdd", async (reaction, user) => { // This event parses re
 
 setInterval(() => {
   ModIdea.updateReportMessage();
-}, 300000); // 5 minutes
+}, 300000);
