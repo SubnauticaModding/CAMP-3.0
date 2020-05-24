@@ -27,6 +27,6 @@
     "@types/request": "^2.48.5",
     "@types/request-promise": "^4.1.46",
     "@types/ws": "^7.2.4",
-    "typescript": "^3.9.2"
+    "typescript": "^3.9.3"
   }
 }
