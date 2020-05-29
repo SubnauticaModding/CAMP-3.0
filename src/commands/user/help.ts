@@ -20,7 +20,7 @@ export default class implements Command {
     embed.setAuthor(guild.me?.displayName, message.client.user?.displayAvatarURL());
     embed.setTitle("Commands List");
     embed.setDescription("_Arguments in <angle brackets> are required, and arguments in [square brackets] are optional._");
-    embed.setFooter("Bot created by AlexejheroYTB | v3.0.1");
+    embed.setFooter(`Bot created by AlexejheroYTB | v${config.version}`);
 
     const userPerm = util.getPermission(message.member);
     for (var cmdI in commands) {

@@ -22,7 +22,7 @@ export var nexus: nexusmods;
 
 (async () => {
   console.log("Creating nexusmods object...")
-  nexus = await nexusmods.create(process.env.NEXUS_API_KEY ?? "", "SNModding-CAMP-Bot", "3.0.0", "Subnautica");
+  nexus = await nexusmods.create(process.env.NEXUS_API_KEY ?? "", "SNModding-CAMP-Bot", `v${config.version}`, "Subnautica");
   console.log("Nexusmods object created");
 })();
 
