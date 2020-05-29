@@ -9,7 +9,7 @@ import * as parser from "../../parser";
 export default class implements Command {
   name = "mim";
   aliases = ["modideasmanager"];
-  description = `Gives or takes the <@${config.permissions[CommandPermission.ModIdeasManager]}> role from a person.`;
+  description = `Gives or takes the <@&${config.permissions[CommandPermission.ModIdeasManager]}> role from a person.`;
   usage = "<member ID or @mention>";
   getPermission = (message: Discord.Message) => CommandPermission.Moderator;
 
