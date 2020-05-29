@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 
-import { bot, nexus } from "..";
+import { bot, guild, nexus } from "..";
 import ModIdea from "./data_types/mod_idea";
 
 export function modIdea(id: string) {
@@ -12,10 +12,20 @@ export function modIdea(id: string) {
 }
 
 export function textChannel(id: string) {
+  if (id.startsWith("<#") && id.endsWith(">")) id = id.substring(2, id.length - 1);
   const ch = bot.channels.cache.get(id);
   if (!ch) return;
   if (ch.type != "news" && ch.type != "text") return;
   return ch as Discord.TextChannel;
+}
+
+export async function member(id: string) {
+  if (id.startsWith("<@!") && id.endsWith(">")) id = id.substring(3, id.length - 1);
+  if (id.startsWith("<@") && id.endsWith(">")) id = id.substring(2, id.length - 1);
+  const mem = await guild.members.fetch({ user: id });
+  if (!mem) return;
+  if (mem.deleted) return;
+  return mem;
 }
 
 export async function nexusLink(link: string) {

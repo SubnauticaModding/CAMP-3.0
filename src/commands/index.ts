@@ -4,6 +4,7 @@ export { default as edit } from "./user/edit";
 export { default as help } from "./user/help";
 
 export { default as approve } from "./mod ideas manager/approve";
+export { default as author } from "./mod ideas manager/author";
 export { default as comment } from "./mod ideas manager/comment";
 export { default as duplicate } from "./mod ideas manager/duplicate";
 export { default as new } from "./mod ideas manager/new";

@@ -13,7 +13,7 @@ export default class implements Command {
   name = "ziraport";
   aliases = ["zp"];
   description = "";
-  usage = "<old ideas list channel> <new ideas list channel>";
+  usage = "<old list channel ID or #mention> <new list channel ID or #mention>";
   hidden = true;
   getPermission = (message: Discord.Message) => CommandPermission.Developer;
 
