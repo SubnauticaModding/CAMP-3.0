@@ -9,7 +9,7 @@ export default async function (reaction: Discord.MessageReaction, user: Discord.
   if (reaction.partial) reaction = await reaction.fetch();
   if (user.partial) user = await user.fetch();
 
-  if (reaction.message.guild?.id !== guild.id) return;
+  if (reaction.message.guild?.id != guild.id) return;
   if (user.bot) return;
 
   var modidea = ModIdea.getFromMessage(reaction.message);

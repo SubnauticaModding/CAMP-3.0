@@ -36,7 +36,7 @@ export default class implements Command {
       await idea.send(newList.id, true, true);
     }
 
-    loadingMsg.delete();
+    loadingMsg.delete({ reason: "Loading message deleted." });
     embeds.success(message, "");
   }
 
@@ -44,7 +44,7 @@ export default class implements Command {
     var last = ModIdea.getLastFileId();
     var ideas = data.read("mod_ideas/" + last, []) as ModIdea[];
 
-    if (ideas.length === 100) {
+    if (ideas.length == 100) {
       ideas = [];
       last++;
     }

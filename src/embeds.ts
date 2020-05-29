@@ -11,8 +11,8 @@ export async function success(message: Discord.Message, text: string, time = 10)
 
   await util.wait(time);
 
-  message.delete();
-  replymsg.delete();
+  message.delete({ reason: "Command invocation message deleted." });
+  replymsg.delete({ reason: "Command reply message deleted." });
 }
 
 export async function warn(message: Discord.Message, text: string, time = 10) {
@@ -24,8 +24,8 @@ export async function warn(message: Discord.Message, text: string, time = 10) {
 
   await util.wait(time);
 
-  message.delete();
-  replymsg.delete();
+  message.delete({ reason: "Command invocation message deleted." });
+  replymsg.delete({ reason: "Command reply message deleted." });
 }
 
 export async function error(message: Discord.Message, text: string, time = 10) {
@@ -37,6 +37,6 @@ export async function error(message: Discord.Message, text: string, time = 10) {
 
   await util.wait(time);
 
-  message.delete();
-  replymsg.delete();
+  message.delete({ reason: "Command invocation message deleted." });
+  replymsg.delete({ reason: "Command reply message deleted." });
 }

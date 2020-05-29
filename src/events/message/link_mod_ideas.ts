@@ -18,6 +18,7 @@ export default async function (message: Discord.Message) {
   const embed = new Discord.MessageEmbed();
   embed.setColor("BLUE");
   embed.setDescription("");
+  embed.setFooter(message.id);
 
   for (var key in references) {
     const modidea = references[key];

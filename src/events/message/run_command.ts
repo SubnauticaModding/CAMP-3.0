@@ -10,7 +10,7 @@ import * as util from "../../util";
 export default async function (message: Discord.Message) {
   if (message.partial) message = await message.fetch();
 
-  if (message.guild?.id !== guild.id) return;
+  if (message.guild?.id != guild.id) return;
   if (message.author.bot) return;
   if (!message.content.toLowerCase().startsWith("c/") && !message.content.toLowerCase().startsWith("z/")) return;
 
@@ -24,7 +24,7 @@ export default async function (message: Discord.Message) {
 
     reminderMessage.then((r) => {
       setTimeout(() => {
-        r.delete();
+        r.delete({ reason: "Prefix change reminder message deleted." });
       }, 10000);
     })
   }

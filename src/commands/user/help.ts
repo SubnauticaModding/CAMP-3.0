@@ -51,7 +51,7 @@ export default class implements Command {
 
     await util.wait(120);
 
-    message.delete();
-    helpMessage.delete();
+    message.delete({ reason: "Command invocation message deleted." });
+    helpMessage.delete({ reason: "Command reply message deleted." });
   }
 }

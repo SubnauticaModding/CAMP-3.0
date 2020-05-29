@@ -10,8 +10,8 @@ import * as util from "../../util";
 export default async function (message: Discord.Message) {
   if (message.partial) message = await message.fetch();
 
-  if (message.guild?.id !== guild.id) return;
-  if (message.channel.id !== config.channels.ideas_submit) return;
+  if (message.guild?.id != guild.id) return;
+  if (message.channel.id != config.channels.ideas_submit) return;
   if (message.author.bot) return;
   if (message.content.toLowerCase().startsWith("c/") && util.getPermission(message.member) >= CommandPermission.Administrator) return;
 

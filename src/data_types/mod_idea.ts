@@ -27,8 +27,6 @@ export default class ModIdea {
 
   linkedBy: number[] = [];
 
-  deleted: boolean = false;
-
   public constructor(id: number, text: string, author: string, image?: string) {
     this.id = id;
     this.text = text;
@@ -39,7 +37,7 @@ export default class ModIdea {
   }
 
   public async send(channel: string | Discord.TextChannel, main: boolean, react: boolean) {
-    if (typeof channel === "string") channel = bot.channels.cache.get(channel) as Discord.TextChannel;
+    if (typeof channel == "string") channel = bot.channels.cache.get(channel) as Discord.TextChannel;
     const message = await channel.send(await this.generateEmbed()) as Discord.Message;
     if (main) {
       this.updateMessage(message);
@@ -143,7 +141,6 @@ export default class ModIdea {
 
   public async getMessage() {
     try {
-      if (this.deleted) return;
       if (!this.channel || !this.message) return;
       const ideaChannel = await bot.channels.fetch(this.channel) as Discord.TextChannel;
       const ideaMsg = await ideaChannel.messages.fetch(this.message);
@@ -213,7 +210,7 @@ export default class ModIdea {
     var last = ModIdea.getLastFileId();
     var ideas = data.read("mod_ideas/" + last, []) as ModIdea[];
 
-    if (ideas.length === 100) {
+    if (ideas.length == 100) {
       ideas = [];
       last++;
     }
@@ -233,7 +230,7 @@ export default class ModIdea {
     const ideas = data.read("mod_ideas/" + file, []) as any[];
     if (!ideas) return;
 
-    if (!ideas[index] /*|| ideas[index].deleted*/) return;
+    if (!ideas[index]) return;
 
     return Object.assign(new ModIdea(0, "", ""), ideas[index]) as ModIdea;
   }
@@ -248,7 +245,7 @@ export default class ModIdea {
   }
 
   public static getFromMessage(message: Discord.Message): ModIdea | undefined {
-    if (message.author.id !== bot.user?.id) return;
+    if (message.author.id != bot.user?.id) return;
     if (!message.embeds || message.embeds.length < 1) return;
 
     const embed = message.embeds[0];
@@ -260,7 +257,7 @@ export default class ModIdea {
     footer = footer.substring("ID: #".length);
     if (footer.toLowerCase().endsWith(" (edited)")) footer = footer.substr(0, footer.length - 9);
 
-    if (parseInt(footer).toString() !== footer) return;
+    if (parseInt(footer).toString() != footer) return;
 
     return ModIdea.get(parseInt(footer));
   }
@@ -311,7 +308,7 @@ export default class ModIdea {
     var last = ModIdea.getLastFileId();
     var ideas = data.read("mod_ideas/" + last, []);
 
-    if (ideas.length === 100) {
+    if (ideas.length == 100) {
       ideas = [];
       last++;
     }
