@@ -1,0 +1,1 @@
+export { default as link_delete } from "./link_delete";
