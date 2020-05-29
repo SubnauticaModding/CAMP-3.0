@@ -10,7 +10,7 @@ export default class implements Command {
   name = "author";
   aliases = [];
   description = "Changes the author of a mod idea";
-  usage = "<#ID> [member ID or @mention] [-f]";
+  usage = "<#ID> <member ID or @mention> [-f]";
   getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
   async execute(message: Discord.Message, args: string[]) {
