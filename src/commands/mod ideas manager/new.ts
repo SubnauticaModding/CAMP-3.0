@@ -19,7 +19,7 @@ export default class implements Command {
     const modidea = parser.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
 
-    if (modidea.status == ModIdeaStatus.None) return embeds.error(message, `That mod idea is already in <#${config.channels.ideas_list}>.`);
+    // if (modidea.status == ModIdeaStatus.None) return embeds.error(message, `That mod idea is already in <#${config.channels.ideas_list}>.`);
 
     modidea.status = ModIdeaStatus.None;
     modidea.specialComment = "";

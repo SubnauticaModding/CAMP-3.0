@@ -28,7 +28,7 @@ export function getPermission(member: Discord.GuildMember | null): CommandPermis
   if (member.hasPermission("ADMINISTRATOR")) return 10;
 
   var maxPermission = 0;
-  const roles = [...member.roles.cache.values()].map(r => r.id);
+  const roles = member.roles.cache.array().map(r => r.id);
   for (var permission in config.permissions) {
     // @ts-ignore 7053 - No index signature with a parameter of type 'string' was found on type '...'
     if (roles.includes(config.permissions[permission])) {
@@ -45,10 +45,10 @@ export async function getAllMessages(channel: Discord.TextChannel) {
 
   while (true) {
     try {
-      var fetchedMessages = [...(await channel.messages.fetch({
+      var fetchedMessages = (await channel.messages.fetch({
         before: before,
         limit: 100,
-      })).values()];
+      })).array();
 
       if (!fetchedMessages || fetchedMessages.length == 0) break;
 

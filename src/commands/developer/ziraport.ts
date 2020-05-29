@@ -56,7 +56,7 @@ export default class implements Command {
     idea.comment = (embed.title?.toLowerCase().includes("potential") || embed.title?.toLowerCase().includes("approved")) && embed.fields.length > 0 ? embed.fields[0].value : "";
 
     for (var reaction of message.reactions.cache.values()) {
-      var users = [...(await reaction.users.fetch()).keys()].filter(u => u != "275813801792634880" && u != (id ?? message.author.id));
+      var users = (await reaction.users.fetch()).keyArray().filter(u => u != "275813801792634880" && u != (id ?? message.author.id));
       switch (reaction.emoji.id ?? reaction.emoji.toString()) {
         case "653230762254008350":
         case "👍":

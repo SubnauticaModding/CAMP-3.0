@@ -11,7 +11,7 @@ export default async function (message: Discord.Message | Discord.PartialMessage
   if (message.author.bot) return;
   if (message.content.toLowerCase().startsWith("c/") || message.content.toLowerCase().startsWith("z/")) return;
 
-  const nextMessages = [...(await message.channel.messages.fetch({ after: message.id, limit: 5 })).values()];
+  const nextMessages = (await message.channel.messages.fetch({ after: message.id, limit: 5 })).array();
   for (const msg of nextMessages) {
     if (msg.author.id != bot.user?.id) continue;
     if (!msg.embeds || msg.embeds.length != 1) continue;

@@ -19,7 +19,7 @@ export default class implements Command {
 
     if (author.user.bot) return embeds.error(message, "Invalid arguments. Expected a valid non-bot member ID or @mention as the second argument.");
 
-    if ([...author.roles.cache.keys()].filter(r => r == config.permissions[CommandPermission.ModIdeasManager]).length == 0) {
+    if (author.roles.cache.keyArray().filter(r => r == config.permissions[CommandPermission.ModIdeasManager]).length == 0) {
       try {
         await author.roles.add(config.permissions[CommandPermission.ModIdeasManager], `Added with the c/mim command by ${message.author.tag}`);
         embeds.success(message, `<@${author.id}> has received the <@&${config.permissions[CommandPermission.ModIdeasManager]}> role.`);

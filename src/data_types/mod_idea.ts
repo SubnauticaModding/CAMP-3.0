@@ -5,6 +5,7 @@ import path from "path";
 import { bot } from "../..";
 import config from "../config";
 import * as data from "../data";
+import { ignored_messages } from "../events/messageDelete/mod_idea_delete";
 import ModIdeaStatus from "./mod_idea_status";
 import ModIdeaRating from "./mod_idea_rating";
 
@@ -26,6 +27,8 @@ export default class ModIdea {
   rating: ModIdeaRating = new ModIdeaRating();
 
   linkedBy: number[] = [];
+
+  _deleted: boolean = false;
 
   public constructor(id: number, text: string, author: string, image?: string) {
     this.id = id;
@@ -56,11 +59,14 @@ export default class ModIdea {
   public async sendOrEdit(channel: string) {
     var newIdeaMsg;
     const oldMessage = await this.getMessage();
-    if (oldMessage?.channel.id == channel) {
+    if (oldMessage && oldMessage?.channel.id == channel) {
       newIdeaMsg = oldMessage;
       this.edit(oldMessage);
     } else {
-      oldMessage?.delete();
+      if (oldMessage) {
+        ignored_messages.push(oldMessage.id);
+        oldMessage.delete();
+      }
       newIdeaMsg = await this.send(channel, true, false);
     }
     return newIdeaMsg;
@@ -230,7 +236,7 @@ export default class ModIdea {
     const ideas = data.read("mod_ideas/" + file, []) as any[];
     if (!ideas) return;
 
-    if (!ideas[index]) return;
+    if (!ideas[index] || ideas[index]._deleted) return;
 
     return Object.assign(new ModIdea(0, "", ""), ideas[index]) as ModIdea;
   }
@@ -239,7 +245,7 @@ export default class ModIdea {
     const ideas: ModIdea[] = [];
     for (var i = 1; i < ModIdea.getNextID(); i++) {
       const idea = ModIdea.get(i);
-      if (idea) ideas.push(idea);
+      if (idea && !idea._deleted) ideas.push(idea);
     }
     return ideas;
   }
