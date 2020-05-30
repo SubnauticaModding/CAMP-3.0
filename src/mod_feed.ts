@@ -67,7 +67,7 @@ async function updateUpdatesFeed(game: "subnautica" | "subnauticabelowzero", cha
       version: mod.version,
       channel: message.channel.id,
       message: message.id,
-      changelogExpire: Date.now() + 3600000, // 1 hour
+      changelogExpire: Date.now() + 600000, // 10 minutes
     });
     data.write(`mod_feeds/${game}_updates${id ? "_" + id : ""}`, knownUpdates);
   }
