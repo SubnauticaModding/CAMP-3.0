@@ -1,3 +1,4 @@
+export { default as cmd } from "./developer/cmd";
 export { default as eval } from "./developer/eval";
 export { default as approve } from "./mod ideas manager/approve";
 export { default as author } from "./mod ideas manager/author";
@@ -10,3 +11,4 @@ export { default as attach } from "./user/attach";
 export { default as delete } from "./user/delete";
 export { default as edit } from "./user/edit";
 export { default as help } from "./user/help";
+
