@@ -18,6 +18,14 @@ export function textChannel(id: string) {
   return ch as Discord.TextChannel;
 }
 
+export async function message(channel: string, message: string) {
+  const ch = textChannel(channel);
+  if (!ch) return;
+  const msg = await ch.messages.fetch(message);
+  if (!msg) return;
+  return msg;
+}
+
 export async function member(id: string) {
   if (id.startsWith("<@!") && id.endsWith(">")) id = id.substring(3, id.length - 1);
   if (id.startsWith("<@") && id.endsWith(">")) id = id.substring(2, id.length - 1);

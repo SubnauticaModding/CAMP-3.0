@@ -1,3 +1,4 @@
+import * as nexusapi from "@nexusmods/nexus-api";
 import Discord from "discord.js";
 import { nexus } from "..";
 import config from "./config";
@@ -19,9 +20,12 @@ class ModFeedEntry {
 export function updateModFeeds() {
   updateReleasesFeed("subnautica", config.channels.modfeed.subnautica.releases);
   updateReleasesFeed("subnauticabelowzero", config.channels.modfeed.belowzero.releases);
+
   updateUpdatesFeed("subnautica", config.channels.modfeed.subnautica.updates);
   updateUpdatesFeed("subnauticabelowzero", config.channels.modfeed.belowzero.updates);
-  updateChangelogs();
+
+  updateChangelogs("subnautica");
+  updateChangelogs("subnauticabelowzero");
 }
 
 async function updateReleasesFeed(game: "subnautica" | "subnauticabelowzero", channel: string, id?: string) {
@@ -35,20 +39,7 @@ async function updateReleasesFeed(game: "subnautica" | "subnauticabelowzero", ch
     if (!mod.available || mod.status != "published") continue;
     if (knownReleases.map(x => x.id).includes(mod.mod_id)) continue;
 
-    const embed = new Discord.MessageEmbed();
-    embed.setAuthor(`Mod Release (${gameTitle(game)})`, "https://cdn.discordapp.com/avatars/458591118209187851/686314fcfa96fea3b0bd34b26182b05a.png?size=1024");
-    embed.setColor("faa741");
-    embed.setTitle(mod.name);
-    embed.setURL(`https://nexusmods.com/${game}/mods/${mod.mod_id}`);
-    embed.setDescription(mod.summary?.replace(/<br \/>/g, "\n").replace(/\n+/g, "\n"));
-    embed.addField("Mod ID", mod.mod_id, true);
-    embed.addField("Author", `[${mod.user.name}](https://nexusmods.com/${game}/users/${mod.user.member_id})`, true);
-    embed.addField("Category", await getCategory(game, mod.category_id), true);
-    embed.setImage(mod.picture_url ?? "");
-    embed.setFooter(`v${mod.version}`);
-    embed.setTimestamp(mod.created_timestamp * 1000);
-
-    const message = await textChannel.send(embed);
+    const message = await textChannel.send(generateEmbed(game, mod, "RELEASE"));
     message.crosspost();
 
     knownReleases.push({ id: mod.mod_id });
@@ -68,25 +59,7 @@ async function updateUpdatesFeed(game: "subnautica" | "subnauticabelowzero", cha
     if (knownUpdates.filter(x => x.id == mod.mod_id && x.version == mod.version).length > 0) continue;
     if (mod.created_timestamp == mod.updated_timestamp) continue;
 
-    const embed = new Discord.MessageEmbed();
-    embed.setAuthor(`Mod Update (${gameTitle(game)})`, "https://cdn.discordapp.com/avatars/458591118209187851/686314fcfa96fea3b0bd34b26182b05a.png?size=1024");
-    embed.setColor("57a5cc");
-    embed.setTitle(mod.name);
-    embed.setURL(`https://nexusmods.com/${game}/mods/${mod.mod_id}`);
-    embed.setDescription(mod.summary?.replace(/<br \/>/g, "\n").replace(/\n+/g, "\n"));
-    embed.addField("Mod ID", mod.mod_id, true);
-    embed.addField("Author", `[${mod.user.name}](https://nexusmods.com/${game}/users/${mod.user.member_id})`, true);
-    embed.addField("Category", await getCategory(game, mod.category_id), true);
-    embed.setImage(mod.picture_url ?? "");
-    embed.setFooter(`v${mod.version}`);
-    embed.setTimestamp(mod.created_timestamp * 1000);
-
-    const changelogs = await nexus.getChangelogs(mod.mod_id, game);
-    if (changelogs[mod.version] && changelogs[mod.version].length > 0) {
-      embed.addField("Changelogs", `• ${changelogs[mod.version].join("\n• ")}`);
-    }
-
-    const message = await textChannel.send(embed);
+    const message = await textChannel.send(generateEmbed(game, mod, "UPDATE"));
     message.crosspost();
 
     knownUpdates.push({
@@ -98,6 +71,49 @@ async function updateUpdatesFeed(game: "subnautica" | "subnauticabelowzero", cha
     });
     data.write(`mod_feeds/${game}_updates${id ? "_" + id : ""}`, knownUpdates);
   }
+}
+
+async function updateChangelogs(game: "subnautica" | "subnauticabelowzero", id?: string) {
+  const updates = data.read(`mod_feeds/${game}_updates${id ? "_" + id : ""}`, []) as ModFeedEntry[];
+  for (const update of updates) {
+    if (!update.channel || !update.message || !update.changelogExpire) continue;
+
+    const msg = await parser.message(update.channel, update.message);
+    if (!msg) {
+      update.channel = update.message = update.changelogExpire = undefined;
+      continue;
+    }
+
+    msg.edit(generateEmbed(game, await nexus.getModInfo(update.id, game), "UPDATE"));
+
+    if (update.changelogExpire <= Date.now()) {
+      update.channel = update.message = update.changelogExpire = undefined;
+    }
+  }
+}
+
+async function generateEmbed(game: "subnautica" | "subnauticabelowzero", mod: nexusapi.IModInfo, type: "RELEASE" | "UPDATE") {
+  const embed = new Discord.MessageEmbed();
+  embed.setAuthor(`Mod ${type == "RELEASE" ? "Release" : "Update"} (${gameTitle(game)})`, "https://cdn.discordapp.com/avatars/458591118209187851/686314fcfa96fea3b0bd34b26182b05a.png?size=1024");
+  embed.setColor(type == "RELEASE" ? "faa741" : "57a5cc");
+  embed.setTitle(mod.name);
+  embed.setURL(`https://nexusmods.com/${game}/mods/${mod.mod_id}`);
+  embed.setDescription(mod.summary?.replace(/<br \/>/g, "\n").replace(/\n+/g, "\n"));
+  embed.addField("Mod ID", mod.mod_id, true);
+  embed.addField("Author", `[${mod.user.name}](https://nexusmods.com/${game}/users/${mod.user.member_id})`, true);
+  embed.addField("Category", await getCategory(game, mod.category_id), true);
+  embed.setImage(mod.picture_url ?? "");
+  embed.setFooter(`v${mod.version}`);
+  embed.setTimestamp(mod.created_timestamp * 1000);
+
+  if (type == "UPDATE") {
+    const changelogs = await nexus.getChangelogs(mod.mod_id, game);
+    if (changelogs[mod.version] && changelogs[mod.version].length > 0) {
+      embed.addField("Changelogs", `• ${changelogs[mod.version].join("\n• ")}`);
+    }
+  }
+
+  return embed;
 }
 
 async function getCategory(game: "subnautica" | "subnauticabelowzero", category: number) {
