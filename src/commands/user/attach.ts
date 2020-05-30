@@ -1,5 +1,4 @@
 import Discord from "discord.js";
-
 import config from "../../config";
 import Command from "../../data_types/command";
 import CommandPermission from "../../data_types/command_permission";

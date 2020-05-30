@@ -1,26 +1,27 @@
 import Discord from "discord.js";
-
 import { nexus } from "..";
 import config from "./config";
 import * as data from "./data";
 import * as parser from "./parser";
 
-export function updateModFeeds() {
-  updateModFeed("subnautica", "RELEASES", config.channels.modfeed.subnautica.releases);
-  updateModFeed("subnauticabelowzero", "RELEASES", config.channels.modfeed.belowzero.releases);
-  updateModFeed("subnautica", "UPDATES", config.channels.modfeed.subnautica.updates);
-  updateModFeed("subnauticabelowzero", "UPDATES", config.channels.modfeed.belowzero.updates);
+class ModFeedEntry {
+  id: number;
+  version?: string;
+  message?: string;
+  channel?: string;
+  changelogExpire?: number;
+
+  constructor(id: number) {
+    this.id = id;
+  }
 }
 
-async function updateModFeed(game: "subnautica" | "subnauticabelowzero", type: "RELEASES" | "UPDATES", channel: string, id?: string) {
-  switch (type) {
-    case "RELEASES":
-      await updateReleasesFeed(game, channel, id);
-      break;
-    case "UPDATES":
-      await updateUpdatesFeed(game, channel, id);
-      break;
-  }
+export function updateModFeeds() {
+  updateReleasesFeed("subnautica", config.channels.modfeed.subnautica.releases);
+  updateReleasesFeed("subnauticabelowzero", config.channels.modfeed.belowzero.releases);
+  updateUpdatesFeed("subnautica", config.channels.modfeed.subnautica.updates);
+  updateUpdatesFeed("subnauticabelowzero", config.channels.modfeed.belowzero.updates);
+  updateChangelogs();
 }
 
 async function updateReleasesFeed(game: "subnautica" | "subnauticabelowzero", channel: string, id?: string) {
@@ -28,11 +29,11 @@ async function updateReleasesFeed(game: "subnautica" | "subnauticabelowzero", ch
   if (!textChannel) return;
 
   const mods = await nexus.getLatestAdded(game);
-  const knownReleases = data.read(`mod_feeds/${game}_releases${id ? "_" + id : ""}`, []) as number[];
+  const knownReleases = data.read(`mod_feeds/${game}_releases${id ? "_" + id : ""}`, []) as ModFeedEntry[];
 
   for (const mod of mods) {
     if (!mod.available || mod.status != "published") continue;
-    if (knownReleases.includes(mod.mod_id)) continue;
+    if (knownReleases.map(x => x.id).includes(mod.mod_id)) continue;
 
     const embed = new Discord.MessageEmbed();
     embed.setAuthor(`Mod Release (${gameTitle(game)})`, "https://cdn.discordapp.com/avatars/458591118209187851/686314fcfa96fea3b0bd34b26182b05a.png?size=1024");
@@ -50,7 +51,7 @@ async function updateReleasesFeed(game: "subnautica" | "subnauticabelowzero", ch
     const message = await textChannel.send(embed);
     message.crosspost();
 
-    knownReleases.push(mod.mod_id);
+    knownReleases.push({ id: mod.mod_id });
     data.write(`mod_feeds/${game}_releases${id ? "_" + id : ""}`, knownReleases);
   }
 }
@@ -60,7 +61,7 @@ async function updateUpdatesFeed(game: "subnautica" | "subnauticabelowzero", cha
   if (!textChannel) return;
 
   const mods = await nexus.getLatestUpdated(game);
-  const knownUpdates = data.read(`mod_feeds/${game}_updates${id ? "_" + id : ""}`, []) as { id: number, version: string }[];
+  const knownUpdates = data.read(`mod_feeds/${game}_updates${id ? "_" + id : ""}`, []) as ModFeedEntry[];
 
   for (const mod of mods) {
     if (!mod.available || mod.status != "published") continue;
@@ -88,7 +89,13 @@ async function updateUpdatesFeed(game: "subnautica" | "subnauticabelowzero", cha
     const message = await textChannel.send(embed);
     message.crosspost();
 
-    knownUpdates.push({ id: mod.mod_id, version: mod.version });
+    knownUpdates.push({
+      id: mod.mod_id,
+      version: mod.version,
+      channel: message.channel.id,
+      message: message.id,
+      changelogExpire: Date.now() + 3600000, // 1 hour
+    });
     data.write(`mod_feeds/${game}_updates${id ? "_" + id : ""}`, knownUpdates);
   }
 }

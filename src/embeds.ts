@@ -1,5 +1,4 @@
 import Discord from "discord.js";
-
 import * as util from "./util";
 
 export async function success(message: Discord.Message, text: string, time = 10) {

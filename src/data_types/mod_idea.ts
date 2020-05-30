@@ -1,13 +1,12 @@
 import Discord from "discord.js";
 import readdir from "fs-readdir-recursive";
 import path from "path";
-
 import { bot } from "../..";
 import config from "../config";
 import * as data from "../data";
 import { ignored_messages } from "../events/messageDelete/mod_idea_delete";
-import ModIdeaStatus from "./mod_idea_status";
 import ModIdeaRating from "./mod_idea_rating";
+import ModIdeaStatus from "./mod_idea_status";
 
 export default class ModIdea {
   id: number;

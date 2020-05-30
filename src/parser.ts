@@ -1,5 +1,4 @@
 import Discord from "discord.js";
-
 import { bot, guild, nexus } from "..";
 import ModIdea from "./data_types/mod_idea";
 

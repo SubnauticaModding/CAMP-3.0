@@ -1,7 +1,6 @@
 import Discord from "discord.js";
 import fs from "fs";
 import path from "path";
-
 import config from "./config";
 import CommandPermission from "./data_types/command_permission";
 

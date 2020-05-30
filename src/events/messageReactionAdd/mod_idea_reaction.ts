@@ -1,5 +1,4 @@
 import Discord from "discord.js";
-
 import { guild } from "../../..";
 import config from "../../config";
 import ModIdea from "../../data_types/mod_idea";

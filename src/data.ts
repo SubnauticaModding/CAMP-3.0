@@ -1,6 +1,5 @@
 import * as fs from "fs";
 import * as path from "path";
-
 import * as util from "./util";
 
 export function read<DataType>(file: string, def: DataType): DataType {

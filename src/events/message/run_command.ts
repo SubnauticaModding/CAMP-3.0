@@ -1,5 +1,4 @@
 import Discord from "discord.js";
-
 import { guild } from "../../..";
 import * as commands from "../../commands";
 import config from "../../config";

@@ -1,5 +1,4 @@
 import Discord from "discord.js";
-
 import CommandPermission from "./command_permission";
 
 export default interface Command {
