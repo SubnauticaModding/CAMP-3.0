@@ -90,6 +90,7 @@ async function updateChangelogs(game: "subnautica" | "subnauticabelowzero", id?:
       update.channel = update.message = update.changelogExpire = undefined;
     }
   }
+  data.write(`mod_feeds/${game}_updates${id ? "_" + id : ""}`, updates);
 }
 
 async function generateEmbed(game: "subnautica" | "subnauticabelowzero", mod: nexusapi.IModInfo, type: "RELEASE" | "UPDATE") {
@@ -117,7 +118,7 @@ async function generateEmbed(game: "subnautica" | "subnauticabelowzero", mod: ne
 }
 
 async function getCategory(game: "subnautica" | "subnauticabelowzero", category: number) {
-  const Game = await nexus.getGameInfo(game);
+  const Game = await getGameWithCategory(game, category);
   const validCategories = Game.categories.filter(c => c.category_id == category);
 
   if (validCategories.length < 1) return "_none_";
@@ -127,4 +128,28 @@ async function getCategory(game: "subnautica" | "subnauticabelowzero", category:
 function gameTitle(game: "subnautica" | "subnauticabelowzero") {
   if (game == "subnautica") return "Subnautica";
   return "Below Zero";
+}
+
+var sn: nexusapi.IGameInfo;
+var bz: nexusapi.IGameInfo;
+async function getGameCached(game: "subnautica" | "subnauticabelowzero") {
+  if (game == "subnautica") {
+    if (sn) return sn;
+    sn = await nexus.getGameInfo("subnautica");
+    return sn;
+  } else {
+    if (bz) return bz;
+    bz = await nexus.getGameInfo("subnauticabelowzero");
+    return bz;
+  }
+}
+
+async function getGameWithCategory(game: "subnautica" | "subnauticabelowzero", category: number) {
+  var Game = await getGameCached(game);
+  if (Game.categories.filter(c => c.category_id == category).length > 0) return Game;
+
+  if (game == "subnautica") Game = sn = await nexus.getGameInfo("subnautica");
+  else Game = bz = await nexus.getGameInfo("subnauticabelowzero");
+
+  return Game;
 }
