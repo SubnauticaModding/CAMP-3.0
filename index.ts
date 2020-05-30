@@ -38,3 +38,7 @@ setInterval(() => {
 export function setGuild(g: Discord.Guild) {
   guild = g;
 }
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.log("Unhandled Rejection at: ", promise, "\nReason:", reason);
+});

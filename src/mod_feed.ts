@@ -39,7 +39,7 @@ async function updateReleasesFeed(game: "subnautica" | "subnauticabelowzero", ch
     if (!mod.available || mod.status != "published") continue;
     if (knownReleases.map(x => x.id).includes(mod.mod_id)) continue;
 
-    const message = await textChannel.send(generateEmbed(game, mod, "RELEASE"));
+    const message = await textChannel.send(await generateEmbed(game, mod, "RELEASE"));
     message.crosspost();
 
     knownReleases.push({ id: mod.mod_id });
@@ -59,7 +59,7 @@ async function updateUpdatesFeed(game: "subnautica" | "subnauticabelowzero", cha
     if (knownUpdates.filter(x => x.id == mod.mod_id && x.version == mod.version).length > 0) continue;
     if (mod.created_timestamp == mod.updated_timestamp) continue;
 
-    const message = await textChannel.send(generateEmbed(game, mod, "UPDATE"));
+    const message = await textChannel.send(await generateEmbed(game, mod, "UPDATE"));
     message.crosspost();
 
     knownUpdates.push({
@@ -84,7 +84,7 @@ async function updateChangelogs(game: "subnautica" | "subnauticabelowzero", id?:
       continue;
     }
 
-    msg.edit(generateEmbed(game, await nexus.getModInfo(update.id, game), "UPDATE"));
+    msg.edit(await generateEmbed(game, await nexus.getModInfo(update.id, game), "UPDATE"));
 
     if (update.changelogExpire <= Date.now()) {
       update.channel = update.message = update.changelogExpire = undefined;
