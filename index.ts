@@ -33,7 +33,7 @@ bot.login(process.env.DISCORD_TOKEN);
 setInterval(() => {
   ModIdea.updateReportMessage();
   modfeed.updateModFeeds();
-}, 300000);
+}, 300000); // 5 minutes
 
 export function setGuild(g: Discord.Guild) {
   guild = g;
