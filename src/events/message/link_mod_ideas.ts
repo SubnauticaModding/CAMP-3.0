@@ -8,7 +8,7 @@ export default async function (message: Discord.Message) {
   if (message.partial) message = await message.fetch();
 
   if (message.guild?.id != guild.id) return;
-  if (message.channel.id != config.channels.ideas_discussion) return;
+  if (message.channel.id != config.channels.modideas.discussion) return;
   if (message.author.bot) return;
   if (message.content.toLowerCase().startsWith("c/") || message.content.toLowerCase().startsWith("z/")) return;
 

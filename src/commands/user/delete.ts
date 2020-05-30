@@ -10,7 +10,7 @@ import * as parser from "../../parser";
 export default class implements Command {
   name = "delete";
   aliases = [];
-  description = `Deletes your mod idea and moves it into <#${config.channels.ideas_removed}>.`;
+  description = `Deletes your mod idea and moves it into <#${config.channels.modideas.removed}>.`;
   usage = "<#ID> [comment]";
   getPermission = (message: Discord.Message) => CommandPermission.User;
 
@@ -32,7 +32,7 @@ export default class implements Command {
     modidea.comment = args.join(" ");
 
     modidea.update();
-    const newIdeaMsg = await modidea.sendOrEdit(config.channels.ideas_removed);
+    const newIdeaMsg = await modidea.sendOrEdit(config.channels.modideas.removed);
 
     if (oldStatus == ModIdeaStatus.Deleted)
       embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)

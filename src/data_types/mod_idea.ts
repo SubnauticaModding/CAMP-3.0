@@ -330,9 +330,9 @@ export default class ModIdea {
   }
 
   public static async updateReportMessage() {
-    const channel = await bot.channels.fetch(config.staff.channel) as Discord.TextChannel;
+    const channel = await bot.channels.fetch(config.channels.modideas.report.channel) as Discord.TextChannel;
     try {
-      var message = await channel.messages.fetch(config.staff.message);
+      var message = await channel.messages.fetch(config.channels.modideas.report.message);
       if (!message.editable) return;
     } catch {
       return; // todo: edit config and save it

@@ -1,17 +1,16 @@
-import dotenv from "dotenv";
-dotenv.config();
+require("dotenv").config();
 
 import Discord from "discord.js";
 import nexusmods from "@nexusmods/nexus-api";
 
 import ModIdea from "./src/data_types/mod_idea";
 import config from "./src/config";
-import * as util from "./src/util";
+import * as modfeed from "./src/mod_feed";
 
 import("./src/web_init");
+import("./src/crosspost");
 console.log("Environment: " + config.environment);
 console.log("Launching bot...");
-util.ensureFolders(__dirname, "data", "mod_ideas");
 
 export const bot = new Discord.Client({
   disableMentions: "everyone",
@@ -22,7 +21,7 @@ export var nexus: nexusmods;
 
 (async () => {
   console.log("Creating nexusmods object...")
-  nexus = await nexusmods.create(process.env.NEXUS_API_KEY ?? "", "SNModding-CAMP-Bot", `v${config.version}`, "Subnautica");
+  nexus = await nexusmods.create(process.env.NEXUS_API_KEY ?? "", "SNModding-CAMP-Bot", config.version, "subnautica");
   console.log("Nexusmods object created");
 })();
 
@@ -34,6 +33,7 @@ bot.login(process.env.DISCORD_TOKEN);
 
 setInterval(() => {
   ModIdea.updateReportMessage();
+  modfeed.updateModFeeds();
 }, 300000);
 
 export function setGuild(g: Discord.Guild) {

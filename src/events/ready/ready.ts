@@ -1,6 +1,7 @@
 import { bot, setGuild } from "../../..";
 import config from "../../config";
 import ModIdea from "../../data_types/mod_idea";
+import * as modfeed from "../../mod_feed";
 
 export default async function () {
   console.log("Bot is ready.");
@@ -9,4 +10,5 @@ export default async function () {
   else setGuild(mainGuild);
 
   ModIdea.updateReportMessage();
+  modfeed.updateModFeeds();
 }

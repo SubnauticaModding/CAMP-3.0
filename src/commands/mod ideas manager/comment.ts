@@ -22,7 +22,7 @@ export default class implements Command {
     modidea.comment = args.join(" ");
 
     modidea.update();
-    const newIdeaMsg = await modidea.sendOrEdit(modidea.channel ?? config.channels.ideas_list);
+    const newIdeaMsg = await modidea.sendOrEdit(modidea.channel ?? config.channels.modideas.list);
 
     embeds.success(message, `Your comment to mod idea \`#${modidea.id}\` has been applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
   }

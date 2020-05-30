@@ -31,7 +31,7 @@ export default class implements Command {
     modidea.edited = true;
 
     modidea.update();
-    const newIdeaMsg = await modidea.sendOrEdit(config.channels.ideas_list);
+    const newIdeaMsg = await modidea.sendOrEdit(config.channels.modideas.list);
 
     embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
   }

@@ -10,7 +10,7 @@ import * as parser from "../../parser";
 export default class implements Command {
   name = "approve";
   aliases = ["release", "released"];
-  description = `Marks a mod idea as released and moves it into <#${config.channels.ideas_released}>.`;
+  description = `Marks a mod idea as released and moves it into <#${config.channels.modideas.released}>.`;
   usage = "<#ID> <NexusMods link> [comment]";
   getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
@@ -33,7 +33,7 @@ export default class implements Command {
     modidea.comment = args.join(" ");
 
     modidea.update();
-    const newIdeaMsg = await modidea.sendOrEdit(config.channels.ideas_released);
+    const newIdeaMsg = await modidea.sendOrEdit(config.channels.modideas.released);
 
     if (oldStatus == ModIdeaStatus.Released)
       embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)

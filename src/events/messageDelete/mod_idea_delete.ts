@@ -10,7 +10,7 @@ export default async function (message: Discord.Message | Discord.PartialMessage
   if (message.partial) message = await message.fetch();
 
   if (message.guild?.id != guild.id) return;
-  if (message.channel.id != config.channels.ideas_list && message.channel.id != config.channels.ideas_released && message.channel.id != config.channels.ideas_removed) return;
+  if (message.channel.id != config.channels.modideas.list && message.channel.id != config.channels.modideas.released && message.channel.id != config.channels.modideas.removed) return;
   if (!message.author.bot) return;
 
   if (ignored_messages.includes(message.id)) {

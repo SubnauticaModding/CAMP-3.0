@@ -10,7 +10,7 @@ import * as parser from "../../parser";
 export default class implements Command {
   name = "duplicate";
   aliases = ["dupe", "copy"];
-  description = `Marks a mod idea as a duplicate of another mod idea and moves it into <#${config.channels.ideas_removed}>.`;
+  description = `Marks a mod idea as a duplicate of another mod idea and moves it into <#${config.channels.modideas.removed}>.`;
   usage = "<duplicate #ID> <original #ID> [-f] [comment]";
   getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
@@ -46,7 +46,7 @@ export default class implements Command {
     dupe.comment = args[0] == "-f" ? args.join(" ").substr(3) : args.join(" ");
 
     dupe.update();
-    const newIdeaMsg = await dupe.sendOrEdit(config.channels.ideas_removed);
+    const newIdeaMsg = await dupe.sendOrEdit(config.channels.modideas.removed);
 
     if (oldStatus == ModIdeaStatus.Duplicate) {
       if ((dupe.time < orig.time || orig.status != ModIdeaStatus.None) && args[0] == "-f")

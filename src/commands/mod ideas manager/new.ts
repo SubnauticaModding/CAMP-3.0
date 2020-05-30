@@ -11,7 +11,7 @@ import * as parser from "../../parser";
 export default class implements Command {
   name = "new";
   aliases = ["relist"];
-  description = `Removes the status of a mod idea and re-adds it to <#${config.channels.ideas_list}>.`;
+  description = `Removes the status of a mod idea and re-adds it to <#${config.channels.modideas.list}>.`;
   usage = "<#ID>";
   getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
@@ -19,7 +19,7 @@ export default class implements Command {
     const modidea = parser.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
 
-    // if (modidea.status == ModIdeaStatus.None) return embeds.error(message, `That mod idea is already in <#${config.channels.ideas_list}>.`);
+    // if (modidea.status == ModIdeaStatus.None) return embeds.error(message, `That mod idea is already in <#${config.channels.modideas.list}>.`);
 
     modidea.status = ModIdeaStatus.None;
     modidea.specialComment = "";
@@ -27,9 +27,9 @@ export default class implements Command {
     modidea.comment = "";
 
     modidea.update();
-    const newIdeaMsg = await modidea.sendOrEdit(config.channels.ideas_list);
+    const newIdeaMsg = await modidea.sendOrEdit(config.channels.modideas.list);
     ModIdea.addReactions(newIdeaMsg);
 
-    embeds.success(message, `Mod idea \`#${modidea.id}\` has been re-added to <#${config.channels.ideas_list}>.\nClick [here](${newIdeaMsg.url}) to view it.`);
+    embeds.success(message, `Mod idea \`#${modidea.id}\` has been re-added to <#${config.channels.modideas.list}>.\nClick [here](${newIdeaMsg.url}) to view it.`);
   }
 }
