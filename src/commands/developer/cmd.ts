@@ -6,7 +6,7 @@ import CommandPermission from "../../data_types/command_permission";
 export default class implements Command {
   name = "cmd";
   aliases = ["command", "shell"];
-  description = "";
+  description = "Executes a shell command.";
   usage = "<command>";
   hidden = true;
   getPermission = (message: Discord.Message) => CommandPermission.Developer;

@@ -5,7 +5,7 @@ import CommandPermission from "../../data_types/command_permission";
 export default class implements Command {
   name = "eval";
   aliases = [];
-  description = "";
+  description = "Executes custom JavaScript code.";
   usage = "<JS code>";
   hidden = true;
   getPermission = (message: Discord.Message) => CommandPermission.Developer;
