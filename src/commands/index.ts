@@ -8,6 +8,7 @@ export { default as duplicate } from "./mod ideas manager/duplicate";
 export { default as new } from "./mod ideas manager/new";
 export { default as remove } from "./mod ideas manager/remove";
 export { default as mim } from "./moderator/mim";
+export { default as about } from "./user/about";
 export { default as attach } from "./user/attach";
 export { default as delete } from "./user/delete";
 export { default as edit } from "./user/edit";

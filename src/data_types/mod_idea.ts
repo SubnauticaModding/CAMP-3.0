@@ -338,7 +338,6 @@ export default class ModIdea {
     }
 
     const ideas = ModIdea.getAll();
-    const badIdeas: ModIdea[] = [];
     var total = 558, listed = 0, released = 64, removed = 408, duplicate = 84, deleted = 2;
 
     for (const idea of ideas) {
@@ -360,8 +359,9 @@ export default class ModIdea {
           break;
       }
       total++;
-      if (idea.rating.likes.length < idea.rating.dislikes.length && idea.status == ModIdeaStatus.None) badIdeas.push(idea);
     }
+
+    var topIdeas = [...ideas].sort((a, b) => a.rating.likes.length - a.rating.dislikes.length - b.rating.likes.length + b.rating.dislikes.length).slice(0, 10);
 
     const embed = new Discord.MessageEmbed();
     embed.setColor("BLUE");
@@ -377,7 +377,7 @@ export default class ModIdea {
     embed.addField("Duplicate Mod Ideas", `${duplicate} (${(duplicate / total * 100).toFixed(2)}%)`, true);
     embed.addField("Deleted Mod Ideas", `${deleted} (${(deleted / total * 100).toFixed(2)}%)`, true);
 
-    embed.addField("Poorly Rated Mod Ideas", badIdeas.length == 0 ? "_none_" : await ModIdea.parseReferencesStatic(badIdeas.map(b => "#" + b.id).join(", ")));
+    if (topIdeas.length > 0) embed.addField("Top 10 Mod Ideas", await ModIdea.parseReferencesStatic(topIdeas.map(b => "#" + b.id).join(", ")));
 
     message.edit(embed);
   }
