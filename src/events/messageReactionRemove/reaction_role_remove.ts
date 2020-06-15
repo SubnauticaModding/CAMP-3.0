@@ -13,7 +13,7 @@ export default async function (reaction: Discord.MessageReaction, user: Discord.
   for (const reactionRole of config.reactionroles) {
     if (reactionRole.message == reaction.message.id && reactionRole.emoji == (reaction.emoji.id ?? reaction.emoji.toString())) {
       const member = await parser.member(user.id);
-      member?.roles.remove(reactionRole.role);
+      member?.roles.remove(reactionRole.role, `User removed reaction "${reactionRole.emoji}" on message "${reaction.message.content.substr(0, 50)}${reaction.message.content.length > 50 ? "..." : ""}"`);
     }
   }
 }

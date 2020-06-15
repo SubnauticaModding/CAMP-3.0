@@ -8,7 +8,7 @@ export default async function (message: Discord.Message | Discord.PartialMessage
   if (message.guild?.id != guild.id) return;
   if (message.channel.id != config.channels.modideas.discussion) return;
   if (message.author.bot) return;
-  if (message.content.toLowerCase().startsWith("c/") || message.content.toLowerCase().startsWith("z/")) return;
+  if (message.content.toLowerCase().startsWith("c/")) return;
 
   const nextMessages = (await message.channel.messages.fetch({ after: message.id, limit: 5 })).array();
   for (const msg of nextMessages) {

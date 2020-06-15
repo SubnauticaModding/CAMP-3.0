@@ -11,22 +11,7 @@ export default async function (message: Discord.Message) {
 
   if (message.guild?.id != guild.id) return;
   if (message.author.bot) return;
-  if (!message.content.toLowerCase().startsWith("c/") && !message.content.toLowerCase().startsWith("z/")) return;
-
-  if (message.content.toLowerCase().startsWith("z/")) {
-    const reminderMessage = message.channel.send(new Discord.MessageEmbed({
-      title: "Reminder",
-      description: "The prefix for the Mod Ideas bot has changed. The new prefix is `c/`.",
-      color: "FEFEFE"
-    }));
-    message.content = "c" + message.content.substr(1);
-
-    reminderMessage.then((r) => {
-      setTimeout(() => {
-        r.delete({ reason: "Prefix change reminder message deleted." });
-      }, 10000);
-    })
-  }
+  if (!message.content.toLowerCase().startsWith("c/")) return;
 
   const args = message.content.split(/[ \n\r]+/g);
   const cmd = args.shift()?.substr(2);
