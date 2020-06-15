@@ -8,7 +8,7 @@ import * as parser from "../../parser";
 export default class implements Command {
   name = "actor";
   aliases = [];
-  description = "Changes the last actor of a mod idea";
+  description = "Changes the last actor on a mod idea";
   usage = "<#ID> <member ID or @mention> [-f]";
   getPermission = (message: Discord.Message) => CommandPermission.ModIdeasManager;
 
