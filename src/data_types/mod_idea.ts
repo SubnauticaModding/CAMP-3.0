@@ -104,8 +104,9 @@ export default class ModIdea {
       case ModIdeaStatus.Removed:
         embed.addField("Status", "Removed");
         embed.addField("Removed by", `<@${this.lastActor}>`);
+        break;
       case ModIdeaStatus.None:
-        embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\``, true);
+        embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\`${rating <= -10 ? " _(pending deletion)_" : ""}`, true);
         embed.addField("Votes", this.rating.likes.length + this.rating.dislikes.length, true);
         break;
       case ModIdeaStatus.Released:
@@ -178,6 +179,30 @@ export default class ModIdea {
     }
     this.linkedBy = this.linkedBy.filter(x => !toRemove.includes(x));
     this.update();
+  }
+
+  public static removeBadIdeas() {
+    const ideas = ModIdea.getAll();
+    for (const idea of ideas) {
+      if (idea.status == ModIdeaStatus.None) {
+        if (idea.rating.likes.length - idea.rating.dislikes.length > -10) {
+          if (idea.rating.pendingDeletionStart) delete idea.rating.pendingDeletionStart;
+        } else {
+          if (!idea.rating.pendingDeletionStart) {
+            idea.rating.pendingDeletionStart = Date.now();
+            idea.update();
+          }
+          if (idea.rating.pendingDeletionStart + 300000 <= Date.now()) { // 5 minutes
+            idea.status = ModIdeaStatus.Removed;
+            idea.specialComment = "";
+            idea.lastActor = bot.user?.id ?? "";
+            idea.comment = "[Automatic] Mod idea had a rating of `-10` or less.";
+            idea.update();
+            idea.sendOrEdit(config.channels.modideas.removed);
+          }
+        }
+      }
+    }
   }
 
   public static async parseReferencesStatic(text: string) {

@@ -19,6 +19,7 @@ export default async function (reaction: Discord.MessageReaction, user: Discord.
       if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) break;
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
+      if (modidea.rating.likes.length - modidea.rating.dislikes.length > -10) delete modidea.rating.pendingDeletionStart;
       modidea.update();
       modidea.edit(reaction.message);
       break;
@@ -27,6 +28,7 @@ export default async function (reaction: Discord.MessageReaction, user: Discord.
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.dislikes.push(user.id);
+      if (modidea.rating.likes.length - modidea.rating.dislikes.length > -10) modidea.rating.pendingDeletionStart = Date.now();
       modidea.update();
       modidea.edit(reaction.message);
       break;
@@ -35,6 +37,7 @@ export default async function (reaction: Discord.MessageReaction, user: Discord.
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.likes.push(user.id);
+      if (modidea.rating.likes.length - modidea.rating.dislikes.length > -10) delete modidea.rating.pendingDeletionStart;
       modidea.update();
       modidea.edit(reaction.message);
       break;

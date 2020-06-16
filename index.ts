@@ -31,9 +31,13 @@ console.log("Events loaded");
 bot.login(process.env.DISCORD_TOKEN);
 
 setInterval(() => {
-  ModIdea.updateReportMessage();
   modfeed.updateModFeeds();
 }, 300000); // 5 minutes
+
+setInterval(() => {
+  ModIdea.updateReportMessage();
+  ModIdea.removeBadIdeas();
+}, 60000); // 1 minute
 
 export function setGuild(g: Discord.Guild) {
   guild = g;

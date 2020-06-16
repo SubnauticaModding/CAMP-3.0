@@ -110,7 +110,7 @@ async function generateEmbed(game: "subnautica" | "subnauticabelowzero", mod: ne
   if (type == "UPDATE") {
     const changelogs = await nexus.getChangelogs(mod.mod_id, game);
     if (changelogs[mod.version] && changelogs[mod.version].length > 0) {
-      embed.addField("Changelogs", `• ${changelogs[mod.version].join("\n• ")}`);
+      embed.addField("Changelogs", parseChangelogs(changelogs[mod.version]));
     }
   }
 
@@ -123,6 +123,20 @@ async function getCategory(game: "subnautica" | "subnauticabelowzero", category:
 
   if (validCategories.length < 1) return "_none_";
   return validCategories.map(c => c.name).join(", ");
+}
+
+function parseChangelogs(changelogs: string[]) {
+  var length = 0;
+  var i;
+  for (i = 0; i < changelogs.length && length < 1000; i++) {
+    length += changelogs[i].length + 5;
+  }
+  if (length >= 1000) i--;
+
+  const fitCh = changelogs.slice(0, i);
+  if (fitCh.length != changelogs.length) fitCh.push("_and more..._");
+
+  return "• " + fitCh.join("\n• ");
 }
 
 function gameTitle(game: "subnautica" | "subnauticabelowzero") {

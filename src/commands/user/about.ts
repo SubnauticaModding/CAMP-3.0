@@ -2,6 +2,7 @@ import Discord from "discord.js";
 import config from "../../config";
 import Command from "../../data_types/command";
 import CommandPermission from "../../data_types/command_permission";
+import * as util from "../../util";
 
 export default class implements Command {
   name = "about";
@@ -20,6 +21,12 @@ export default class implements Command {
     embed.addField("Created In", "[TypeScript](https://npmjs.com/package/typescript)", true)
     embed.addField("Library", "[discord.js](https://npmjs.com/package/discord.js)", true);
     embed.addField("Source Code", "[GitHub](https://github.com/subnauticamodding/camp)", true);
-    message.channel.send(embed);
+
+    const aboutMessage = await message.channel.send(embed);
+
+    await util.wait(120);
+
+    message.delete({ reason: "Command invocation message deleted." });
+    aboutMessage.delete({ reason: "Command reply message deleted." });
   }
 }
