@@ -347,7 +347,7 @@ export default class ModIdea {
   }
 
   public static getLastFileId(): number {
-    return Math.max(0, ...readdir(path.join(__dirname, "../../data/mod_ideas"))
+    return Math.max(0, ...readdir(path.join(__dirname, "../data/mod_ideas"))
       .filter((p) => p.endsWith(".json"))
       .map((p) => parseInt(p.substring(0, p.length - 5))),
     );
