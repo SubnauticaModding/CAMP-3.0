@@ -9,6 +9,3 @@ package-lock.json
 pnpm-debug.log
 .githubsync
 shrinkwrap.yaml
-pull
-push
-index.nginx-debian.html
