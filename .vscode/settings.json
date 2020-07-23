@@ -19,8 +19,10 @@
         "dist/d[bcdefghijklmnopqrstuvwxyz]*": true,
         "dist/da[abcdefghijklmnopqrsuvwxyz]*": true,
         "dist/dat[bcdefghijklmnopqrstuvwxyz]*": true,
-        "package.json": true,
-        ".env": true
+        "package.json": false,
+        ".env": true,
+        "pull": true,
+        "push": true
     },
     "tslint.autoFixOnSave": true,
     "typescript.tsdk": "node_modules\\typescript\\lib"

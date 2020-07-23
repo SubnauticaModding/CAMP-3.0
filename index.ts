@@ -6,7 +6,6 @@ import config from "./src/config";
 import ModIdea from "./src/data_types/mod_idea";
 import * as modfeed from "./src/mod_feed";
 
-import("./src/web_init");
 import("./src/crosspost");
 console.log("Environment: " + config.environment);
 console.log("Launching bot...");
