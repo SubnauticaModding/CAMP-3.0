@@ -2,7 +2,7 @@ import { bot } from "../../..";
 import ModIdea from "../../mod_idea";
 
 export default async function () {
-  const ideas = ModIdea.getAll();
+  const ideas = ModIdea.getAll().reverse();
   for (const idea of ideas) {
     const message = await idea.getMessage();
     if (!message) continue;
