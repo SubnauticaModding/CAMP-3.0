@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "echo Starting build... && tsc && echo Build finished! && node dist/index.js",
-    "nodemon": "nodemon -e \"ts\" -i dist/ -i .env -i config/ -i config/*.json -x \"tsc && echo Build finished! && node dist/index.js || exit 1\"",
+    "nodemon": "nodemon -e \"ts\" -i dist/ -i .env -i config/ -i config/*.json -x \"echo Starting build... && tsc && echo Build finished! && node dist/index.js || exit 1\"",
     "update": "ncu -u && pnpm i"
   },
   "author": "AlexejheroYTB",

@@ -17,7 +17,7 @@ export default class implements Command {
     embed.setColor("BLUE");
     embed.addField("Created By", "<@183249892712513536>", true);
     embed.addField("Version", `v${config.version}`, true);
-    embed.addField("Hosted On", "[glitch.com](https://glitch.com)", true);
+    embed.addField("Hosted On", "[DigitalOcean](https://digitalocean.com)", true);
     embed.addField("Created In", "[TypeScript](https://npmjs.com/package/typescript)", true)
     embed.addField("Library", "[discord.js](https://npmjs.com/package/discord.js)", true);
     embed.addField("Source Code", "[GitHub](https://github.com/subnauticamodding/camp)", true);

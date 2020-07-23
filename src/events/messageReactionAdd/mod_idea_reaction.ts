@@ -44,6 +44,10 @@ export default async function (reaction: Discord.MessageReaction, user: Discord.
     case config.emojis.update:
       modidea.update();
       modidea.edit(reaction.message);
+      await reaction.message.reactions.removeAll();
+      await reaction.message.react(config.emojis.upvote);
+      await reaction.message.react(config.emojis.abstain);
+      reaction.message.react(config.emojis.downvote);
       break;
   }
 
