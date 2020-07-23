@@ -9,3 +9,4 @@ package-lock.json
 pnpm-debug.log
 .githubsync
 shrinkwrap.yaml
+output.log
