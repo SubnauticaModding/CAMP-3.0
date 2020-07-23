@@ -21,6 +21,17 @@ export function wait(s: number): Promise<void> {
   });
 }
 
+export function waitUntil(func: Function): Promise<void> {
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (func()) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 100);
+  });
+}
+
 export function getPermission(member: Discord.GuildMember | null): CommandPermission {
   if (!member) return CommandPermission.User;
   if (member.id == "183249892712513536") return CommandPermission.Developer;

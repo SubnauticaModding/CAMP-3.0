@@ -7,6 +7,8 @@ export default async function () {
     const message = await idea.getMessage();
     if (!message) continue;
 
+    console.log("Catching up with reactions on mod idea " + idea.id);
+
     const reactions = message.reactions.cache.array();
     for (const reaction of reactions) {
       const users = (await reaction.users.fetch()).array();
