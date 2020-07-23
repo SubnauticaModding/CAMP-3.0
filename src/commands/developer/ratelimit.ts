@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import { nexus } from "../../..";
-import Command from "../../data_types/command";
-import CommandPermission from "../../data_types/command_permission";
+import Command from "../../command";
+import CommandPermission from "../../command_permission";
 
 export default class implements Command {
   name = "ratelimit";

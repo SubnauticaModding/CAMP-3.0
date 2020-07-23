@@ -1,7 +1,7 @@
 import Discord from "discord.js";
+import Command from "../../command";
+import CommandPermission from "../../command_permission";
 import config from "../../config";
-import Command from "../../data_types/command";
-import CommandPermission from "../../data_types/command_permission";
 import * as util from "../../util";
 
 export default class implements Command {

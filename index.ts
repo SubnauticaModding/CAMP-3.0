@@ -3,8 +3,8 @@ require("dotenv").config();
 import nexusmods from "@nexusmods/nexus-api";
 import Discord from "discord.js";
 import config from "./src/config";
-import ModIdea from "./src/data_types/mod_idea";
 import * as modfeed from "./src/mod_feed";
+import ModIdea from "./src/mod_idea";
 
 import("./src/crosspost");
 console.log("Environment: " + config.environment);

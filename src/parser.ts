@@ -1,6 +1,6 @@
 import Discord from "discord.js";
 import { bot, guild, nexus } from "..";
-import ModIdea from "./data_types/mod_idea";
+import ModIdea from "./mod_idea";
 
 export function modIdea(id: string) {
   if (id.startsWith("#")) id = id.substr(1);

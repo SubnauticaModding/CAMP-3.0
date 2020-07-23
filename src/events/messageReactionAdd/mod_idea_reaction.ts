@@ -1,8 +1,8 @@
 import Discord from "discord.js";
 import { guild } from "../../..";
 import config from "../../config";
-import ModIdea from "../../data_types/mod_idea";
-import ModIdeaStatus from "../../data_types/mod_idea_status";
+import ModIdea from "../../mod_idea";
+import ModIdeaStatus from "../../mod_idea_status";
 
 export default async function (reaction: Discord.MessageReaction, user: Discord.User | Discord.PartialUser) {
   if (reaction.partial) reaction = await reaction.fetch();

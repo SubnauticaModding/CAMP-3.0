@@ -1,7 +1,7 @@
 import { bot, setGuild } from "../../..";
 import config from "../../config";
-import ModIdea from "../../data_types/mod_idea";
 import * as modfeed from "../../mod_feed";
+import ModIdea from "../../mod_idea";
 
 export default async function () {
   console.log("Bot is ready.");

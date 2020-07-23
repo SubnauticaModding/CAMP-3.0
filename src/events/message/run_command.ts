@@ -1,8 +1,8 @@
 import Discord from "discord.js";
 import { guild } from "../../..";
 import * as commands from "../../commands";
+import CommandPermission from "../../command_permission";
 import config from "../../config";
-import CommandPermission from "../../data_types/command_permission";
 import * as embeds from "../../embeds";
 import * as util from "../../util";
 

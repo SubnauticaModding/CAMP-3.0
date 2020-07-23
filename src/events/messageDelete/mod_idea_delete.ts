@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import { guild } from "../../..";
 import config from "../../config";
-import ModIdea from "../../data_types/mod_idea";
+import ModIdea from "../../mod_idea";
 
 export var ignored_messages: string[] = [];
 

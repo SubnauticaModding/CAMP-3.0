@@ -1,10 +1,10 @@
 import Discord from "discord.js";
+import Command from "../../command";
+import CommandPermission from "../../command_permission";
 import config from "../../config";
 import * as data from "../../data";
-import Command from "../../data_types/command";
-import CommandPermission from "../../data_types/command_permission";
-import ModIdea from "../../data_types/mod_idea";
 import * as embeds from "../../embeds";
+import ModIdea from "../../mod_idea";
 import * as parser from "../../parser";
 import * as util from "../../util";
 

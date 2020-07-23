@@ -1,9 +1,9 @@
 import Discord from "discord.js";
 import { guild } from "../../..";
+import CommandPermission from "../../command_permission";
 import config from "../../config";
-import CommandPermission from "../../data_types/command_permission";
-import ModIdea from "../../data_types/mod_idea";
 import * as embeds from "../../embeds";
+import ModIdea from "../../mod_idea";
 import * as util from "../../util";
 
 export default async function (message: Discord.Message) {

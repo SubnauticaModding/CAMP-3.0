@@ -1,8 +1,8 @@
 import Discord from "discord.js";
 import fs from "fs";
 import path from "path";
+import CommandPermission from "./command_permission";
 import config from "./config";
-import CommandPermission from "./data_types/command_permission";
 
 export function ensureFolders(...p: string[]) {
   var currentPath;
