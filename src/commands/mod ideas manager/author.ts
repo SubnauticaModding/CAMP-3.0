@@ -27,6 +27,9 @@ export default class implements Command {
 
     args.shift();
 
+    modidea.rating.likes = modidea.rating.likes.filter(f => f != author.id);
+    modidea.rating.dislikes = modidea.rating.dislikes.filter(f => f != author.id);
+
     modidea.author = author.id;
     modidea.edited = true;
 
