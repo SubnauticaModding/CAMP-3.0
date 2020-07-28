@@ -19,7 +19,7 @@
         "dist/d[bcdefghijklmnopqrstuvwxyz]*": true,
         "dist/da[abcdefghijklmnopqrsuvwxyz]*": true,
         "dist/dat[bcdefghijklmnopqrstuvwxyz]*": true,
-        "package.json": false,
+        "package.json": true,
         ".env": true,
         "pull": true,
         "push": true

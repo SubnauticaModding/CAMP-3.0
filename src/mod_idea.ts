@@ -386,7 +386,7 @@ export default class ModIdea {
       total++;
     }
 
-    var topIdeas = [...ideas].sort((a, b) => - a.rating.likes.length + a.rating.dislikes.length + b.rating.likes.length - b.rating.dislikes.length).slice(0, 10);
+    var topIdeas = [...ideas].filter(i => i.status = ModIdeaStatus.None).sort((a, b) => - a.rating.likes.length + a.rating.dislikes.length + b.rating.likes.length - b.rating.dislikes.length).slice(0, 10);
 
     const embed = new Discord.MessageEmbed();
     embed.setColor("BLUE");
