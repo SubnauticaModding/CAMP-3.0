@@ -12,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.1.1
+      with:
+        node-version: 12.x
+        check-latest: true
+
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
@@ -23,6 +29,9 @@ jobs:
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
+      
+    - name: Install modules
+      run: npm i
 
     - name: Build TypeScript
       run: tsc
