@@ -8,7 +8,7 @@ declare global {
 
 String.prototype.replaceAsync = async function (regex: RegExp, func: (substring: string, ...args: any[]) => Promise<string>): Promise<string> {
   const promises: Promise<string>[] = [];
-  this.replace(regex, (substring, ...args) => {
+  this.replace(regex, (substring: string, ...args: any) => {
     const promise = func(substring, ...args);
     promises.push(promise);
     return substring;

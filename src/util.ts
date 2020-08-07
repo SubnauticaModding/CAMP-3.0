@@ -1,8 +1,24 @@
 import Discord from "discord.js";
 import fs from "fs";
+import readdir from "fs-readdir-recursive";
 import path from "path";
 import CommandPermission from "./command_permission";
 import config from "./config";
+
+/**
+ * Imports all files from the specified folder and its subfolders
+ */
+export function importAll(dirPath: string) {
+  const files = readdir(dirPath, (file) => {
+    if (file.endsWith("index.js")) return false;
+    if (file.endsWith(".js")) return true;
+    return false;
+  });
+
+  for (const file of files) {
+    import(path.join(dirPath, file.substr(0, file.length - 3)));
+  }
+}
 
 /**
  * Makes sure that the provided directories exist.
