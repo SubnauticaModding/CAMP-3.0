@@ -22,7 +22,8 @@
         "package.json": true,
         ".env": true,
         "pull": true,
-        "push": true
+        "push": true,
+        ".github": true
     },
     "tslint.autoFixOnSave": true,
     "typescript.tsdk": "node_modules\\typescript\\lib"

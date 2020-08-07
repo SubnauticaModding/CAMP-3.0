@@ -1,12 +1,12 @@
 import Discord from "discord.js";
-import { guild } from "../../..";
-import * as commands from "../../commands";
-import CommandPermission from "../../command_permission";
-import config from "../../config";
-import * as embeds from "../../embeds";
-import * as util from "../../util";
+import * as commands from "../../commands"; // TODO
+import { bot, guild } from "../../src";
+import CommandPermission from "../../src/command_permission";
+import config from "../../src/config";
+import * as embeds from "../../src/embeds";
+import * as util from "../../src/util";
 
-export default async function (message: Discord.Message) {
+bot.on("message", async (message: Discord.Message) => {
   if (message.partial) message = await message.fetch();
 
   if (message.guild?.id != guild.id) return;
@@ -51,4 +51,4 @@ export default async function (message: Discord.Message) {
       }
     }
   }
-}
+});

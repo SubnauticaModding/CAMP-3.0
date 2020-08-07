@@ -1,4 +1,4 @@
-import all from "../config/all.json";
+import all from "../config/all.json"; // TODO
 import development from "../config/development.json";
 import production from "../config/production.json";
 

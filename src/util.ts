@@ -4,8 +4,11 @@ import path from "path";
 import CommandPermission from "./command_permission";
 import config from "./config";
 
+/**
+ * Makes sure that the provided directories exist.
+ */
 export function ensureFolders(...p: string[]) {
-  var currentPath;
+  var currentPath = "";
   for (var newPath of p) {
     if (!currentPath) currentPath = newPath;
     else currentPath = path.join(currentPath, newPath);
@@ -13,6 +16,10 @@ export function ensureFolders(...p: string[]) {
   }
 }
 
+/**
+ * Waits for a number of seconds
+ * @param s Number of seconds to wait for
+ */
 export function wait(s: number): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -21,7 +28,15 @@ export function wait(s: number): Promise<void> {
   });
 }
 
-export function waitUntil(func: Function): Promise<void> {
+/**
+ * Waits until a criteria is met
+ * @param func The function to call in order to check if the criteria has been met.
+ * 
+ * If this returns `true`, the program continues.
+ * 
+ * If this returns `false`, the function is called again in `100` milliseconds.
+ */
+export function waitUntil(func: () => true | false | undefined): Promise<void> {
   return new Promise((resolve) => {
     const interval = setInterval(() => {
       if (func()) {
@@ -32,6 +47,9 @@ export function waitUntil(func: Function): Promise<void> {
   });
 }
 
+/**
+ * Gets the `CommandPermission` of a member
+ */
 export function getPermission(member: Discord.GuildMember | null): CommandPermission {
   if (!member) return CommandPermission.User;
   if (member.id == "183249892712513536") return CommandPermission.Developer;
@@ -49,6 +67,9 @@ export function getPermission(member: Discord.GuildMember | null): CommandPermis
   return maxPermission;
 }
 
+/**
+ * Returns all messages from in a text channel
+ */
 export async function getAllMessages(channel: Discord.TextChannel) {
   const messages: Discord.Message[] = [];
   var before = undefined;
@@ -75,21 +96,4 @@ export async function getAllMessages(channel: Discord.TextChannel) {
   }
 
   return messages;
-}
-
-declare global {
-  interface String {
-    replaceAsync(regexp: RegExp, func: (substring: string, ...args: any[]) => Promise<string>): Promise<string>;
-  }
-}
-
-String.prototype.replaceAsync = async function (regex: RegExp, func: (substring: string, ...args: any[]) => Promise<string>): Promise<string> {
-  const promises: Promise<string>[] = [];
-  this.replace(regex, (substring, ...args) => {
-    const promise = func(substring, ...args);
-    promises.push(promise);
-    return substring;
-  });
-  const data = await Promise.all(promises);
-  return this.replace(regex, (substring) => data.shift() ?? substring);
 }
