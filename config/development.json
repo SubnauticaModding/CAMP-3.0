@@ -1,0 +1,47 @@
+{
+  "guild": "695394283124949053",
+  "modules": {
+    "mod_ideas": {
+      "enable": true,
+      "channels": {
+        "submit": "695394284035112986",
+        "discussion": "716011205931696299",
+        "list": "695394284035112987",
+        "released": "695394284035112989",
+        "removed": "695394284219662386",
+        "report": {
+          "channel": "695394284035112986",
+          "message": "711590599043579935"
+        }
+      }
+    },
+    "mod_feed": {
+      "enable": false,
+      "channels": {
+        "subnautica": {
+          "releases": "716238256194322442",
+          "updates": "716238346308812842"
+        },
+        "belowzero": {
+          "releases": "716238317661716490",
+          "updates": "716238367406293052"
+        }
+      }
+    },
+    "reaction_roles": {
+      "enable": false,
+      "ids": [
+        {
+          "message": "",
+          "emoji": "",
+          "role": ""
+        }
+      ]
+    }
+  },
+  "permissions": {
+    "1": "695394283280269337",
+    "2": "695394283309760564",
+    "3": "695394283309760565"
+  }
+}
