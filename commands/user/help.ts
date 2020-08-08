@@ -8,7 +8,9 @@ import * as util from "../../src/util";
 commands.push(new Command({
   name: "help",
   description: `Shows a list of commands you can use.`,
-  execute: async (message: Discord.Message) => {
+  usage: "[permission level] [-nodelete]",
+
+  execute: async (message, args) => {
     const embed = new Discord.MessageEmbed();
     embed.setColor("BLUE");
     embed.setAuthor(guild.me?.displayName, message.client.user?.displayAvatarURL());
@@ -16,8 +18,14 @@ commands.push(new Command({
     embed.setDescription("_Arguments in <angle brackets> are required, and arguments in [square brackets] are optional._");
     embed.setFooter(`Bot created by AlexejheroYTB | v${config.version}`);
 
-    const userPerm = util.getPermission(message.member); // TODO Add an argument to specifiy until which permission commands should appear
-    for (var cmdI in commands) {
+    var userPerm = util.getPermission(message.member);
+
+    if (Object.keys(CommandPermission).includes(args[0])) {
+      // @ts-ignore 7015
+      userPerm = Math.min(userPerm, CommandPermission[args[0]]);
+    }
+
+    for (var cmdI in commands.sort((a, b) => commandSort(a, b, message))) {
       const command = commands[cmdI];
 
       if (command.hidden == true) continue;
@@ -42,9 +50,19 @@ commands.push(new Command({
 
     const helpMessage = await message.channel.send(embed);
 
+    if (args[0] == "-nodelete" || args[1] == "-nodelete") {
+      message.delete({ reason: "Command invocation message deleted." });
+      return;
+    }
+
     await util.wait(120);
 
     message.delete({ reason: "Command invocation message deleted." });
-    helpMessage.delete({ reason: "Command reply message deleted." });  // TODO Add an argument to not delete the message 
+    helpMessage.delete({ reason: "Command reply message deleted." });
   },
 }));
+
+function commandSort(a: Command, b: Command, message: Discord.Message) {
+  if (a.getPermission(message) != b.getPermission(message)) return a.getPermission(message) - b.getPermission(message);
+  return a.name.localeCompare(b.name);
+}
