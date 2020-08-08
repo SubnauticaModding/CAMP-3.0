@@ -1,6 +1,6 @@
 import * as nexusapi from "@nexusmods/nexus-api";
 import Discord from "discord.js";
-import { nexus } from "../../../common/nexus";
+import { nexus } from "../../../common_modules/nexus";
 import config from "../../../src/config";
 import * as data from "../../../src/data";
 import * as parser from "../../../src/parser";

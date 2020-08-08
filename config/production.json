@@ -1,19 +1,8 @@
 {
   "guild": "324207629784186882",
   "modules": {
-    "mod_ideas": {
-      "enable": true,
-      "channels": {
-        "submit": "621260261046747146",
-        "discussion": "534606919579729920",
-        "list": "711539388919840829",
-        "released": "589929267534495745",
-        "removed": "552397598237917184",
-        "report": {
-          "channel": "621260261046747146",
-          "message": "711590379236884480"
-        }
-      }
+    "account_linking": {
+      "enable": true
     },
     "mod_feed": {
       "enable": true,
@@ -25,6 +14,20 @@
         "belowzero": {
           "releases": "540595006155784202",
           "updates": "664411730234834964"
+        }
+      }
+    },
+    "mod_ideas": {
+      "enable": true,
+      "channels": {
+        "submit": "621260261046747146",
+        "discussion": "534606919579729920",
+        "list": "711539388919840829",
+        "released": "589929267534495745",
+        "removed": "552397598237917184",
+        "report": {
+          "channel": "621260261046747146",
+          "message": "711590379236884480"
         }
       }
     },

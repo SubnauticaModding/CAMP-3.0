@@ -1,8 +1,8 @@
 import Discord from "discord.js";
-import { nexus } from "..";
-import { commands } from "../../../src";
-import Command from "../../../src/command";
-import CommandPermission from "../../../src/command_permission";
+import { nexus } from "../..";
+import { commands } from "../../../../src";
+import Command from "../../../../src/command";
+import CommandPermission from "../../../../src/command_permission";
 
 commands.push(new Command({
   name: "ratelimit",

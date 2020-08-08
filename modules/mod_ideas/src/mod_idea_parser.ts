@@ -1,4 +1,4 @@
-import { nexus } from "../../../common/nexus";
+import { nexus } from "../../../common_modules/nexus";
 import ModIdea from "./mod_idea";
 
 export function modIdea(id: string) {
