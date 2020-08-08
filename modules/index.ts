@@ -5,7 +5,7 @@ import path from "path";
 import config from "../src/config";
 
 for (const file of fs.readdirSync(__dirname)) {
-  if (file.endsWith(".js") || file.endsWith(".map")) continue;
+  if (file.endsWith(".js") || file.endsWith(".map") || file == "common") continue;
   if (!config.modules.hasOwnProperty(file)) {
     console.warn("Found module folder which is not present in config: " + file);
     continue;

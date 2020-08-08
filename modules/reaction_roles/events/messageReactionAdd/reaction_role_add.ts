@@ -1,7 +1,7 @@
 import Discord from "discord.js";
-import * as parser from "../../../../../CAMP-3.0-Test/src/parser";
 import { bot, guild } from "../../../../src";
 import config from "../../../../src/config";
+import * as parser from "../../../../src/parser";
 
 bot.on("messageReactionAdd", async (reaction: Discord.MessageReaction, user: Discord.User | Discord.PartialUser) => {
   if (reaction.partial) reaction = await reaction.fetch();

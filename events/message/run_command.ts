@@ -1,6 +1,5 @@
 import Discord from "discord.js";
-import * as commands from "../../commands"; // TODO
-import { bot, guild } from "../../src";
+import { bot, commands, guild } from "../../src";
 import CommandPermission from "../../src/command_permission";
 import config from "../../src/config";
 import * as embeds from "../../src/embeds";
@@ -22,8 +21,7 @@ bot.on("message", async (message: Discord.Message) => {
 
   if (!cmd) return;
 
-  for (const commandType of Object.values(commands)) {
-    const command = new commandType();
+  for (const command of Object.values(commands)) {
     // @ts-ignore 2345 - Argument of type 'string' is not assignable to parameter of type 'never'.
     if (command.name == cmd || command.aliases?.includes(cmd)) {
       if (util.getPermission(message.member) >= command.getPermission(message)) {

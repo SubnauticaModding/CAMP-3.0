@@ -1,28 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es2019",
-    "module": "commonjs",
+    "target": "ES2019",
+    "module": "CommonJS",
     "outDir": "dist",
     "sourceMap": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "moduleResolution": "Node",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "strict": true,
     "noUnusedLocals": true,
-    "lib": [
-      "ES2019",
-      "ES2020.BigInt",
-      "ES2020.String",
-      "ES2020.Symbol.WellKnown"
-    ]
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": true,
+    "alwaysStrict": true,
+    "pretty": true
   },
   "include": [
-    "src/**/*.ts",
-    "modules/**/*.ts",
+    "**/*.ts",
     "config/**/*.json"
   ],
   "exclude": [
     "node_modules"
-  ],
+  ]
 }
