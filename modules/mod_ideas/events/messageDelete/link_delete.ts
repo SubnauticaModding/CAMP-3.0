@@ -8,7 +8,7 @@ bot.on("messageDelete", async (message: Discord.Message | Discord.PartialMessage
   if (message.guild?.id != guild.id) return;
   if (message.channel.id != config.modules.mod_ideas.channels.discussion) return;
   if (message.author.bot) return;
-  if (message.content.toLowerCase().startsWith("c/")) return;
+  if (message.content.toLowerCase().startsWith(config.prefix)) return;
 
   const nextMessages = (await message.channel.messages.fetch({ after: message.id, limit: 5 })).array();
   for (const msg of nextMessages) {

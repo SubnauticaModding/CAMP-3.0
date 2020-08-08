@@ -8,7 +8,7 @@ import * as util from "../../src/util";
 commands.push(new Command({
   name: "help",
   description: `Shows a list of commands you can use.`,
-  execute: async (message: Discord.Message, args: string[]) => {
+  execute: async (message: Discord.Message) => {
     const embed = new Discord.MessageEmbed();
     embed.setColor("BLUE");
     embed.setAuthor(guild.me?.displayName, message.client.user?.displayAvatarURL());
@@ -18,8 +18,7 @@ commands.push(new Command({
 
     const userPerm = util.getPermission(message.member);
     for (var cmdI in commands) {
-      // @ts-ignore 7053 - No index signature with a parameter of type 'string' was found on type '...'
-      const command = new commands[cmdI]() as Command;
+      const command = commands[cmdI];
 
       if (command.hidden == true) continue;
 
@@ -28,7 +27,7 @@ commands.push(new Command({
 
         if (command.aliases && command.aliases.length > 0) {
           toAdd += "\n• Aliases: ";
-          toAdd += command.aliases.map(a => `\`c/${a}\``).join(", ");
+          toAdd += command.aliases.map(a => `\`${config.prefix}${a}\``).join(", ");
         }
         if (command.getPermission(message) != CommandPermission.User) {
           toAdd += "\n• Required Permission: ";
@@ -37,7 +36,7 @@ commands.push(new Command({
           else toAdd += `>= <@&${config.permissions[command.getPermission(message).toString()]}>`
         }
 
-        embed.addField(`c/${command.name} ${command.usage}`, toAdd.trim());
+        embed.addField(`${config.prefix}${command.name} ${command.usage}`, toAdd.trim());
       }
     }
 

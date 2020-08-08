@@ -8,7 +8,7 @@ commands.push(new Command({
   name: "about",
   aliases: ["info"],
   description: "Shows information about the bot.",
-  execute: async (message: Discord.Message, args: string[]) => {
+  execute: async (message: Discord.Message) => {
     const embed = new Discord.MessageEmbed();
     embed.setTitle("Bot Information");
     embed.setColor("BLUE");

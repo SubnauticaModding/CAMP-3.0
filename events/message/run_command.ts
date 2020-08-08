@@ -10,10 +10,10 @@ bot.on("message", async (message: Discord.Message) => {
 
   if (message.guild?.id != guild.id) return;
   if (message.author.bot) return;
-  if (!message.content.toLowerCase().startsWith("c/")) return;
+  if (!message.content.toLowerCase().startsWith(config.prefix)) return;
 
   const args = message.content.split(/[ \n\r]+/g);
-  const cmd = args.shift()?.substr(2);
+  const cmd = args.shift()?.substr(config.prefix.length);
 
   for (var i = 0; i < 10; i++) {
     args[i] = args[i] ?? "";

@@ -9,7 +9,7 @@ bot.on("message", async (message: Discord.Message) => {
   if (message.guild?.id != guild.id) return;
   if (message.channel.id != config.modules.mod_ideas.channels.discussion) return;
   if (message.author.bot) return;
-  if (message.content.toLowerCase().startsWith("c/")) return;
+  if (message.content.toLowerCase().startsWith(config.prefix)) return;
 
   const references = await ModIdea.getReferences(message.content);
   if (Object.values(references).length == 0) return;

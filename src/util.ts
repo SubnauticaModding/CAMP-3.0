@@ -9,13 +9,14 @@ import config from "./config";
  * Imports all files from the specified folder and its subfolders
  */
 export function importAll(dirPath: string) {
-  const files = readdir(dirPath, (file) => {
-    if (file.endsWith("index.js")) return false;
-    if (file.endsWith(".js")) return true;
-    return false;
-  });
+  console.log(`Importing all files at ${dirPath}`);
+  const files = readdir(dirPath);
 
   for (const file of files) {
+    console.log(`Checking ${path.join(dirPath, file)}...`);
+    if (file.endsWith("index.js")) continue;
+    if (!file.endsWith(".js")) continue;
+    console.log(`Importing ${path.join(dirPath, file)}...`);
     import(path.join(dirPath, file.substr(0, file.length - 3)));
   }
 }

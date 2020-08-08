@@ -14,7 +14,12 @@
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": true,
     "alwaysStrict": true,
-    "pretty": true
+    "pretty": true,
+    "lib": [
+      "ES2019",
+      "ES2020.Promise",
+      "ES2020.String",
+    ]
   },
   "include": [
     "**/*.ts",

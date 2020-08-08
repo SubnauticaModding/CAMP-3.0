@@ -6,10 +6,16 @@ import config from "../src/config";
 
 for (const file of fs.readdirSync(__dirname)) {
   if (file.endsWith(".js") || file.endsWith(".map") || file == "common") continue;
+  console.log("Found module " + file);
   if (!config.modules.hasOwnProperty(file)) {
-    console.warn("Found module folder which is not present in config: " + file);
+    console.warn("Module not present in config: " + file);
     continue;
   }
   // @ts-ignore 7053
-  if (config.modules[file].enable) import(path.join(".", file));
+  if (config.modules[file].enable) {
+    console.log("Loading module " + file + "...");
+    import(path.join(".", file));
+  } else {
+    console.log("Skipping module " + file);
+  }
 }

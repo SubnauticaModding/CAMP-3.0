@@ -1,5 +1,4 @@
 import { exec } from "child_process";
-import Discord from "discord.js";
 import { commands } from "../../src/";
 import Command from "../../src/command";
 import CommandPermission from "../../src/command_permission";
@@ -10,8 +9,8 @@ commands.push(new Command({
   description: "Executes a shell command.",
   usage: "<command>",
   hidden: true,
-  getPermission: (message: Discord.Message) => CommandPermission.Developer,
-  execute: (message: Discord.Message, args: string[]) => {
+  getPermission: () => CommandPermission.Developer,
+  execute: (_, args: string[]) => {
     exec(args.join(" "), (error, stdout, stderr) => {
       if (error) console.error(error.message);
       else if (stderr) console.error(stderr);
