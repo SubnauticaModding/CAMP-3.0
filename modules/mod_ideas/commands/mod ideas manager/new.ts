@@ -24,6 +24,7 @@ commands.push(new Command({
     modidea.specialComment = "";
     modidea.lastActor = message.author.id;
     modidea.comment = "";
+    modidea.lastCommenter = "";
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.list);

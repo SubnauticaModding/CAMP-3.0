@@ -29,6 +29,7 @@ commands.push(new Command({
     modidea.specialComment = "";
     modidea.lastActor = message.author.id;
     modidea.comment = args.join(" ");
+    modidea.lastCommenter = message.member?.displayName ?? "";
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.removed);

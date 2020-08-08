@@ -43,6 +43,7 @@ commands.push(new Command({
     dupe.specialComment = orig.id.toString();
     dupe.lastActor = message.author.id;
     dupe.comment = args[0] == "-f" ? args.join(" ").substr(3) : args.join(" ");
+    dupe.lastCommenter = message.member?.displayName ?? "";
 
     dupe.update();
     const newIdeaMsg = await dupe.sendOrEdit(config.modules.mod_ideas.channels.removed);

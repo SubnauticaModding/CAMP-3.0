@@ -17,7 +17,8 @@ commands.push(new Command({
 
     args.shift();
 
-    modidea.comment = args.join(" "); // TODO: Show author of comment somehow
+    modidea.comment = args.join(" ");
+    modidea.lastCommenter = message.member?.displayName ?? "";
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(modidea.channel ?? config.modules.mod_ideas.channels.list);

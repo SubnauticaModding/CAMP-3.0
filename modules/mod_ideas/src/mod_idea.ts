@@ -21,11 +21,14 @@ export default class ModIdea {
   message: string = "";
 
   status: ModIdeaStatus = ModIdeaStatus.None;
+  rating: ModIdeaRating = new ModIdeaRating();
+
   edited: boolean = false;
   specialComment: string = "";
   comment: string = "";
+
   lastActor: string = "";
-  rating: ModIdeaRating = new ModIdeaRating();
+  lastCommenter: string = "";
 
   linkedBy: number[] = [];
 
@@ -117,7 +120,12 @@ export default class ModIdea {
         break;
     }
 
-    if (this.comment && this.comment.trim().length > 0) embed.addField("Comment", await this.parseReferences(this.comment, true));
+    if (this.comment && this.comment.trim().length > 0) {
+      if (this.lastCommenter && this.lastCommenter.trim().length > 0)
+        embed.addField(`${this.lastCommenter.endsWith("s") ? `${this.lastCommenter}'` : `${this.lastCommenter}'s`} Comment`, await this.parseReferences(this.comment, true));
+      else
+        embed.addField("Comment", await this.parseReferences(this.comment, true));
+    }
 
     embed.setFooter(`ID: #${this.id}${this.edited ? " (edited)" : ""}`);
     embed.setImage(this.image ?? "");
@@ -199,6 +207,7 @@ export default class ModIdea {
             idea.specialComment = "";
             idea.lastActor = bot.user?.id ?? "";
             idea.comment = "[Automatic] Mod idea had a rating of `-10` or less.";
+            idea.lastCommenter = "CAMP";
             idea.update();
             idea.sendOrEdit(config.modules.mod_ideas.channels.removed);
           }

@@ -30,6 +30,7 @@ commands.push(new Command({
     modidea.specialComment = `https://nexusmods.com/${modinfo.domain_name}/mods/${modinfo.mod_id}`;
     modidea.lastActor = message.author.id;
     modidea.comment = args.join(" ");
+    modidea.lastCommenter = message.member?.displayName ?? "";
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.released);
