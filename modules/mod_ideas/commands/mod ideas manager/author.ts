@@ -12,6 +12,7 @@ commands.push(new Command({
   description: "Changes the author of a mod idea",
   usage: "<#ID> <member ID or @mention> [-f]",
   getPermission: () => CommandPermission.ModIdeasManager,
+
   execute: async (message: Discord.Message, args: string[]) => {
     const modidea = parser2.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
@@ -34,7 +35,7 @@ commands.push(new Command({
     modidea.edited = true;
 
     modidea.update();
-    const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.list); // TODO: Keep mod idea in the same channel or prevent this if mod idea has been removed
+    const newIdeaMsg = await modidea.sendOrEdit(modidea.channel ?? config.modules.mod_ideas.channels.list);
 
     if (author.user.bot && args[2] == "-f")
       embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been **forcefully** applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
