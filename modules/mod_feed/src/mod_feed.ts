@@ -1,9 +1,9 @@
 import * as nexusapi from "@nexusmods/nexus-api";
 import Discord from "discord.js";
+import { nexus } from "../../../common/nexus";
 import config from "../../../src/config";
 import * as data from "../../../src/data";
 import * as parser from "../../../src/parser";
-import { nexus } from "../../common/nexus";
 
 import("../../../extensions/Discord.Message/crosspost");
 

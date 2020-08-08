@@ -23,10 +23,9 @@ console.log("Loading commands...");
 importAll(path.join(__dirname, "../commands"));
 console.log("Commands loaded");
 
-// console.log("Loading modules...");
-// import("../modules");
-// console.log("Modules loaded");
-
+console.log("Loading modules...");
+import("../modules");
+console.log("Modules loaded");
 
 console.log("Logging in...");
 bot.login(process.env.DISCORD_TOKEN);

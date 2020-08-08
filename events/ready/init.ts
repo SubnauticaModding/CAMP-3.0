@@ -1,5 +1,4 @@
-// import * as modfeed from "../../mod_feed"; // TODO
-// import ModIdea from "../../mod_idea";
+// import ModIdea from "../../mod_idea"; // TODO
 import { bot, setGuild } from "../../src";
 import config from "../../src/config";
 
@@ -10,5 +9,4 @@ bot.on("ready", async () => {
   else setGuild(mainGuild);
 
   // ModIdea.updateReportMessage();
-  // modfeed.updateModFeeds();
 });

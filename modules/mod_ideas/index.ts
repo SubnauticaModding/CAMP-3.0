@@ -2,6 +2,7 @@ import path from "path";
 import { importAll } from "../../src/util";
 import ModIdea from "./src/mod_idea";
 
+importAll(path.join(__dirname, "./commands"));
 importAll(path.join(__dirname, "./events"));
 
 setInterval(() => {
