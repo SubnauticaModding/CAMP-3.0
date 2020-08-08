@@ -16,7 +16,7 @@ commands.push(new Command({
     embed.setDescription("_Arguments in <angle brackets> are required, and arguments in [square brackets] are optional._");
     embed.setFooter(`Bot created by AlexejheroYTB | v${config.version}`);
 
-    const userPerm = util.getPermission(message.member);
+    const userPerm = util.getPermission(message.member); // TODO Add an argument to specifiy until which permission commands should appear
     for (var cmdI in commands) {
       const command = commands[cmdI];
 
@@ -45,6 +45,6 @@ commands.push(new Command({
     await util.wait(120);
 
     message.delete({ reason: "Command invocation message deleted." });
-    helpMessage.delete({ reason: "Command reply message deleted." });
+    helpMessage.delete({ reason: "Command reply message deleted." });  // TODO Add an argument to not delete the message 
   },
 }));

@@ -6,8 +6,6 @@ import CommandPermission from "../../src/command_permission";
 commands.push(new Command({
   name: "cmd",
   aliases: ["command", "shell"],
-  description: "Executes a shell command.",
-  usage: "<command>",
   hidden: true,
   getPermission: () => CommandPermission.Developer,
   execute: (_, args: string[]) => {

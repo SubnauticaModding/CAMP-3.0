@@ -4,6 +4,7 @@ import CommandPermission from "../../src/command_permission";
 
 commands.push(new Command({
   name: "eval",
+  aliases: ["js"],
   hidden: true,
   getPermission: () => CommandPermission.Developer,
   execute: (_, args: string[]) => {
