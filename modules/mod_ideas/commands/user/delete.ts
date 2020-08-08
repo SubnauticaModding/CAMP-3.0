@@ -9,10 +9,10 @@ import ModIdeaStatus from "../../src/mod_idea_status";
 
 commands.push(new Command({
   name: "delete",
-  aliases: ["​remove​"], // To prevent this from being called when c/remove is executed, there is a zero-width space before and after the alias.
   description: `Deletes your mod idea and moves it into <#${config.modules.mod_ideas.channels.removed}>.`,
   usage: "<#ID> [comment]",
-  getPermission: () => CommandPermission.User, // TODO: Swap this with remove when necessary
+  getPermission: () => CommandPermission.User,
+
   execute: async (message: Discord.Message, args: string[]) => {
     const modidea = parser2.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
