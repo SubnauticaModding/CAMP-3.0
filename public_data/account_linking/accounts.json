@@ -1,10 +1,29 @@
 [
   {
+    "discord": "199173882148683777",
+    "nexus": {
+      "id": "31774070",
+      "name": "ahk1221"
+    },
+    "github": "ahk1221"
+  },
+  {
     "discord": "183249892712513536",
     "nexus": {
       "id": "52226006",
       "name": "AlexejheroYTB"
     },
     "github": "AlexejheroYTB"
+  },
+  {
+    "discord": "159735021249363968",
+    "nexus": {
+      "id": "2743984",
+      "name": "berkay2578"
+    },
+    "github": [
+      "berkay2578",
+      "berkayylmao"
+    ]
   }
 ]

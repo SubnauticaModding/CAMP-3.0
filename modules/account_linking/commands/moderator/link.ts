@@ -1,4 +1,4 @@
-/* // TODO
+/* // TODO Add this
 import Discord from "discord.js";
 import { Account } from "../..";
 import { commands } from "../../../../src";
