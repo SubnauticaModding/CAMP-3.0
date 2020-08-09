@@ -17,9 +17,15 @@ commands.push(new Command({
     const accounts = data.read("account_linking/accounts", [] as Account[], true);
     const validAccounts: Account[] = [];
     a: for (const account of accounts) {
-      if (!account.discord && !account.github || !account.discord && !account.nexus || !account.github && !account.nexus) continue;
+      if (Object.values(account).filter(x => !!x).length <= 1) continue;
+
+      if (account.discord && !Array.isArray(account.discord)) account.discord = [account.discord];
+      if (account.nexus && !Array.isArray(account.nexus)) account.nexus = [account.nexus];
+      if (account.github && !Array.isArray(account.github)) account.github = [account.github];
+      if (account.bitbucket && !Array.isArray(account.bitbucket)) account.bitbucket = [account.bitbucket];
 
       if (account.discord) {
+        const members = await message.guild?.members.fetch();
         for (const discord of account.discord) {
           if (arg == discord) {
             validAccounts.push(account);
@@ -31,10 +37,21 @@ commands.push(new Command({
             continue a;
           }
 
-          const members = await message.guild?.members.fetch();
           if (members) {
             const member = members.find((v) => v.user.tag == arg);
             if (member && member.id == discord) {
+              validAccounts.push(account);
+              continue a;
+            }
+
+            const member2 = members.find((v) => v.user.username == arg);
+            if (member2 && member2.id == discord) {
+              validAccounts.push(account);
+              continue a;
+            }
+
+            const member3 = members.find((v) => v.displayName == arg);
+            if (member3 && member3.id == discord) {
               validAccounts.push(account);
               continue a;
             }
@@ -59,6 +76,15 @@ commands.push(new Command({
           }
         }
       }
+
+      if (account.bitbucket) {
+        for (const bitbucket of account.bitbucket) {
+          if (bitbucket == arg) {
+            validAccounts.push(account);
+            continue a;
+          }
+        }
+      }
     }
 
     const uniqueAccounts = new Set(validAccounts);
@@ -67,6 +93,7 @@ commands.push(new Command({
       embed.setTitle("User Information");
       embed.setColor("RED");
       embed.setDescription("There is no information about this user.");
+      embed.setFooter("Missing or outdated information? Contact @AlexejheroYTB#1636.");
       message.channel.send(embed);
       return;
     }
@@ -76,10 +103,11 @@ commands.push(new Command({
       const embed = new Discord.MessageEmbed();
       embed.setTitle("User Information");
       embed.setColor("BLUE");
-      embed.addField("Discord", account.discord ? getDiscord(account.discord) : "_Not linked_", true);
-      embed.addField("NexusMods", account.nexus ? getNexus(account.nexus) : "_Not linked_", true);
-      embed.addField("GitHub", account.github ? getGithub(account.github) : "_Not linked_", true);
-      embed.setFooter("Missing or outdated information? Contact @AlexejheroYTB#1636.")
+      if (account.discord) embed.addField("Discord", getDiscord(account.discord as []), true);
+      if (account.nexus) embed.addField("NexusMods", getNexus(account.nexus as []), true);
+      if (account.github) embed.addField("GitHub", getGithub(account.github as []), true);
+      if (account.bitbucket) embed.addField("BitBucket", getBitbucket(account.bitbucket as []), true);
+      embed.setFooter("Missing or outdated information? Contact @AlexejheroYTB#1636.");
       await message.channel.send(embed);
     }
   },
@@ -104,7 +132,15 @@ function getNexus(arr: NexusAccount[]) {
 function getGithub(arr: string[]) {
   var result = "";
   for (const v of arr) {
-    result += `<:github:741753188851384390> [${v}](https://github.com/${v})`;
+    result += `<:github:741753188851384390> [${v}](https://github.com/${v})\n`;
+  }
+  return result;
+}
+
+function getBitbucket(arr: string[]) {
+  var result = "";
+  for (const v of arr) {
+    result += `<:bitbucket:741948675353346079> [${v}](https://bitbucket.org/${v})\n`;
   }
   return result;
 }
