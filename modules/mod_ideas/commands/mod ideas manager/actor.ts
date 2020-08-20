@@ -28,7 +28,6 @@ commands.push(new Command({
     args.shift();
 
     modidea.lastActor = actor.id;
-    modidea.edited = true;
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.list);
