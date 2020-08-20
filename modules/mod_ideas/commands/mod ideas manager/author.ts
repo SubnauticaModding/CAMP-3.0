@@ -26,8 +26,6 @@ commands.push(new Command({
       return embeds.warn(message, "You are trying to change the author of a mod idea to a bot.\nUsually, you'd want to change it into a user.\n_If you're sure you want to do this, run this command with the `-f` parameter at the end._", 20);
     }
 
-    args.shift();
-
     modidea.rating.likes = modidea.rating.likes.filter(f => f != author.id);
     modidea.rating.dislikes = modidea.rating.dislikes.filter(f => f != author.id);
 
