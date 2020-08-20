@@ -19,15 +19,15 @@ export default class ModIdea {
 
   channel: string = "";
   message: string = "";
+  edited: boolean = false;
 
-  status: ModIdeaStatus = ModIdeaStatus.None;
   rating: ModIdeaRating = new ModIdeaRating();
 
-  edited: boolean = false;
-  specialComment: string = "";
-  comment: string = "";
-
+  status: ModIdeaStatus = ModIdeaStatus.None;
   lastActor: string = "";
+  specialComment: string = "";
+
+  comment: string = "";
   lastCommenter: string = "";
 
   linkedBy: number[] = [];
@@ -50,7 +50,7 @@ export default class ModIdea {
       this.updateMessage(message);
       this.update();
     }
-    if (react) {
+    if (react && !this.rating.disabled) {
       ModIdea.addReactions(message);
     }
     return message;
@@ -111,8 +111,12 @@ export default class ModIdea {
         embed.addField("Removed by", `<@${this.lastActor}>`);
         break;
       case ModIdeaStatus.None:
-        embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\`${rating <= -10 ? " _(pending deletion)_" : ""}`, true);
-        embed.addField("Votes", this.rating.likes.length + this.rating.dislikes.length, true);
+        if (this.rating.disabled) {
+          embed.addField("Rating", `_Disabled by <@${this.rating.disabledBy}>_`);
+        } else {
+          embed.addField("Rating", `<:a:${ModIdea.getEmojiForRating(rating)}> \`${rating}\`${rating <= -10 && !this.rating.preventDeletion ? " _(pending deletion)_" : ""}`, true);
+          embed.addField("Votes", this.rating.likes.length + this.rating.dislikes.length, true);
+        }
         break;
       case ModIdeaStatus.Released:
         embed.addField("Status", `Released at ${this.specialComment}`);
@@ -194,7 +198,7 @@ export default class ModIdea {
   public static removeBadIdeas() {
     const ideas = ModIdea.getAll();
     for (const idea of ideas) {
-      if (idea.status == ModIdeaStatus.None) {
+      if (idea.status == ModIdeaStatus.None && !idea.rating.disabled && !idea.rating.preventDeletion) {
         if (idea.rating.likes.length - idea.rating.dislikes.length > -10) {
           if (idea.rating.pendingDeletionStart) delete idea.rating.pendingDeletionStart;
         } else {

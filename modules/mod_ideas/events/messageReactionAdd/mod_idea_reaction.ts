@@ -16,7 +16,7 @@ bot.on("messageReactionAdd", async (reaction: Discord.MessageReaction, user: Dis
 
   switch (reaction.emoji.id ?? reaction.emoji.toString()) {
     case config.emojis.abstain:
-      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) break;
+      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None || modidea.rating.disabled) break;
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       if (modidea.rating.likes.length - modidea.rating.dislikes.length > -10) delete modidea.rating.pendingDeletionStart;
@@ -24,7 +24,7 @@ bot.on("messageReactionAdd", async (reaction: Discord.MessageReaction, user: Dis
       modidea.edit(reaction.message);
       break;
     case config.emojis.downvote:
-      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) break;
+      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None || modidea.rating.disabled) break;
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.dislikes.push(user.id);
@@ -33,7 +33,7 @@ bot.on("messageReactionAdd", async (reaction: Discord.MessageReaction, user: Dis
       modidea.edit(reaction.message);
       break;
     case config.emojis.upvote:
-      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None) break;
+      if (user.id == modidea.author || modidea.status != ModIdeaStatus.None || modidea.rating.disabled) break;
       modidea.rating.likes = modidea.rating.likes.filter(v => v != user.id);
       modidea.rating.dislikes = modidea.rating.dislikes.filter(v => v != user.id);
       modidea.rating.likes.push(user.id);
@@ -45,9 +45,7 @@ bot.on("messageReactionAdd", async (reaction: Discord.MessageReaction, user: Dis
       modidea.update();
       modidea.edit(reaction.message);
       await reaction.message.reactions.removeAll();
-      await reaction.message.react(config.emojis.upvote);
-      await reaction.message.react(config.emojis.abstain);
-      reaction.message.react(config.emojis.downvote);
+      ModIdea.addReactions(reaction.message);
       break;
   }
 

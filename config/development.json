@@ -2,7 +2,7 @@
   "guild": "695394283124949053",
   "modules": {
     "account_linking": {
-      "enable": true
+      "enable": false
     },
     "mod_feed": {
       "enable": false,
@@ -18,7 +18,7 @@
       }
     },
     "mod_ideas": {
-      "enable": false,
+      "enable": true,
       "channels": {
         "submit": "695394284035112986",
         "discussion": "716011205931696299",
