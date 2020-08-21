@@ -13,6 +13,7 @@ commands.push(new Command({
   description: "Edits a mod idea.",
   usage: "<#ID> [new text]",
   getPermission: () => CommandPermission.User,
+
   execute: async (message: Discord.Message, args: string[]) => {
     const modidea = parser2.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
@@ -24,13 +25,13 @@ commands.push(new Command({
 
     args.shift();
 
-    modidea.lastActor = message.author.id;
+    modidea.lastEditor = message.author.id;
     modidea.text = args.join(" ");
     modidea.edited = true;
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.list);
 
-    embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
+    embeds.success(message, `Your edit to mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}) has been applied.`);
   },
 }));

@@ -16,19 +16,34 @@ export default class ModIdea {
   author: string;
   time: number;
   image?: string;
+  imageAttachedBy?: string; // TODO: Use this
 
   channel: string = "";
   message: string = "";
+
   edited: boolean = false;
+  lastEditor: string = ""; // TODO: Use this
 
   rating: ModIdeaRating = new ModIdeaRating();
 
   status: ModIdeaStatus = ModIdeaStatus.None;
-  lastActor: string = "";
-  specialComment: string = "";
+  public get lastStatusUpdater(): string {
+    return this.lastActor;
+  }
+  public set lastStatusUpdater(value) {
+    this.lastActor = value;
+  }
+  private lastActor: string = "";
+  public get statusComment(): string {
+    return this.specialComment;
+  }
+  public set statusComment(value) {
+    this.specialComment = value;
+  }
+  private specialComment: string = "";
 
   comment: string = "";
-  lastCommenter: string = "";
+  lastCommenterID: string = "";
 
   linkedBy: number[] = [];
 
@@ -103,12 +118,12 @@ export default class ModIdea {
         embed.addField("Status", "Deleted by author");
         break;
       case ModIdeaStatus.Duplicate:
-        embed.addField("Status", await this.parseReferences(`Duplicate of #${this.specialComment}`, true));
-        embed.addField("Marked as duplicate by", `<@${this.lastActor}>`);
+        embed.addField("Status", await this.parseReferences(`Duplicate of #${this.statusComment}`, true));
+        embed.addField("Marked as duplicate by", `<@${this.lastStatusUpdater}>`);
         break;
       case ModIdeaStatus.Removed:
         embed.addField("Status", "Removed");
-        embed.addField("Removed by", `<@${this.lastActor}>`);
+        embed.addField("Removed by", `<@${this.lastStatusUpdater}>`);
         break;
       case ModIdeaStatus.None:
         if (this.rating.disabled) {
@@ -119,8 +134,8 @@ export default class ModIdea {
         }
         break;
       case ModIdeaStatus.Released:
-        embed.addField("Status", `Released at ${this.specialComment}`);
-        embed.addField("Marked as released by", `<@${this.lastActor}>`);
+        embed.addField("Status", `Released at ${this.statusComment}`);
+        embed.addField("Marked as released by", `<@${this.lastStatusUpdater}>`);
         break;
     }
 
@@ -208,8 +223,8 @@ export default class ModIdea {
           }
           if (idea.rating.pendingDeletionStart + 300000 <= Date.now()) { // 5 minutes
             idea.status = ModIdeaStatus.Removed;
-            idea.specialComment = "";
-            idea.lastActor = bot.user?.id ?? "";
+            idea.statusComment = "";
+            idea.lastStatusUpdater = bot.user?.id ?? "";
             idea.comment = "[Automatic] Mod idea had a rating of `-10` or less.";
             idea.lastCommenter = "CAMP";
             idea.update();

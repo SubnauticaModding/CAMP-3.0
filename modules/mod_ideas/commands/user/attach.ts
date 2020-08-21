@@ -12,25 +12,36 @@ commands.push(new Command({
   name: "attach",
   description: "Adds, replaces or removes an attachment from a mod idea.",
   usage: "<#ID> [attachment link]",
-  getPermission: (message: Discord.Message) => CommandPermission.User,
+  getPermission: () => CommandPermission.User,
+
   execute: async (message: Discord.Message, args: string[]) => {
     const modidea = parser2.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
 
     if (modidea.author != message.author.id && getPermission(message.member) == CommandPermission.User)
-      return embeds.error(message, "That is not your mod idea!\nYou cannot edit someone else's mod idea.");
+      return embeds.error(message, "That is not your mod idea!\nYou cannot add attachments to someone else's mod idea.");
     if (modidea.status != ModIdeaStatus.None && getPermission(message.member) == CommandPermission.User)
-      return embeds.error(message, "Your mod idea has already been released/removed, so you cannot edit it.");
+      return embeds.error(message, "Your mod idea has already been released/removed, so you cannot add attachments to it.");
 
     args.shift();
 
-    modidea.lastActor = message.author.id;
+    if (!modidea.image?.trim() && !args.join(" ").trim())
+      return embeds.error(message, "This mod idea has no attachment to remove.");
+
+    const previousAttachment = modidea.image;
+
     modidea.image = args.join(" ");
     modidea.edited = true;
+    modidea.imageAttachedBy = message.author.id;
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.list);
 
-    embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
+    if (!modidea.image.trim())
+      embeds.success(message, `You have removed the attachment on mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}).`);
+    else if (previousAttachment?.trim())
+      embeds.success(message, `You have updated the attachment on mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}).`);
+    else
+      embeds.success(message, `You have added an attachment to mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}).`);
   },
 }));

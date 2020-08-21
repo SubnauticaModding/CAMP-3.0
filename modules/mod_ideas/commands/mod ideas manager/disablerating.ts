@@ -29,7 +29,7 @@ commands.push(new Command({
 
     if (args.join(" ").trim()) {
       modidea.comment = args.join(" ");
-      modidea.lastCommenter = message.author.id;
+      modidea.lastCommenterID = message.author.id;
     }
 
     modidea.update();

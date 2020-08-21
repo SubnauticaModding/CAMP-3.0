@@ -13,6 +13,7 @@ commands.push(new Command({
   description: `Marks a mod idea as a duplicate of another mod idea and moves it into <#${config.modules.mod_ideas.channels.removed}>.`,
   usage: "<duplicate #ID> <original #ID> [-f] [comment]",
   getPermission: () => CommandPermission.ModIdeasManager,
+
   execute: async (message: Discord.Message, args: string[]) => {
     const dupe = parser2.modIdea(args[0]);
     if (!dupe) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
@@ -40,24 +41,28 @@ commands.push(new Command({
     const oldStatus = dupe.status;
 
     dupe.status = ModIdeaStatus.Duplicate;
-    dupe.specialComment = orig.id.toString();
-    dupe.lastActor = message.author.id;
-    dupe.comment = args[0] == "-f" ? args.join(" ").substr(3) : args.join(" ");
-    dupe.lastCommenter = message.member?.displayName ?? "";
+    dupe.statusComment = orig.id.toString();
+    dupe.lastStatusUpdater = message.author.id;
+
+    const comment = args[0] == "-f" ? args.join(" ").substr(3) : args.join(" ");
+    if (comment.trim()) {
+      dupe.comment = comment;
+      dupe.lastCommenterID = message.author.id;
+    }
 
     dupe.update();
     const newIdeaMsg = await dupe.sendOrEdit(config.modules.mod_ideas.channels.removed);
 
     if (oldStatus == ModIdeaStatus.Duplicate) {
       if ((dupe.time < orig.time || orig.status != ModIdeaStatus.None) && args[0] == "-f")
-        embeds.success(message, `Your changes to mod idea \`#${dupe.id}\` have been **forcefully** applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+        embeds.success(message, `Your comment on mod idea [\`#${dupe.id}\`](${newIdeaMsg.url}) has been **forcefully** ${comment.trim() ? "updated" : "removed"}.`);
       else
-        embeds.success(message, `Your changes to mod idea \`#${dupe.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+        embeds.success(message, `Your comment to mod idea [\`#${dupe.id}\`](${newIdeaMsg.url}) has been ${comment.trim() ? "updated" : "removed"}.`);
     } else {
       if ((dupe.time < orig.time || orig.status != ModIdeaStatus.None) && args[0] == "-f")
-        embeds.success(message, `Mod idea \`#${dupe.id}\` has been **forcefully** marked as a duplicate of \`#${orig.id}\`.\nClick [here](${newIdeaMsg.url}) to view it.`);
+        embeds.success(message, `Mod idea [\`#${dupe.id}\`](${newIdeaMsg.url}) has been **forcefully** marked as a duplicate of \`#${orig.id}\`.`);
       else
-        embeds.success(message, `Mod idea \`#${dupe.id}\` has been marked as a duplicate of \`#${orig.id}\`.\nClick [here](${newIdeaMsg.url}) to view it.`);
+        embeds.success(message, `Mod idea [\`#${dupe.id}\`](${newIdeaMsg.url}) has been marked as a duplicate of \`#${orig.id}\`.`); // TODO: Add link to old idea
     }
   },
 }));

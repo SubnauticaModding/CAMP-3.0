@@ -26,17 +26,17 @@ commands.push(new Command({
     const oldStatus = modidea.status;
 
     modidea.status = ModIdeaStatus.Deleted;
-    modidea.specialComment = "";
-    modidea.lastActor = message.author.id;
+    modidea.statusComment = "";
+    modidea.lastStatusUpdater = message.author.id;
     modidea.comment = args.join(" ");
-    modidea.lastCommenter = message.member?.displayName ?? "";
+    modidea.lastCommenterID = message.author.id;
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.removed);
 
     if (oldStatus == ModIdeaStatus.Deleted)
-      embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
+      embeds.success(message, `Your comment on mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}) has been ${args.join(" ").trim() ? "updated" : "removed"}.`);
     else
-      embeds.success(message, `Mod idea \`#${modidea.id}\` has been deleted.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      embeds.success(message, `You have deleted mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}).`);
   },
 }));

@@ -13,13 +13,14 @@ commands.push(new Command({
   description: `Marks a mod idea as released and moves it into <#${config.modules.mod_ideas.channels.released}>.`,
   usage: "<#ID> <NexusMods link> [comment]",
   getPermission: () => CommandPermission.ModIdeasManager,
+
   execute: async (message: Discord.Message, args: string[]) => {
     const modidea = parser2.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
 
     const modinfo = await parser2.nexusLink(args[1]);
     if (!modinfo) return embeds.error(message, "Invalid arguments. Expected a valid NexusMods link as the second argument.");
-    if (!modinfo.available || modinfo.status != "published") return embeds.error(message, `Invalid mod. Mod \`${modinfo.domain_name}/${modinfo.mod_id}\` is not available.`);
+    if (!modinfo.available || modinfo.status != "published") return embeds.error(message, `Invalid mod. Mod [\`${modinfo.domain_name}/${modinfo.mod_id}\`](https://nexusmods.com/${modinfo.domain_name}/mods/${modinfo.mod_id}) is not available.`);
 
     args.shift();
     args.shift();
@@ -27,17 +28,20 @@ commands.push(new Command({
     const oldStatus = modidea.status;
 
     modidea.status = ModIdeaStatus.Released;
-    modidea.specialComment = `https://nexusmods.com/${modinfo.domain_name}/mods/${modinfo.mod_id}`;
-    modidea.lastActor = message.author.id;
-    modidea.comment = args.join(" ");
-    modidea.lastCommenter = message.member?.displayName ?? "";
+    modidea.statusComment = `https://nexusmods.com/${modinfo.domain_name}/mods/${modinfo.mod_id}`;
+    modidea.lastStatusUpdater = message.author.id;
+
+    if (args.join(" ").trim()) {
+      modidea.comment = args.join(" ");
+      modidea.lastCommenterID = message.author.id;
+    }
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.released);
 
     if (oldStatus == ModIdeaStatus.Released)
-      embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`)
+      embeds.success(message, `Your comment on mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}) has been ${args.join(" ").trim() ? "updated" : "removed"}.`);
     else
-      embeds.success(message, `Mod idea \`#${modidea.id}\` has been marked as released.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      embeds.success(message, `Mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}) has been marked as released at [\`${modinfo.domain_name}/${modinfo.mod_id}\`](https://nexusmods.com/${modinfo.domain_name}/mods/${modinfo.mod_id}).`);
   },
 }));

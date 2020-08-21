@@ -36,8 +36,8 @@ commands.push(new Command({
     const newIdeaMsg = await modidea.sendOrEdit(modidea.channel ?? config.modules.mod_ideas.channels.list);
 
     if (author.user.bot && args[2] == "-f")
-      embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been **forcefully** applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      embeds.success(message, `The author of mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}) has been **forcefully** updated.`);
     else
-      embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      embeds.success(message, `The author of mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}) has been updated.`);
   },
 }));
