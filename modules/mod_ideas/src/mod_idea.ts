@@ -43,7 +43,7 @@ export default class ModIdea {
   private specialComment: string = "";
 
   comment: string = "";
-  lastCommenterID: string = "";
+  lastCommenter: string = "";
 
   linkedBy: number[] = [];
 
@@ -140,10 +140,7 @@ export default class ModIdea {
     }
 
     if (this.comment && this.comment.trim().length > 0) {
-      if (this.lastCommenter && this.lastCommenter.trim().length > 0)
-        embed.addField(`${this.lastCommenter.endsWith("s") ? `${this.lastCommenter}'` : `${this.lastCommenter}'s`} Comment`, await this.parseReferences(this.comment, true));
-      else
-        embed.addField("Comment", await this.parseReferences(this.comment, true));
+      embed.addField("Comment", `${await this.parseReferences(this.comment, true)}${this.lastCommenter.trim() ? `~~ <@${this.lastCommenter}>` : ""}`);
     }
 
     embed.setFooter(`ID: #${this.id}${this.edited ? " (edited)" : ""}`);

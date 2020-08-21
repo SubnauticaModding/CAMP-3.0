@@ -18,7 +18,7 @@ commands.push(new Command({
     args.shift();
 
     modidea.comment = args.join(" ");
-    modidea.lastCommenterID = message.author.id;
+    modidea.lastCommenter = message.author.id;
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(modidea.channel ?? config.modules.mod_ideas.channels.list);

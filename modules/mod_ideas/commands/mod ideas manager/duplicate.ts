@@ -47,7 +47,7 @@ commands.push(new Command({
     const comment = args[0] == "-f" ? args.join(" ").substr(3) : args.join(" ");
     if (comment.trim()) {
       dupe.comment = comment;
-      dupe.lastCommenterID = message.author.id;
+      dupe.lastCommenter = message.author.id;
     }
 
     dupe.update();
