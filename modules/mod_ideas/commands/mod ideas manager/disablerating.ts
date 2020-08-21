@@ -11,7 +11,7 @@ import ModIdeaStatus from "../../src/mod_idea_status";
 commands.push(new Command({
   name: "disablerating",
   description: "Disables or enables ratings on a mod idea.",
-  usage: "<#ID> [comment]",
+  usage: "<#ID>",
   aliases: ["disableratings", "enablerating", "enableratings"],
   getPermission: () => CommandPermission.Moderator,
 
@@ -22,15 +22,8 @@ commands.push(new Command({
     if (modidea.status != ModIdeaStatus.None)
       return embeds.error(message, "You cannot modify the ratings of a released/removed mod idea.");
 
-    args.shift();
-
     modidea.rating.disabled = !modidea.rating.disabled;
     modidea.rating.disabledBy = message.author.id;
-
-    if (args.join(" ").trim()) {
-      modidea.comment = args.join(" ");
-      modidea.lastCommenter = message.author.id;
-    }
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.list);
