@@ -9,9 +9,11 @@ import * as parser2 from "../../src/mod_idea_parser";
 
 commands.push(new Command({
   name: "actor",
-  description: "Changes the last actor on a mod idea",
+  description: "Changes the last status updater on a mod idea",
   usage: "<#ID> <member ID or @mention> [-f]",
-  getPermission: () => CommandPermission.ModIdeasManager,
+  aliases: ["statusupdater"],
+  getPermission: () => CommandPermission.Moderator,
+
   execute: async (message: Discord.Message, args: string[]) => {
     const modidea = parser2.modIdea(args[0]);
     if (!modidea) return embeds.error(message, "Invalid arguments. Expected a valid mod idea ID as the first argument.");
@@ -19,22 +21,22 @@ commands.push(new Command({
     const actor = await parser.member(args[1]);
     if (!actor) return embeds.error(message, "Invalid arguments. Expected a valid member ID or @mention as the second argument.");
 
-    if (actor.user.id == modidea.author) return embeds.error(message, "That mod idea already has that actor.");
+    if (actor.user.id == modidea.author) return embeds.error(message, "That mod idea already has that status updater.");
 
     if (actor.user.bot && args[2] != "-f") {
-      return embeds.warn(message, "You are trying to change the last actor of a mod idea to a bot.\nUsually, you'd want to change it into a user.\n_If you're sure you want to do this, run this command with the `-f` parameter at the end._", 20);
+      return embeds.warn(message, "You are trying to change the last status updater of a mod idea to a bot.\nUsually, you'd want to change it into a user.\n_If you're sure you want to do this, run this command with the `-f` parameter at the end._", 20);
     }
 
     args.shift();
 
-    modidea.lastActor = actor.id;
+    modidea.lastStatusUpdater = actor.id;
 
     modidea.update();
     const newIdeaMsg = await modidea.sendOrEdit(config.modules.mod_ideas.channels.list);
 
     if (actor.user.bot && args[2] == "-f")
-      embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been **forcefully** applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      embeds.success(message, `Your change to mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}) has been **forcefully** applied.`);
     else
-      embeds.success(message, `Your changes to mod idea \`#${modidea.id}\` have been applied.\nClick [here](${newIdeaMsg.url}) to view it.`);
+      embeds.success(message, `Your change to mod idea [\`#${modidea.id}\`](${newIdeaMsg.url}) has been applied.`);
   },
 }));
