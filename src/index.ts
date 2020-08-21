@@ -6,6 +6,8 @@ import Command from "./command";
 import config from "./config";
 import { importAll } from "./util";
 
+import("../extensions/Discord.Message/delete");
+
 console.log("Environment: " + config.environment);
 
 export const bot = new Discord.Client({

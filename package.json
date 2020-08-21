@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nexusmods/nexus-api": "^1.0.5",
-    "discord.js": "^12.2.0",
+    "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fs-readdir-recursive": "^1.1.0",
