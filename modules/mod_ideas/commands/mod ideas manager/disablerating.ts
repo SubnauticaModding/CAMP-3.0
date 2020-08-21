@@ -13,7 +13,7 @@ commands.push(new Command({
   description: "Disables or enables ratings on a mod idea.",
   usage: "<#ID> [comment]",
   aliases: ["disableratings", "enablerating", "enableratings"],
-  getPermission: () => CommandPermission.ModIdeasManager,
+  getPermission: () => CommandPermission.Moderator,
 
   execute: async (message: Discord.Message, args: string[]) => {
     const modidea = parser2.modIdea(args[0]);
