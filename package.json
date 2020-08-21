@@ -3,8 +3,8 @@
   "version": "3.0.0",
   "main": "dist/src/index.js",
   "scripts": {
-    "start": "echo Starting build... && tsc && echo Build finished! && node dist/src/index.js",
-    "nodemon": "nodemon -e \"ts\" -i dist/ -i .env -i config/ -i config/*.json -x \"echo Starting build... && tsc && echo Build finished! && node dist/src/index.js || exit 1\"",
+    "start": "node scripts/remove_old_dist.js && echo Starting build... && tsc && echo Build finished! && node dist/src/index.js",
+    "nodemon": "nodemon -e \"ts\" -i dist/ -i .env -i config/ -i config/*.json -x \"node scripts/remove_old_dist.js && echo Starting build... && tsc && echo Build finished! && node dist/src/index.js || exit 1\"",
     "update": "ncu -u && pnpm i"
   },
   "author": "AlexejheroYTB",

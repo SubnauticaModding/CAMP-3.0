@@ -21,8 +21,6 @@
         "dist/dat[bcdefghijklmnopqrstuvwxyz]*": true,
         "package.json": true,
         ".env": true,
-        "pull": true,
-        "push": true,
         ".github": true
     },
     "tslint.autoFixOnSave": true,

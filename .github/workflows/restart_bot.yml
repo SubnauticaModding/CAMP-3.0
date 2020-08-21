@@ -17,4 +17,4 @@ jobs:
           host: ${{ secrets.HOST }}
           privateKey: ${{ secrets.PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          command: cd ../var/www/html && bash push
+          command: cd ../var/www/html && bash scripts/push.sh
