@@ -6,5 +6,6 @@ export default class ModIdeaRating {
   public dislikes: string[] = [];
 
   public preventDeletion: boolean = false;
+  public preventDeletionBy: string = "";
   public pendingDeletionStart?: number;
 }
