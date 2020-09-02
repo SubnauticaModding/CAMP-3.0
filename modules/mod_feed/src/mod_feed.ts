@@ -115,7 +115,7 @@ async function generateEmbed(game: "subnautica" | "subnauticabelowzero", mod: ne
   if (type == "UPDATE") {
     const changelogs = await nexus.getChangelogs(mod.mod_id, game);
     if (changelogs[mod.version] && changelogs[mod.version].length > 0) {
-      embed.addField("Changelogs", parseChangelogs(changelogs[mod.version]));
+      embed.addField("Changelogs", parseChangelogs(changelogs[mod.version]).replace(/<br \/>/g, "\n").replace(/\n+/g, "\n"));
     }
   }
 
