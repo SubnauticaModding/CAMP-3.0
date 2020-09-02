@@ -20,7 +20,7 @@ commands.push(new Command({
 
     var userPerm = util.getPermission(message.member);
 
-    if (Object.keys(CommandPermission).includes(args[0])) {
+    if (Object.keys(CommandPermission).filter(k => Number(k).toString() != k).includes(args[0])) {
       // @ts-ignore 7015
       userPerm = Math.min(userPerm, CommandPermission[args[0]]);
     }
