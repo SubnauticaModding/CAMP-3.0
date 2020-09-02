@@ -1,0 +1,15 @@
+[
+  {
+    "name": "log",
+    "title": "📜 How to locate your log file",
+    "description": "The log file contains information about errors that occur during initialization or gameplay. The log file allows modders to figure out what is wrong with your game and how to fix it.\n\nThe log file for _QModManager_ is located in the game folder.\n• **For _Subnautica_**, the log file is called `qmodmanager_log-Subnautica.txt`.\n• **For _Below Zero_**, the log file is called `qmodmanager_log-SubnauticaZero.txt`.\n\nAfter you have located your log file, you may upload it directly to _Discord_, but we recommend that you upload it to a text sharing website such as _[pastebin.com](https://pastebin.com)_, so it is viewable by mobile users.",
+    "color": "BLUE"
+  },
+  {
+    "name": "nitrox",
+    "content": "https://discord.gg/E8B4X9s",
+    "title": "<:nitrox_1:750822815783059546><:nitrox_2:750822815908757534> Nitrox",
+    "description": "The multiplayer mod **_Nitrox_** has a different support server, as stated in <#324207672293326848>.\nYou can join the **_Nitrox_** support server here: https://discord.gg/E8B4X9s.",
+    "color": "fbff00"
+  }
+]

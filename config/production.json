@@ -40,6 +40,9 @@
           "role": ""
         }
       ]
+    },
+    "tags": {
+      "enable": true
     }
   },
   "permissions": {

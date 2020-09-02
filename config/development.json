@@ -18,7 +18,7 @@
       }
     },
     "mod_ideas": {
-      "enable": true,
+      "enable": false,
       "channels": {
         "submit": "695394284035112986",
         "discussion": "716011205931696299",
@@ -40,6 +40,9 @@
           "role": ""
         }
       ]
+    },
+    "tags": {
+      "enable": true
     }
   },
   "permissions": {
