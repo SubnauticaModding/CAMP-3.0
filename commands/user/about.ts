@@ -21,7 +21,7 @@ commands.push(new Command({
 
     const aboutMessage = await message.channel.send(embed);
 
-    await util.wait(120);
+    await util.wait(60);
 
     message.delete({ reason: "Command invocation message deleted." });
     aboutMessage.delete({ reason: "Command reply message deleted." });

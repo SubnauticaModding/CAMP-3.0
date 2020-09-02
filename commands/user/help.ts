@@ -55,7 +55,7 @@ commands.push(new Command({
       return;
     }
 
-    await util.wait(120);
+    await util.wait(60);
 
     message.delete({ reason: "Command invocation message deleted." });
     helpMessage.delete({ reason: "Command reply message deleted." });
